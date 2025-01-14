@@ -35,10 +35,18 @@ int main()
                 ImGui::PushID(i);
                 if (i % 8 != 0)
                     ImGui::SameLine();
-                if (i % 2 == 0) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{1.f, 0.f, 0.f, 1.f});
+                if ((i / 8) % 2 == 0) {
+                    if (i % 2 == 0) {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{1.f, 0.f, 0.f, 1.f});
+                    } else {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.f, 0.f, 1.f, 1.f});
+                    }
                 } else {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.f, 0.f, 1.f, 1.f});
+                    if (i % 2 == 0) {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.f, 0.f, 1.f, 1.f});
+                    } else {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{1.f, 0.f, 0.f, 1.f});
+                    }
                 }
 
                 std::string name = std::to_string((i / 8)+1) + std::to_string((i % 8)+1);
