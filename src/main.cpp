@@ -1,6 +1,12 @@
 #include <imgui.h>
 #include <iostream>
 #include "quick_imgui/quick_imgui.hpp"
+#include <vector>
+
+int trudx()
+{
+    return 0;
+}
 
 int main()
 {
@@ -17,23 +23,44 @@ int main()
 
             ImGui::SliderFloat("My Value", &value, 0.f, 3.f);
 
-            if (ImGui::Button("1", ImVec2{50.f, 50.f}))
-                std::cout << "Clicked button 1\n";
-            ImGui::SameLine(); // Draw the next ImGui widget on the same line as the previous one. Otherwise it would be below it
+            // if (ImGui::Button("1", ImVec2{50.f, 50.f}))
+            //     std::cout << "Clicked button 1\n";
+            // // std::vector<int> v{};
+            // ImGui::SameLine(); // Draw the next ImGui widget on the same line as the previous one. Otherwise it would be below it
+            // if (ImGui::Button("2", ImVec2{50.f, 50.f}))
+            //     std::cout << "Clicked button 2\n";
 
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{1.f, 0.f, 0.f, 1.f}); // Changes the color of all buttons until we call ImGui::PopStyleColor(). There is also ImGuiCol_ButtonActive and ImGuiCol_ButtonHovered
+            for (int i = 0; i < 64; i++)
+            {
+                ImGui::PushID(i);
+                if (i % 8 != 0)
+                    ImGui::SameLine();
+                if (i % 2 == 0)
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{1.f, 0.f, 0.f, 1.f});
+                else
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.f, 0.f, 1.f, 1.f});
 
-            ImGui::PushID(2); // When some ImGui items have the same label (for exemple the next two buttons are labeled "Yo") ImGui needs you to specify an ID so that it can distinguish them. It can be an int, a pointer, a string, etc.
-                              // You will definitely run into this when you create a button for each of your chess pieces, so remember to give them an ID!
-            if (ImGui::Button("Yo", ImVec2{50.f, 50.f}))
-                std::cout << "Clicked button 2\n";
-            ImGui::PopID(); // Then pop the id you pushed after you created the widget
+                std::string name = std::to_string((i / 8)+1) + std::to_string(i % 8);
+                if (ImGui::Button(name.c_str(), ImVec2{50.f, 50.f}))
+                    std::cout << "Clicked button " << i << "\n";
+                ImGui::PopStyleColor();
+                ImGui::PopID();
+            }
+            
 
-            ImGui::SameLine();
-            ImGui::PushID(3);
-            if (ImGui::Button("Yo", ImVec2{50.f, 50.f}))
-                std::cout << "Clicked button 3\n";
-            ImGui::PopID();
+            // ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{1.f, 0.f, 0.f, 1.f}); // Changes the color of all buttons until we call ImGui::PopStyleColor(). There is also ImGuiCol_ButtonActive and ImGuiCol_ButtonHovered
+
+            // ImGui::PushID(2); // When some ImGui items have the same label (for exemple the next two buttons are labeled "Yo") ImGui needs you to specify an ID so that it can distinguish them. It can be an int, a pointer, a string, etc.
+            //                   // You will definitely run into this when you create a button for each of your chess pieces, so remember to give them an ID!
+            // if (ImGui::Button("Yo", ImVec2{50.f, 50.f}))
+            //     std::cout << "Clicked button 2\n";
+            // ImGui::PopID(); // Then pop the id you pushed after you created the widget
+
+            // ImGui::SameLine();
+            // ImGui::PushID(3);
+            // if (ImGui::Button("Yo", ImVec2{50.f, 50.f}))
+            //     std::cout << "Clicked button 3\n";
+            // ImGui::PopID();
 
             ImGui::PopStyleColor();
 
