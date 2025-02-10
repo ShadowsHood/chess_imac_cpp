@@ -11,7 +11,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 # You can set the name of your project here
-project(SimpleCpp)
+project(ChessCpp)
 add_executable(${PROJECT_NAME})
 
 # Choose your C++ version
@@ -39,12 +39,20 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS src/*)
 target_sources(${PROJECT_NAME} PRIVATE ${MY_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE src)
-# target_include_directories(${PROJECT_NAME} PRIVATE src std)
 
 # Add quick-imgui library
 add_subdirectory(lib/quick_imgui)
 target_link_libraries(${PROJECT_NAME} PRIVATE quick_imgui::quick_imgui)
 
+include("./CMakeUtils/files_and_folders.cmake")
+Cool__target_copy_folder(${PROJECT_NAME} fonts)
+
+# Cool__target_copy_folder(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/fonts ${CMAKE_BINARY_DIR}/fonts)
+# Cool__target_copy_folder(${PROJECT_NAME} src/fonts ${CMAKE_BINARY_DIR}/fonts)
+# Cool__target_copy_folder(${CMAKE_BINARY_DIR} src/fonts)
+# Cool__target_copy_folder(${OUTPUT} src/fonts)
+# Cool__target_copy_folder(${CMAKE_SOURCE_DIR} src/fonts)
+
 # target_compile_options(${PROJECT_NAME}
-#     PRIVATE "-Ic:/Libs/Winlibs/include/c++/14.2.0"
+# PRIVATE "-Ic:/Libs/Winlibs/include/c++/14.2.0"
 # )
