@@ -9,8 +9,11 @@ class Board {
 private:
   std::array<Piece *, 64> positions_board;
 
+private :
+    void init_board();
+
 public:
-    Board()= default;
+    inline Board() { this->init_board(); }
     ~Board() = default;
 
     void set_piece(Piece* piece, int position);

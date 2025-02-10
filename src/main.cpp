@@ -1,15 +1,23 @@
 #include <imgui.h>
+#include <utility>
 #include <iostream>
-#include "quick_imgui/quick_imgui.hpp"
 #include <vector>
 #include <array>
-#include "../pieces/Piece.hpp"
+#include "./pieces/Piece.hpp"
+#include "./pieces/Rook.hpp"
+#include "./pieces/Bishop.hpp"
+#include "./pieces/King.hpp"
+#include "./pieces/Knight.hpp"
+#include "./pieces/Pawn.hpp"
+#include "./pieces/Queen.hpp"
+#include "./utils.hpp"
+#include "quick_imgui/quick_imgui.hpp"
 
 int main()
 {
-    std::vector<int> next_possible_moves;
-    bool moving = false;
-    Color current_player = Color::White;
+    std::vector<int>       next_possible_moves;
+    bool                   moving         = false;
+    Color                  current_player = Color::White;
     std::array<Piece*, 64> positions_board;
 
     quick_imgui::loop(
@@ -26,21 +34,30 @@ int main()
                 ImGui::PushID(i);
                 if (i % 8 != 0)
                     ImGui::SameLine();
-                if ((i / 8) % 2 == 0) {
-                    if (i % 2 == 0) {
-                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{1.f, 0.f, 0.f, 1.f});
-                    } else {
-                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.f, 0.f, 1.f, 1.f});
+                if ((i / 8) % 2 == 0)
+                {
+                    if (i % 2 == 0)
+                    {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.8f, 0.8f, 0.8f, 1.f});
                     }
-                } else {
-                    if (i % 2 == 0) {
-                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.f, 0.f, 1.f, 1.f});
-                    } else {
-                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{1.f, 0.f, 0.f, 1.f});
+                    else
+                    {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.2f, 0.2f, 0.2f, 1.f});
+                    }
+                }
+                else
+                {
+                    if (i % 2 == 0)
+                    {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.2f, 0.2f, 0.2f, 1.f});
+                    }
+                    else
+                    {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{0.8f, 0.8f, 0.8f, 1.f});
                     }
                 }
 
-                std::string name = std::to_string((i / 8)+1) + std::to_string((i % 8)+1);
+                std::string name = std::to_string((i / 8) + 1) + std::to_string((i % 8) + 1);
                 if (ImGui::Button(name.c_str(), ImVec2{50.f, 50.f}))
                     std::cout << "Clicked button " << i << "\n";
                 ImGui::PopStyleColor();
