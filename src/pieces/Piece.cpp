@@ -1,4 +1,5 @@
 #include "./Piece.hpp"
+#include "./Board.hpp"
 
 void Piece::set_char(Color color, Type type) {
   switch (type) {
@@ -23,4 +24,4 @@ void Piece::set_char(Color color, Type type) {
   }
 }
 
-void Piece::move(std::vector<Piece *> &position_on_board, int new_position) {}
+void Piece::move(Board & board, int new_position) {}

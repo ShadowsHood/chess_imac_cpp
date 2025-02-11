@@ -50,7 +50,7 @@ int main() {
                                    : ImVec4{0.8f, 0.8f, 0.8f, 1.f};
           ImGui::PushStyleColor(ImGuiCol_Button, buttonColor);
 
-          Piece *piece = board.get_piece(get_pos_2D(i));
+          Piece *piece = board.get_piece(i);
           std::string name = (piece != nullptr)
                                  ? std::string(1, piece->get_char())
                                  : std::to_string(i);
@@ -63,8 +63,20 @@ int main() {
                                       ? IM_COL32(25, 25, 25, 255)
                                       : IM_COL32(250, 250, 250, 255));
           }
-          if (ImGui::Button(buttonLabel.c_str(), ImVec2{100.f, 100.f}))
-            std::cout << "Clicked button " << i << "\n";
+          if (ImGui::Button(name.c_str(), ImVec2{100.f, 100.f})) {
+            std::cout << "Clicked button : " << i << " ==> (" << get_pos_2D(i).first << "," << get_pos_2D(i).second << ") \n";
+
+            if (!board.is_empty(i)) {
+                std::cout << "paaaaaas viide" << std::endl;
+                if (board.get_piece(i)->get_type() == Type::Bishop)
+                    std::cout << "BISHOP" << std::endl;
+                for(int pos : board.get_piece(i)->get_possible_moves(board, i)) {
+                    std::cout << pos << " " << std::endl;
+                }
+            } else if (board.is_empty(i)) {
+                std::cout << "viiiiiiiiiiide" << std::endl;
+            }
+        }
           if (piece != nullptr) {
             ImGui::PopFont();
             ImGui::PopStyleColor();

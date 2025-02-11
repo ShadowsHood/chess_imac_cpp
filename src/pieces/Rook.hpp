@@ -12,6 +12,6 @@ public:
   ~Rook() override = default;
 
   std::vector<int>
-  get_possible_moves(const std::array<Piece *, 64> &positions_board,
+  get_possible_moves(const Board & board,
                      int position) override;
 };

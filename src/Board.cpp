@@ -50,6 +50,6 @@ void Board::set_piece(Piece *piece, int position) {
 
 };
 
-bool Board::is_in_board(int position) {
+bool Board::is_in_board(int position) const {
     return position >= 0 && position < 64;
 }

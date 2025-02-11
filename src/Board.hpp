@@ -1,6 +1,5 @@
 #pragma once
 #include "./pieces/Piece.hpp"
-#include "./utils.hpp"
 #include <array>
 #include <iostream>
 #include <vector>
@@ -17,16 +16,19 @@ public:
   inline Board() { this->init_board(); }
   ~Board() = default;
 
+  const std::array<Piece *, 64> & get_positions_board() const {
+    return this->positions_board;
+  }
   void set_piece(Piece *piece, int position);
 
-  bool is_in_board(int position);
-  Piece *get_piece(std::pair<int, int> position) {
-    return this->positions_board[get_pos_1D(position)] ? this->positions_board[get_pos_1D(position)] : nullptr;
+  bool is_in_board(int position) const;
+  Piece *get_piece(int position) {
+    return this->positions_board[position] ? this->positions_board[position] : nullptr;
   };
-  bool is_empty(std::pair<int, int> position) {
-    return this->positions_board[get_pos_1D(position)] == nullptr;
+  bool is_empty(int position) const {
+    return this->positions_board[position] == nullptr;
   };
-  bool is_other_color(std::pair<int, int> position, Color color) {
-    return this->positions_board[get_pos_1D(position)]->get_color() != color;
+  bool is_other_color(int position, Color color) const {
+    return this->positions_board[position]->get_color() != color;
   };
 };

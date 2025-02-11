@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
+// #include "Board.hpp"
+
+class Board;
 
 enum class Color { White, Black };
 enum class Type { Pawn, Rook, Knight, Bishop, Queen, King };
@@ -34,7 +37,6 @@ public:
   char get_char() const { return this->character; };
 
   virtual std::vector<int>
-  get_possible_moves(const std::array<Piece *, 64> &positions_board,
-                     int position) = 0;
-  void move(std::vector<Piece *> &position_on_board, int new_position);
+  get_possible_moves(const Board & board, int position) = 0;
+  void move(Board & board, int new_position);
 };
