@@ -50,6 +50,6 @@ void Board::set_piece(Piece *piece, int position) {
 
 };
 
-bool Board::is_in_board(std::pair<int, int> position) {
-    return false;
+bool Board::is_in_board(int position) {
+    return position >= 0 && position < 64;
 }

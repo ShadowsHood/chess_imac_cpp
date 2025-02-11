@@ -19,7 +19,7 @@ public:
 
   void set_piece(Piece *piece, int position);
 
-  bool is_in_board(std::pair<int, int> position);
+  bool is_in_board(int position);
   Piece *get_piece(std::pair<int, int> position) {
     return this->positions_board[get_pos_1D(position)] ? this->positions_board[get_pos_1D(position)] : nullptr;
   };

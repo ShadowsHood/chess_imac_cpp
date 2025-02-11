@@ -1,13 +1,17 @@
 #pragma once
-#include <iostream>
-#include <array>
 #include "./Piece.hpp"
+#include <array>
+#include <iostream>
 
 class Queen : public Piece {
 
-    public:
-        Queen(Color color) : Piece(color, Type::Queen) {this->set_char(color, Type::Queen);};
-        virtual ~Queen() = default;
+public:
+  explicit Queen(Color color) : Piece(color, Type::Queen) {
+    this->set_char(color, Type::Queen);
+  };
+  ~Queen() override = default;
 
-        std::vector<int> get_possible_moves(const std::array<Piece*, 64>& positions_board, int position) override;
+  std::vector<int>
+  get_possible_moves(const std::array<Piece *, 64> &positions_board,
+                     int position) override;
 };
