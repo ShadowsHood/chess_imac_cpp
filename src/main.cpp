@@ -38,7 +38,8 @@ int main() {
                                  // show you the corresponding code directly in
                                  // your IDE!
 
-        ImGui::Begin("Example");
+        ImGui::Begin("Chess Game");
+        ImGui::GetStyle().ItemSpacing = ImVec2(0.0f, 0.0f);
 
         for (int i = 0; i < 64; i++) {
           ImGui::PushID(i);
@@ -70,9 +71,7 @@ int main() {
                 std::cout << "paaaaaas viide" << std::endl;
                 if (board.get_piece(i)->get_type() == Type::Bishop)
                     std::cout << "BISHOP" << std::endl;
-                for(int pos : board.get_piece(i)->get_possible_moves(board, i)) {
-                    std::cout << pos << " " << std::endl;
-                }
+                    board.get_piece(i)->get_possible_moves(board, i);
             } else if (board.is_empty(i)) {
                 std::cout << "viiiiiiiiiiide" << std::endl;
             }

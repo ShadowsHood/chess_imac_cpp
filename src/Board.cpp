@@ -19,9 +19,9 @@ void Board::init_board() {
     this->positions_board[get_pos_1D(std::make_pair(0,7))] = new Rook(Color::Black); 
     
     this->positions_board[get_pos_1D(std::make_pair(1,0))] = new Pawn(Color::Black);
-    this->positions_board[get_pos_1D(std::make_pair(1,1))] = new Pawn(Color::Black);
+    // this->positions_board[get_pos_1D(std::make_pair(1,1))] = new Pawn(Color::Black);
     this->positions_board[get_pos_1D(std::make_pair(1,2))] = new Pawn(Color::Black);
-    this->positions_board[get_pos_1D(std::make_pair(1,3))] = new Pawn(Color::Black);
+    // this->positions_board[get_pos_1D(std::make_pair(1,3))] = new Pawn(Color::Black);
     this->positions_board[get_pos_1D(std::make_pair(1,4))] = new Pawn(Color::Black);
     this->positions_board[get_pos_1D(std::make_pair(1,5))] = new Pawn(Color::Black);
     this->positions_board[get_pos_1D(std::make_pair(1,6))] = new Pawn(Color::Black);
@@ -50,6 +50,6 @@ void Board::set_piece(Piece *piece, int position) {
 
 };
 
-bool Board::is_in_board(int position) const {
-    return position >= 0 && position < 64;
+bool Board::is_in_board(std::pair<int,int> position) const {
+    return (position.first >= 0 && position.first < 8) && position.second >= 0 && position.second < 8;
 }
