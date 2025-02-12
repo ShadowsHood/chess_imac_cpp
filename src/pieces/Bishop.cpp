@@ -13,5 +13,10 @@ std::vector<int> Bishop::get_possible_moves(const Board & board, int position)  
         std::cout << "------------fin down right" << std::endl;
     get_down_left_moves(possible_moves, board, get_pos_2D(position), this->color, false);
         std::cout << "------------fin down left" << std::endl;
+
+    for (int pos : possible_moves) {
+        std::cout << pos << " - ";
+    }
+    std::cout << std::endl;
     return possible_moves;
 }
