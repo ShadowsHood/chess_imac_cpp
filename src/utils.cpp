@@ -134,3 +134,46 @@ void get_knight_tile_from_step(std::vector<int> &moves, const Board &board,
     }
   }
 }
+
+// ----------------- PAWN -----------------
+
+void get_pawn_moves(std::vector<int> &moves, const Board &board,
+                    const std::pair<int, int> &position, Color color,
+                    bool first_move) {
+  int orientation{color == Color::White ? -1 : 1};
+
+  // Move forward
+  std::pair<int, int> new_position(position.first + orientation,
+                                   position.second);
+  int new_position_1D = get_pos_1D(new_position);
+  if (board.is_in_board(new_position) && board.is_empty(new_position_1D)) {
+    {
+      moves.push_back(new_position_1D);
+    }
+    // Move forward twice
+    if (first_move) {
+      new_position = {position.first + 2 * orientation, position.second};
+      new_position_1D = get_pos_1D(new_position);
+      if (board.is_in_board(new_position) && board.is_empty(new_position_1D))
+        moves.push_back(new_position_1D);
+    }
+  }
+
+  // Capture
+  new_position = {position.first + orientation, position.second + 1};
+  new_position_1D = get_pos_1D(new_position);
+  if (board.is_in_board(new_position) &&
+      board.is_other_color(new_position_1D, color)) {
+    {
+      moves.push_back(new_position_1D);
+    }
+  }
+  new_position = {position.first + orientation, position.second - 1};
+  new_position_1D = get_pos_1D(new_position);
+  if (board.is_in_board(new_position) &&
+      board.is_other_color(new_position_1D, color)) {
+    {
+      moves.push_back(new_position_1D);
+    }
+  }
+}

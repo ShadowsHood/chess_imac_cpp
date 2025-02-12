@@ -48,3 +48,9 @@ void get_left_moves(std::vector<int> &moves, const Board &board,
 void get_knight_tile_from_step(std::vector<int> &moves, const Board &board,
                                const std::pair<int, int> &position, Color color,
                                int stepX, int stepY);
+
+// ----------------- PAWN -----------------
+
+void get_pawn_moves(std::vector<int> &moves, const Board &board,
+                    const std::pair<int, int> &position, Color color,
+                    bool first_move);

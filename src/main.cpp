@@ -52,9 +52,11 @@ int main() {
           ImGui::PushStyleColor(ImGuiCol_Button, buttonColor);
 
           Piece *piece = board.get_piece(i);
-          std::string name = (piece != nullptr)
-                                 ? std::string(1, piece->get_char())
-                                 : std::to_string(i);
+          // std::string name = (piece != nullptr)
+          //                        ? std::string(1, piece->get_char())
+          //                        : std::to_string(i);
+          std::string name =
+              (piece != nullptr) ? std::string(1, piece->get_char()) : "";
           std::string buttonLabel = name + "##" + std::to_string(i);
 
           if (piece != nullptr) {
@@ -65,17 +67,19 @@ int main() {
                                       : IM_COL32(250, 250, 250, 255));
           }
           if (ImGui::Button(name.c_str(), ImVec2{100.f, 100.f})) {
-            std::cout << "Clicked button : " << i << " ==> (" << get_pos_2D(i).first << "," << get_pos_2D(i).second << ") \n";
+            std::cout << "Clicked button : " << i << " ==> ("
+                      << get_pos_2D(i).first << "," << get_pos_2D(i).second
+                      << ") \n";
 
             if (!board.is_empty(i)) {
-                std::cout << "paaaaaas viide" << std::endl;
-                if (board.get_piece(i)->get_type() == Type::Bishop)
-                    std::cout << "BISHOP" << std::endl;
-                    board.get_piece(i)->get_possible_moves(board, i);
+              std::cout << "paaaaaas viide" << std::endl;
+              if (board.get_piece(i)->get_type() == Type::Bishop)
+                std::cout << "BISHOP" << std::endl;
+              board.get_piece(i)->get_possible_moves(board, i);
             } else if (board.is_empty(i)) {
-                std::cout << "viiiiiiiiiiide" << std::endl;
+              std::cout << "viiiiiiiiiiide" << std::endl;
             }
-        }
+          }
           if (piece != nullptr) {
             ImGui::PopFont();
             ImGui::PopStyleColor();
