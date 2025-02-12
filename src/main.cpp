@@ -74,20 +74,23 @@ int main() {
           // ImGui::PushStyleColor(
           //     ImGuiCol_Border,
           //     IM_COL32(0, 255, 0, 255)); // Set border color to green
-
+          
           this_tile_is_a_possible_move =
-              std::find(next_possible_moves.begin(), next_possible_moves.end(),
-                        i) != next_possible_moves.end()
-                  ? true
-                  : false;
-
+          std::find(next_possible_moves.begin(), next_possible_moves.end(),
+          i) != next_possible_moves.end()
+          ? true
+          : false;
+          
           // Border selected
           if (this_tile_is_a_possible_move) {
             ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize,
-                                2.0f); // Set border size
-            ImGui::PushStyleColor(
+              5.0f); // Set border size
+              ImGui::PushStyleColor(
+                  ImGuiCol_Border,
+                  IM_COL32(0, 255, 0, 255)); // Set border color to green
+              ImGui::PushStyleColor(
                 ImGuiCol_Button,
-                ImVec4{0.2f, 0.4f, 0.2f, 1.f}); // Set border color to green
+                ImVec4{0.6f, 0.8f, 0.6f, 1.f}); // Set border color to green
           }
           // Draw tiles
           if (ImGui::Button(name.c_str(), ImVec2{100.f, 100.f}) &&
@@ -109,6 +112,7 @@ int main() {
 
           // Border selected
           if (this_tile_is_a_possible_move) {
+            ImGui::PopStyleColor();
             ImGui::PopStyleColor();
             ImGui::PopStyleVar();
           }
