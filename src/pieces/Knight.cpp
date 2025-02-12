@@ -20,5 +20,6 @@ std::vector<int> Knight::get_possible_moves(const Board &board, int position) {
                             this->color, -1, -2);
   get_knight_tile_from_step(possible_moves, board, get_pos_2D(position),
                             this->color, 1, -2);
+  display_vector_pos(possible_moves);
   return possible_moves;
 }

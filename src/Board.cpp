@@ -19,9 +19,9 @@ void Board::init_board() {
     this->positions_board[get_pos_1D(std::make_pair(0,7))] = new Rook(Color::Black); 
     
     this->positions_board[get_pos_1D(std::make_pair(1,0))] = new Pawn(Color::Black);
-    // this->positions_board[get_pos_1D(std::make_pair(1,1))] = new Pawn(Color::Black);
+    this->positions_board[get_pos_1D(std::make_pair(1,1))] = new Pawn(Color::Black);
     this->positions_board[get_pos_1D(std::make_pair(1,2))] = new Pawn(Color::Black);
-    // this->positions_board[get_pos_1D(std::make_pair(1,3))] = new Pawn(Color::Black);
+    this->positions_board[get_pos_1D(std::make_pair(1,3))] = new Pawn(Color::Black);
     this->positions_board[get_pos_1D(std::make_pair(1,4))] = new Pawn(Color::Black);
     this->positions_board[get_pos_1D(std::make_pair(1,5))] = new Pawn(Color::Black);
     this->positions_board[get_pos_1D(std::make_pair(1,6))] = new Pawn(Color::Black);

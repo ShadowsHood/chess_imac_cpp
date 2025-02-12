@@ -12,6 +12,8 @@ inline int get_pos_1D(std::pair<int, int> pos2D) {
   return pos2D.first * 8 + pos2D.second;
 }
 
+void display_vector_pos(std::vector<int> &possible_moves);
+
 // ----------------- TOWER/BISHOP/QUEEN/KING -----------------
 
 void get_linear_moves(std::vector<int> &moves, const Board &board,

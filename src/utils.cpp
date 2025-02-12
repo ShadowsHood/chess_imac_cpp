@@ -1,5 +1,18 @@
 #include "./utils.hpp"
 
+void display_vector_pos(std::vector<int> &possible_moves) {
+  if (!possible_moves.empty()) {
+    std::cout << "Possible moves: " << std::endl;
+    for (int pos : possible_moves) {
+      std::cout << "(" << get_pos_2D(pos).first << "," << get_pos_2D(pos).second
+                << ")" << " ";
+    }
+    std::cout << std::endl;
+  } else {
+    std::cout << "No possible moves" << std::endl;
+  }
+}
+
 // ----------------- TOWER/BISHOP/QUEEN/KING -----------------
 
 static void get_step_from_direction(const Direction &direction, int &stepX,
@@ -48,13 +61,9 @@ void get_linear_moves(std::vector<int> &moves, const Board &board,
   int stepX = 0;
   int stepY = 0;
   get_step_from_direction(direction, stepX, stepY);
-  std::cout << stepX << " :: " << stepY << std::endl;
   std::pair<int, int> new_position(position.first + stepX,
                                    position.second + stepY);
   int new_position_1D = get_pos_1D(new_position);
-  std::cout << new_position.first << "," << new_position.second << "--->"
-            << new_position_1D << "--->" << board.is_in_board(new_position)
-            << std::endl;
 
   if (board.is_in_board(new_position) &&
       (board.is_empty(new_position_1D) ||
@@ -162,18 +171,18 @@ void get_pawn_moves(std::vector<int> &moves, const Board &board,
   // Capture
   new_position = {position.first + orientation, position.second + 1};
   new_position_1D = get_pos_1D(new_position);
-  if (board.is_in_board(new_position) &&
-      board.is_other_color(new_position_1D, color)) {
+  if (board.is_in_board(new_position) && !board.is_empty(new_position_1D)) {
     {
-      moves.push_back(new_position_1D);
+      if (board.is_other_color(new_position_1D, color))
+        moves.push_back(new_position_1D);
     }
   }
   new_position = {position.first + orientation, position.second - 1};
   new_position_1D = get_pos_1D(new_position);
-  if (board.is_in_board(new_position) &&
-      board.is_other_color(new_position_1D, color)) {
+  if (board.is_in_board(new_position) && !board.is_empty(new_position_1D)) {
     {
-      moves.push_back(new_position_1D);
+      if (board.is_other_color(new_position_1D, color))
+        moves.push_back(new_position_1D);
     }
   }
 }
