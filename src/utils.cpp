@@ -126,7 +126,7 @@ void get_knight_tile_from_step(std::vector<int> &moves, const Board &board,
                                    position.second + stepY);
   int new_position_1D = get_pos_1D(new_position);
 
-  if (board.is_in_board(new_position_1D) &&
+  if (board.is_in_board(new_position) &&
       (board.is_empty(new_position_1D) ||
        board.is_other_color(new_position_1D, color))) {
     {
