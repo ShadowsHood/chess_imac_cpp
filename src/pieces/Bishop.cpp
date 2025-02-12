@@ -1,6 +1,5 @@
 #include "./Bishop.hpp"
-#include "./Board.hpp"
-#include <utils.hpp>
+#include "./utils.hpp"
 
 std::vector<int> Bishop::get_possible_moves(const Board & board, int position)  {
         std::cout << "------------entree fonction" << std::endl;
