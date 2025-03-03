@@ -1,6 +1,7 @@
 #pragma once
 #include "./pieces/Piece.hpp"
 #include <array>
+#include <imgui.h>
 #include <iostream>
 #include <vector>
 
@@ -15,6 +16,17 @@ private:
 public:
   inline Board() { this->init_board(); }
   ~Board() = default;
+
+  void draw_board(std::vector<int> &next_possible_moves, bool &moving,
+                  Color &current_player, bool &this_tile_is_a_possible_move,
+                  ImFont *main_font);
+  void draw_tile(int i, Piece *piece, ImFont *main_font,
+                 bool &is_a_possible_move,
+                 std::vector<int> &next_possible_moves, bool &moving,
+                 Color &current_player);
+  void handle_tile_click(int index, Piece *piece, bool &is_a_possible_move,
+                         std::vector<int> &next_possible_moves, bool &moving,
+                         Color &current_player);
 
   const std::array<Piece *, 64> &get_positions_board() const {
     return this->positions_board;
