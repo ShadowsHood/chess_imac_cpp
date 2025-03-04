@@ -3,18 +3,20 @@
 #include <string>
 
 void Board::draw_board(std::vector<int> &next_possible_moves, bool &moving,
-                       Color &current_player, bool &is_a_possible_move,
-                       ImFont *main_font) {
+                       Color &current_player,
+                      //  bool &is_a_possible_move, // useless ?
+                       ImFont *main_font,
+                       std::optional<int> &selected_piece_position) {
   for (int i = 0; i < 64; i++) {
     ImGui::PushID(i);
     if (i % 8 != 0)
       ImGui::SameLine();
 
     Piece *piece = this->get_piece(i);
-    is_a_possible_move = is_possible_move(next_possible_moves, i);
+    bool is_a_possible_move = is_possible_move(next_possible_moves, i);
 
     draw_tile(i, piece, main_font, is_a_possible_move, next_possible_moves,
-              moving, current_player);
+              moving, current_player, selected_piece_position);
 
     ImGui::PopID();
   }
@@ -23,7 +25,8 @@ void Board::draw_board(std::vector<int> &next_possible_moves, bool &moving,
 void Board::draw_tile(int index, Piece *piece, ImFont *main_font,
                       bool &is_a_possible_move,
                       std::vector<int> &next_possible_moves, bool &moving,
-                      Color &current_player) {
+                      Color &current_player,
+                      std::optional<int> &selected_piece_position) {
   // Set color of the tile (black or white)
   ImVec4 tileColor = get_tile_color(index);
   ImGui::PushStyleColor(ImGuiCol_Button, tileColor);
@@ -41,10 +44,9 @@ void Board::draw_tile(int index, Piece *piece, ImFont *main_font,
     push_possible_move_color();
 
   // Draw tile
-  if (ImGui::Button(name.c_str(), ImVec2{100.f, 100.f}) &&
-      !this->is_empty(index)) {
+  if (ImGui::Button(name.c_str(), ImVec2{100.f, 100.f})) {
     handle_tile_click(index, piece, is_a_possible_move, next_possible_moves,
-                      moving, current_player);
+                      moving, current_player, selected_piece_position);
   }
 
   if (piece != nullptr)
@@ -54,22 +56,6 @@ void Board::draw_tile(int index, Piece *piece, ImFont *main_font,
     pop_possible_move_color();
   // Pop tile color (black or white)
   ImGui::PopStyleColor();
-}
-
-void Board::handle_tile_click(int index, Piece *piece, bool &is_a_possible_move,
-                              std::vector<int> &next_possible_moves,
-                              bool &moving, Color &current_player) {
-  // Current player
-  if (this->get_piece(index)->get_color() == current_player) {
-    std::cout << "Clicked button : " << index << " ==> ("
-              << get_pos_2D(index).first << "," << get_pos_2D(index).second
-              << ") \n";
-    moving = true;
-    next_possible_moves = this->get_piece(index)->get_possible_moves(*this, index);
-
-  } else {
-    std::cout << "Not your turn\n";
-  }
 }
 
 // -

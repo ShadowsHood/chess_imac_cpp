@@ -3,16 +3,14 @@
 #include <array>
 #include <imgui.h>
 #include <iostream>
+#include <optional>
 #include <stack>
 #include <vector>
-
 
 class Board {
 
 private:
   std::array<Piece *, 64> positions_board{};
-
-public:
   std::stack<Piece *> dead_white_pieces{};
   std::stack<Piece *> dead_black_pieces{};
 
@@ -24,21 +22,33 @@ public:
   ~Board() = default;
 
   void draw_board(std::vector<int> &next_possible_moves, bool &moving,
-                  Color &current_player, bool &this_tile_is_a_possible_move,
-                  ImFont *main_font);
+                  Color &current_player,
+                  // bool &this_tile_is_a_possible_move,
+                  ImFont *main_font,
+                  std::optional<int> &selected_piece_position);
   void draw_tile(int i, Piece *piece, ImFont *main_font,
                  bool &is_a_possible_move,
                  std::vector<int> &next_possible_moves, bool &moving,
-                 Color &current_player);
+                 Color &current_player,
+                 std::optional<int> &selected_piece_position);
   void handle_tile_click(int index, Piece *piece, bool &is_a_possible_move,
                          std::vector<int> &next_possible_moves, bool &moving,
-                         Color &current_player);
+                         Color &current_player,
+                         std::optional<int> &selected_piece_position);
+  void click_playable_piece(int index, std::vector<int> &next_possible_moves,
+                            bool &moving,
+                            std::optional<int> &selected_piece_position);
+  void click_reachable_tile(int index, std::vector<int> &next_possible_moves,
+                            bool &moving, Color &current_player,
+                            std::optional<int> &selected_piece_position);
 
   const std::array<Piece *, 64> &get_positions_board() const {
     return this->positions_board;
   }
 
   void set_piece(Piece *piece, int position);
+
+  void kill_piece(Piece *piece, Color color, int position);
 
   bool is_in_board(std::pair<int, int> position) const;
 

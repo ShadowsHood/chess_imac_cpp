@@ -11,6 +11,9 @@ inline std::pair<int, int> get_pos_2D(int pos1D) {
 inline int get_pos_1D(std::pair<int, int> pos2D) {
   return pos2D.first * 8 + pos2D.second;
 }
+template <typename T>
+bool is_in_vec(std::vector<T> &vec, T value);
+
 
 void display_vector_pos(std::vector<int> &possible_moves);
 

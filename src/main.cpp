@@ -13,13 +13,15 @@
 #include <imgui.h>
 #include <iostream>
 #include <vector>
+#include <optional>
 
 int main() {
   Board board;
   Color current_player = Color::White;
   std::vector<int> next_possible_moves{};
+  std::optional<int> selected_piece_position {};
   bool moving = false;
-  bool this_tile_is_a_possible_move = false;
+  // bool this_tile_is_a_possible_move = false;
 
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
@@ -44,7 +46,8 @@ int main() {
         ImGui::GetStyle().ItemSpacing = ImVec2(0.0f, 0.0f);
 
         // Draw the board
-        board.draw_board(next_possible_moves,moving, current_player,this_tile_is_a_possible_move, main_font);
+        board.draw_board(next_possible_moves,moving, current_player, main_font, selected_piece_position);
+        // board.draw_board(next_possible_moves,moving, current_player,this_tile_is_a_possible_move, main_font, selected_piece_position);
 
         ImGui::End();
       });
