@@ -3,12 +3,18 @@
 #include <array>
 #include <imgui.h>
 #include <iostream>
+#include <stack>
 #include <vector>
+
 
 class Board {
 
 private:
   std::array<Piece *, 64> positions_board{};
+
+public:
+  std::stack<Piece *> dead_white_pieces{};
+  std::stack<Piece *> dead_black_pieces{};
 
 private:
   void init_board();
