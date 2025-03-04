@@ -29,6 +29,7 @@ int main() {
   ImFont *main_font = io.Fonts->AddFontFromFileTTF("fonts/CHEQ_TT.TTF", 60.0f);
   IM_ASSERT(main_font != nullptr);
 
+  if (ImGui::IsMouseClicked( ImGuiMouseButton_Right )) deselect_piece(moving, selected_piece_position, next_possible_moves);
   quick_imgui::loop(
       "Chess",
       /* init: */ [&]() {},

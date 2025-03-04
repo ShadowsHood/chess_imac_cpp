@@ -26,10 +26,10 @@ void Board::init_board() {
   this->positions_board[get_pos_1D(std::make_pair(0, 7))] =
       new Rook(Color::Black);
 
-  this->positions_board[get_pos_1D(std::make_pair(5, 2))] =
-      new Pawn(Color::Black); // (1,0)
-  this->positions_board[get_pos_1D(std::make_pair(4, 3))] =
-      new Pawn(Color::Black); // (1,1)
+  this->positions_board[get_pos_1D(std::make_pair(1, 0))] =
+      new Pawn(Color::Black);
+  this->positions_board[get_pos_1D(std::make_pair(1, 1))] =
+      new Pawn(Color::Black);
   this->positions_board[get_pos_1D(std::make_pair(1, 2))] =
       new Pawn(Color::Black);
   this->positions_board[get_pos_1D(std::make_pair(1, 3))] =
@@ -100,7 +100,8 @@ void Board::handle_tile_click(int index, Piece *piece, bool &is_a_possible_move,
                               std::vector<int> &next_possible_moves,
                               bool &moving, Color &current_player,
                               std::optional<int> &selected_piece_position) {
-                                if (!moving && piece->get_color() != current_player) std::cout << "Not your turn\n";
+  if (!moving && piece->get_color() != current_player)
+    std::cout << "Not your turn\n";
   // Si je clique  sur une pièce jouable
   if (!this->is_empty(index) && piece->get_color() == current_player) {
     click_playable_piece(index, next_possible_moves, moving,
@@ -110,9 +111,7 @@ void Board::handle_tile_click(int index, Piece *piece, bool &is_a_possible_move,
     click_reachable_tile(index, next_possible_moves, moving, current_player,
                          selected_piece_position);
   } else {
-    moving = false;
-    selected_piece_position.reset();
-    next_possible_moves.clear();
+    deselect_piece(moving, selected_piece_position, next_possible_moves);
     // std::cout << "Invalid move" << std::endl;
   }
 }
@@ -140,4 +139,11 @@ void Board::click_reachable_tile(int index,
   next_possible_moves.clear();
   current_player =
       (current_player == Color::White) ? Color::Black : Color::White;
+}
+
+void deselect_piece(bool &moving, std::optional<int> &selected_piece_position,
+                    std::vector<int> &next_possible_moves) {
+  moving = false;
+  selected_piece_position.reset();
+  next_possible_moves.clear();
 }

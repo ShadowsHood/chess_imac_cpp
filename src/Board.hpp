@@ -65,3 +65,6 @@ public:
     return this->positions_board[position]->get_color() != color;
   };
 };
+
+void deselect_piece(bool &moving, std::optional<int> &selected_piece_position,
+  std::vector<int> &next_possible_moves);
