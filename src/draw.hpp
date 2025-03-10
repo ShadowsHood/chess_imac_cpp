@@ -1,8 +1,7 @@
 #pragma once
 #include "board.hpp"
-#include "utils.hpp"
 #include <imgui.h>
-#include <stack>
+#include <vector>
 
 ImVec4 get_tile_color(int i);
 

@@ -1,14 +1,12 @@
 #pragma once
-#include <iostream>
 #include <vector>
-// #include "Board.hpp"
 
 class Board;
 
-enum class Color { White, Black };
-enum class Type { Pawn, Rook, Knight, Bishop, Queen, King };
+enum class Color : std::uint8_t { White, Black };
+enum class Type : std::uint8_t { Pawn, Rook, Knight, Bishop, Queen, King };
 
-enum class Direction {
+enum class Direction : std::uint8_t {
   Up,
   Down,
   Left,
@@ -27,9 +25,7 @@ protected:
   bool first_move{true};
 
 public:
-  // Piece(): color(Color::White), type(Type::Pawn), position(0) {};
-  Piece(Color color, Type type)
-      : color(color), type(type) {};
+  Piece(Color color, Type type) : color(color), type(type) {};
   virtual ~Piece() = default;
 
   Color get_color() const { return this->color; };
@@ -38,7 +34,7 @@ public:
   char get_char() const { return this->character; };
   bool get_first_move() const { return this->first_move; };
 
-  virtual std::vector<int>
-  get_possible_moves(const Board & board, int position) = 0;
-  void move(Board & board, int old_position, int new_position);
+  virtual std::vector<int> get_possible_moves(const Board &board,
+                                              int position) = 0;
+  void move(Board &board, int old_position, int new_position);
 };

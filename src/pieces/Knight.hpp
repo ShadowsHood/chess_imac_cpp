@@ -1,6 +1,4 @@
 #pragma once
-#include <iostream>
-#include <array>
 #include "./Piece.hpp"
 
 class Knight : public Piece {

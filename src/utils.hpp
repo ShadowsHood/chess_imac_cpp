@@ -1,6 +1,4 @@
 #pragma once
-#include <array>
-#include <iostream>
 #include <vector>
 
 inline std::pair<int, int> get_pos_2D(int pos1D) {

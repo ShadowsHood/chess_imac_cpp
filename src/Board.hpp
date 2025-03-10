@@ -2,50 +2,43 @@
 #include "./pieces/Piece.hpp"
 #include <array>
 #include <imgui.h>
-#include <iostream>
 #include <optional>
 #include <stack>
 #include <vector>
 
 class Board {
-
 private:
   std::array<Piece *, 64> positions_board{};
   std::stack<Piece *> dead_white_pieces{};
   std::stack<Piece *> dead_black_pieces{};
 
+  Color current_player{};
+  std::vector<int> next_possible_moves{};
+  std::optional<int> selected_piece_position{};
+  bool moving{};
+
 private:
   void init_board();
 
 public:
-  inline Board() { this->init_board(); }
+  Board() { this->init_board(); }
   ~Board() = default;
+  // Board(const Board &other);
+  // Board &operator=(const Board &other);
+  // Board(Board &&other) noexcept;
+  // Board &operator=(Board &&other) noexcept;
 
-  void draw_board(std::vector<int> &next_possible_moves, bool &moving,
-                  Color &current_player,
-                  // bool &this_tile_is_a_possible_move,
-                  ImFont *main_font,
-                  std::optional<int> &selected_piece_position);
-  void draw_tile(int i, Piece *piece, ImFont *main_font,
-                 bool &is_a_possible_move,
-                 std::vector<int> &next_possible_moves, bool &moving,
-                 Color &current_player,
-                 std::optional<int> &selected_piece_position);
+  void draw_board(ImFont *main_font);
+  void draw_tile(int i, Piece *piece, ImFont *main_font, bool &is_a_possible_move);
   void draw_dead_pieces(Color color, ImFont *main_font) const;
-  void handle_tile_click(int index, Piece *piece, bool &is_a_possible_move,
-                         std::vector<int> &next_possible_moves, bool &moving,
-                         Color &current_player,
-                         std::optional<int> &selected_piece_position);
-  void click_playable_piece(int index, std::vector<int> &next_possible_moves,
-                            bool &moving,
-                            std::optional<int> &selected_piece_position);
-  void click_reachable_tile(int index, std::vector<int> &next_possible_moves,
-                            bool &moving, Color &current_player,
-                            std::optional<int> &selected_piece_position);
+  void handle_tile_click(int index, Piece *piece, bool &is_a_possible_move);
+  void click_playable_piece(int index);
+  void click_reachable_tile(int index);
 
   const std::array<Piece *, 64> &get_positions_board() const {
     return this->positions_board;
   }
+  void deselect_piece();
 
   void set_piece(Piece *piece, int position);
 
@@ -66,6 +59,3 @@ public:
     return this->positions_board[position]->get_color() != color;
   };
 };
-
-void deselect_piece(bool &moving, std::optional<int> &selected_piece_position,
-                    std::vector<int> &next_possible_moves);

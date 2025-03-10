@@ -9,6 +9,12 @@
 #include "utils.hpp"
 
 void Board::init_board() {
+
+  this->current_player = Color::White;
+  this->moving = false;
+  this->selected_piece_position.reset();
+  this->next_possible_moves.clear();
+
   this->positions_board[get_pos_1D(std::make_pair(0, 0))] =
       new Rook(Color::Black);
   this->positions_board[get_pos_1D(std::make_pair(0, 1))] =
@@ -96,30 +102,22 @@ void Board::kill_piece(Piece *piece, Color color, int position) {
   this->positions_board[position] = nullptr;
 }
 
-void Board::handle_tile_click(int index, Piece *piece, bool &is_a_possible_move,
-                              std::vector<int> &next_possible_moves,
-                              bool &moving, Color &current_player,
-                              std::optional<int> &selected_piece_position) {
+void Board::handle_tile_click(int index, Piece *piece, bool &is_a_possible_move) {
   if (!moving && piece->get_color() != current_player)
     std::cout << "Not your turn\n";
   // Si je clique  sur une pièce jouable
   if (!this->is_empty(index) && piece->get_color() == current_player) {
-    click_playable_piece(index, next_possible_moves, moving,
-                         selected_piece_position);
+    click_playable_piece(index);
     // Si je clique sur une case ou je peux me déplacer
   } else if (moving && is_a_possible_move && selected_piece_position) {
-    click_reachable_tile(index, next_possible_moves, moving, current_player,
-                         selected_piece_position);
+    click_reachable_tile(index);
   } else {
-    deselect_piece(moving, selected_piece_position, next_possible_moves);
+    deselect_piece();
     // std::cout << "Invalid move" << std::endl;
   }
 }
 
-void Board::click_playable_piece(int index,
-                                 std::vector<int> &next_possible_moves,
-                                 bool &moving,
-                                 std::optional<int> &selected_piece_position) {
+void Board::click_playable_piece(int index) {
   std::cout << "Clicked tile : " << index << " ==> (" << get_pos_2D(index).first
             << "," << get_pos_2D(index).second << ") \n";
   moving = true;
@@ -128,10 +126,7 @@ void Board::click_playable_piece(int index,
       this->get_piece(index)->get_possible_moves(*this, index);
 }
 
-void Board::click_reachable_tile(int index,
-                                 std::vector<int> &next_possible_moves,
-                                 bool &moving, Color &current_player,
-                                 std::optional<int> &selected_piece_position) {
+void Board::click_reachable_tile(int index) {
   this->get_piece(*selected_piece_position)
       ->move(*this, *selected_piece_position, index);
   moving = false;
@@ -141,8 +136,7 @@ void Board::click_reachable_tile(int index,
       (current_player == Color::White) ? Color::Black : Color::White;
 }
 
-void deselect_piece(bool &moving, std::optional<int> &selected_piece_position,
-                    std::vector<int> &next_possible_moves) {
+void Board::deselect_piece() {
   moving = false;
   selected_piece_position.reset();
   next_possible_moves.clear();
