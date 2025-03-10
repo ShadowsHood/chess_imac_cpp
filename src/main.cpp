@@ -18,7 +18,7 @@ int main() {
       /* init: */ [&]() {},
       /* loop: */
       [&]() {
-        ImGui::ShowDemoWindow(); // This opens a window with examples.
+        // ImGui::ShowDemoWindow(); // This opens a window with examples.
 
         if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
           board.deselect_piece();
