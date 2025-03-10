@@ -16,6 +16,7 @@ private:
   std::vector<int> next_possible_moves{};
   std::optional<int> selected_piece_position{};
   bool moving{};
+  bool in_game {true};
 
 private:
   void init_board();

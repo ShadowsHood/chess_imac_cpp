@@ -100,6 +100,12 @@ void Board::kill_piece(Piece *piece, Color color, int position) {
     this->dead_black_pieces.push(piece);
   }
   this->positions_board[position] = nullptr;
+
+  // End of game
+  if (piece->get_type() == Type::King) {
+    in_game = false;
+    std::cout << "Game over\n";
+  }
 }
 
 void Board::handle_tile_click(int index, Piece *piece, bool &is_a_possible_move) {
