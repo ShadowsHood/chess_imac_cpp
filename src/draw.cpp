@@ -6,15 +6,10 @@
 void set_background_color() {
   ImGui::StyleColorsDark();
   ImVec4 *colors = ImGui::GetStyle().Colors;
-  colors[ImGuiCol_WindowBg] = ImVec4(0.4f, 0.4f, 0.4f, 1.0f);
+  ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = ImVec4(0.4f, 0.4f, 0.4f, 1.0f);
 }
 
-void Board::draw_board(std::vector<int> &next_possible_moves, bool &moving,
-
-                       Color &current_player,
-                       //  bool &is_a_possible_move, // useless ?
-                       ImFont *main_font,
-                       std::optional<int> &selected_piece_position) {
+void Board::draw_board(ImFont *main_font) {
 
   for (int i = 0; i < 64; i++) {
     ImGui::PushID(i);
@@ -24,18 +19,14 @@ void Board::draw_board(std::vector<int> &next_possible_moves, bool &moving,
     Piece *piece = this->get_piece(i);
     bool is_a_possible_move = is_possible_move(next_possible_moves, i);
 
-    draw_tile(i, piece, main_font, is_a_possible_move, next_possible_moves,
-              moving, current_player, selected_piece_position);
+    draw_tile(i, piece, main_font, is_a_possible_move);
 
     ImGui::PopID();
   }
 }
 
 void Board::draw_tile(int index, Piece *piece, ImFont *main_font,
-                      bool &is_a_possible_move,
-                      std::vector<int> &next_possible_moves, bool &moving,
-                      Color &current_player,
-                      std::optional<int> &selected_piece_position) {
+                      bool &is_a_possible_move) {
   // Set color of the tile (black or white)
   ImVec4 tileColor = get_tile_color(index);
   ImGui::PushStyleColor(ImGuiCol_Button, tileColor);
@@ -43,7 +34,7 @@ void Board::draw_tile(int index, Piece *piece, ImFont *main_font,
   // Set the name of the piece
   std::string name =
       (piece != nullptr) ? std::string(1, piece->get_char()) : "";
-  std::string buttonLabel = name + "##" + std::to_string(index);
+  // std::string buttonLabel = name + "##" + std::to_string(index);
 
   if (piece != nullptr)
     push_font(piece, main_font);
@@ -54,8 +45,7 @@ void Board::draw_tile(int index, Piece *piece, ImFont *main_font,
 
   // Draw tile
   if (ImGui::Button(name.c_str(), ImVec2{100.f, 100.f})) {
-    handle_tile_click(index, piece, is_a_possible_move, next_possible_moves,
-                      moving, current_player, selected_piece_position);
+    handle_tile_click(index, piece, is_a_possible_move);
   }
 
   if (piece != nullptr)
@@ -76,7 +66,7 @@ void Board::draw_dead_pieces(Color color, ImFont *main_font) const {
     push_font(top_piece, main_font);
     ImGui::SameLine();
     std::string name = std::string(1, top_piece->get_char());
-    ImGui::Text(name.c_str());
+    ImGui::Text("%s", name.c_str());
     dead_pieces.pop();
     pop_font();
   }
@@ -135,7 +125,3 @@ void pop_possible_move_color() {
   ImGui::PopStyleColor();
   ImGui::PopStyleVar();
 }
-
-// Colors
-void push_colors(ImFont *&main_font) {}
-void pop_colors(ImFont *&main_font) {}

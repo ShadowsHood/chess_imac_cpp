@@ -165,4 +165,6 @@ void get_pawn_moves(std::vector<int> &moves, const Board &board,
       moves.push_back(new_position_1D);
     }
   }
+
+  // En passant
 }

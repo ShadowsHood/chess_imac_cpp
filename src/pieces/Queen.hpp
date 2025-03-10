@@ -1,7 +1,5 @@
 #pragma once
 #include "./Piece.hpp"
-#include <array>
-#include <iostream>
 
 class Queen : public Piece {
 
