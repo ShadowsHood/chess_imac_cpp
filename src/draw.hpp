@@ -14,6 +14,4 @@ void pop_font();
 void push_possible_move_color();
 void pop_possible_move_color();
 
-void draw_dead_pieces(std::stack<Piece *> dead_pieces, ImFont * main_font);
-
 void set_background_color();

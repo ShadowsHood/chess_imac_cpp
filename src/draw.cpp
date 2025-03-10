@@ -1,18 +1,18 @@
 #include "draw.hpp"
 #include "board.hpp"
-#include <string>
 #include <stack>
+#include <string>
 
 void set_background_color() {
   ImGui::StyleColorsDark();
-  ImVec4* colors = ImGui::GetStyle().Colors;
+  ImVec4 *colors = ImGui::GetStyle().Colors;
   colors[ImGuiCol_WindowBg] = ImVec4(0.4f, 0.4f, 0.4f, 1.0f);
 }
 
 void Board::draw_board(std::vector<int> &next_possible_moves, bool &moving,
 
                        Color &current_player,
-                      //  bool &is_a_possible_move, // useless ?
+                       //  bool &is_a_possible_move, // useless ?
                        ImFont *main_font,
                        std::optional<int> &selected_piece_position) {
 
@@ -67,9 +67,10 @@ void Board::draw_tile(int index, Piece *piece, ImFont *main_font,
   ImGui::PopStyleColor();
 }
 
-void draw_dead_pieces(std::stack<Piece *> dead_pieces, ImFont * main_font) {
-  Piece * top_piece {};
-
+void Board::draw_dead_pieces(Color color, ImFont *main_font) const {
+  Piece *top_piece{};
+  std::stack<Piece *> dead_pieces =
+      color == Color::White ? dead_white_pieces : dead_black_pieces;
   while (!dead_pieces.empty()) {
     top_piece = dead_pieces.top();
     push_font(top_piece, main_font);

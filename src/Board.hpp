@@ -31,6 +31,7 @@ public:
                  std::vector<int> &next_possible_moves, bool &moving,
                  Color &current_player,
                  std::optional<int> &selected_piece_position);
+  void draw_dead_pieces(Color color, ImFont *main_font) const;
   void handle_tile_click(int index, Piece *piece, bool &is_a_possible_move,
                          std::vector<int> &next_possible_moves, bool &moving,
                          Color &current_player,
@@ -67,4 +68,4 @@ public:
 };
 
 void deselect_piece(bool &moving, std::optional<int> &selected_piece_position,
-  std::vector<int> &next_possible_moves);
+                    std::vector<int> &next_possible_moves);
