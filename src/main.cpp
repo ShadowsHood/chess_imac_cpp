@@ -40,7 +40,8 @@ int main() {
 
         // Draw the board
         board.draw_dead_pieces(Color::White, main_font);
-        board.draw_board(next_possible_moves, moving, current_player, main_font, selected_piece_position);
+        board.draw_board(next_possible_moves, moving, current_player, main_font,
+                         selected_piece_position);
         ImGui::Spacing();
         board.draw_dead_pieces(Color::Black, main_font);
 
