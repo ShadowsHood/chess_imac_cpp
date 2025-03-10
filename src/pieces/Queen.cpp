@@ -1,5 +1,7 @@
 #include "./Queen.hpp"
+#include "./move.hpp"
 #include "./utils.hpp"
+
 
 std::vector<int> Queen::get_possible_moves(const Board &board, int position) {
   std::vector<int> possible_moves;

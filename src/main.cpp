@@ -1,5 +1,6 @@
 #include "./Board.hpp"
 #include "./draw.hpp"
+#include "./move.hpp"
 #include "./pieces/Bishop.hpp"
 #include "./pieces/King.hpp"
 #include "./pieces/Knight.hpp"
@@ -12,14 +13,16 @@
 #include <array>
 #include <imgui.h>
 #include <iostream>
+#include <optional>
 #include <vector>
 
 int main() {
   Board board;
   Color current_player = Color::White;
   std::vector<int> next_possible_moves{};
+  std::optional<int> selected_piece_position{};
   bool moving = false;
-  bool this_tile_is_a_possible_move = false;
+  // bool this_tile_is_a_possible_move = false;
 
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
@@ -32,8 +35,12 @@ int main() {
       /* init: */ [&]() {},
       /* loop: */
       [&]() {
-        ImGui::ShowDemoWindow(); // This opens a window which shows tons of examples of what you can do with ImGui. You should check it out! Also, you can use the "Item Picker" in the top menu of that demo window: then click on any widget and it will show you the corresponding code directly in your IDE!
 
+        ImGui::ShowDemoWindow(); // This opens a window with examples.
+
+        if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+          deselect_piece(moving, selected_piece_position, next_possible_moves);
+        
         ImGui::Begin("Chess Game");
         ImGui::GetStyle().ItemSpacing = ImVec2(0.0f, 0.0f);
         set_background_color();
