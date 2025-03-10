@@ -1,8 +1,7 @@
 #include "./utils.hpp"
 #include <iostream>
 
-template <typename T>
-bool is_in_vec(std::vector<T> &vec, T value) {
+template <typename T> bool is_in_vec(std::vector<T> &vec, T value) {
   return std::find(vec.begin(), vec.end(), value) != vec.end();
 }
 
@@ -17,4 +16,14 @@ void display_vector_pos(std::vector<int> &possible_moves) {
   } else {
     std::cout << "No possible moves" << '\n';
   }
+}
+
+int distance_between_two_tiles(int tile1, int tile2) {
+  std::pair<int,int> pos1 = get_pos_2D(tile1);
+  std::pair<int,int> pos2 = get_pos_2D(tile2);
+
+  int dx = pos1.first - pos2.first;
+  int dy = pos1.second - pos2.second;
+
+  return static_cast<int>(std::sqrt(std::pow(dx, 2) + std::pow(dy, 2)));
 }

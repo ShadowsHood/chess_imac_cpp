@@ -14,6 +14,7 @@ void Board::init_board() {
   this->moving = false;
   this->selected_piece_position.reset();
   this->next_possible_moves.clear();
+  this->index_en_passant_available = -1;
 
   this->positions_board[get_pos_1D(std::make_pair(0, 0))] =
       new Rook(Color::Black);
@@ -102,18 +103,34 @@ void Board::kill_piece(Piece *piece, Color color, int position) {
   this->positions_board[position] = nullptr;
 }
 
-void Board::handle_tile_click(int index, Piece *piece, bool &is_a_possible_move) {
-  if (!moving && piece->get_color() != current_player)
-    std::cout << "Not your turn\n";
-  // Si je clique  sur une pièce jouable
-  if (!this->is_empty(index) && piece->get_color() == current_player) {
+void Board::handle_tile_click(int index, Piece *piece,
+                              bool &is_a_possible_move) {
+
+  if (!this->is_empty(index) &&
+      piece->get_color() == current_player && index != selected_piece_position) { // Si la  case est valide
+    // Si je clique sur une pièce jouable
     click_playable_piece(index);
-    // Si je clique sur une case ou je peux me déplacer
-  } else if (moving && is_a_possible_move && selected_piece_position) {
-    click_reachable_tile(index);
-  } else {
+
+  } else if (index == selected_piece_position) {
+    // Si je clique sur la même pièce
     deselect_piece();
-    // std::cout << "Invalid move" << std::endl;
+  } else if (moving && is_a_possible_move && selected_piece_position) {
+
+    // Si je clique sur une case ou je peux me déplacer
+    click_reachable_tile(index);
+
+  } else { // Si la case est erronée
+    if ((is_empty(index))) {
+      // Si je clique sur une case vide
+      deselect_piece();
+    } else if (!moving && piece->get_color() != current_player) {
+      // Si je clique sur une pièce non jouable
+      std::cout << "Not your turn\n";
+    } else {
+      // Si je clique sur une case non jouable et imprévue
+      deselect_piece();
+      std::cout << "Invalid move\n";
+    }
   }
 }
 

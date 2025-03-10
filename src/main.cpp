@@ -1,7 +1,9 @@
 #include "./Board.hpp"
 #include "./draw.hpp"
+#include "./utils.hpp"
 #include "./pieces/Piece.hpp"
 #include "quick_imgui/quick_imgui.hpp"
+#include <iostream>
 #include <imgui.h>
 
 int main() {
@@ -32,6 +34,7 @@ int main() {
         board.draw_board(main_font);
         ImGui::Spacing();
         board.draw_dead_pieces(Color::Black, main_font);
+
 
         ImGui::End();
       });

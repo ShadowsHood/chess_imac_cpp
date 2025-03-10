@@ -16,6 +16,7 @@ private:
   std::vector<int> next_possible_moves{};
   std::optional<int> selected_piece_position{};
   bool moving{};
+  int index_en_passant_available{};
 
 private:
   void init_board();
@@ -35,9 +36,11 @@ public:
   void click_playable_piece(int index);
   void click_reachable_tile(int index);
 
-  const std::array<Piece *, 64> &get_positions_board() const {
-    return this->positions_board;
-  }
+  bool en_passant_available(int position) const  {return this->index_en_passant_available == position;};
+  int get_en_passant_available()const {return this->index_en_passant_available;};
+  void set_en_passant_available(int position) {this->index_en_passant_available = position;};
+
+  const std::array<Piece *, 64> &get_positions_board() const {return this->positions_board;}
   void deselect_piece();
 
   void set_piece(Piece *piece, int position);
@@ -46,10 +49,7 @@ public:
 
   bool is_in_board(std::pair<int, int> position) const;
 
-  Piece *get_piece(int position) {
-    return this->positions_board[position] ? this->positions_board[position]
-                                           : nullptr;
-  };
+  Piece *get_piece(int position) {return this->positions_board[position] ? this->positions_board[position] : nullptr;};
 
   bool is_empty(int position) const {
     return this->positions_board[position] == nullptr;

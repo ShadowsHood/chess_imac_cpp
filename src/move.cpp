@@ -160,21 +160,10 @@ void get_pawn_moves(std::vector<int> &moves, const Board &board,
   for (int i = -1; i <= 1; i += 2) {
     new_position = {position.first + orientation, position.second + i};
     new_position_1D = get_pos_1D(new_position);
-    if (board.is_in_board(new_position) && !board.is_empty(new_position_1D) &&
-        board.is_other_color(new_position_1D, color)) {
+    int pos_en_passant_1D = get_pos_1D({position.first, position.second + i}); 
+    if (board.is_in_board(new_position) && ((!board.is_empty(new_position_1D) &&
+        board.is_other_color(new_position_1D, color)) || board.en_passant_available(pos_en_passant_1D))) {
       moves.push_back(new_position_1D);
     }
   }
-
-  // En passant
-  // if (board.get_en_passant() != -1) {
-  //   for (int i = -1; i <= 1; i += 2) {
-  //     new_position = {position.first, position.second + i};
-  //     new_position_1D = get_pos_1D(new_position);
-  //     if (board.is_in_board(new_position) &&
-  //         new_position_1D == board.get_en_passant()) {
-  //       moves.push_back(new_position_1D);
-  //     }
-  //   }
-  // }
 }

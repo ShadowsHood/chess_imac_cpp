@@ -12,3 +12,5 @@ bool is_in_vec(std::vector<T> &vec, T value);
 
 
 void display_vector_pos(std::vector<int> &possible_moves);
+
+int distance_between_two_tiles(int tile1, int tile2);
