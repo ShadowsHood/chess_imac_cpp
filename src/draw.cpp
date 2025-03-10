@@ -45,7 +45,8 @@ void Board::draw_tile(int index, Piece *piece, ImFont *main_font,
 
   // Draw tile
   if (ImGui::Button(name.c_str(), ImVec2{100.f, 100.f})) {
-    handle_tile_click(index, piece, is_a_possible_move);
+    if (in_game)
+      handle_tile_click(index, piece, is_a_possible_move);
   }
 
   if (piece != nullptr)
