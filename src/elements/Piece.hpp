@@ -33,4 +33,5 @@ public:
   void handleEnPassant(Board &board, std::pair<int, int> new_pos_2D);
   void updateEnPassantAvailability(Board &board, std::pair<int, int> new_pos_2D,
                                    int new_position);
+  void promotion(Board &board, int position);
 };

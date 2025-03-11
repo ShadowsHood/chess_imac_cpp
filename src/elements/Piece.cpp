@@ -1,6 +1,11 @@
 #include "./Piece.hpp"
 #include "./Board.hpp"
+#include "./pieces/Bishop.hpp"
+#include "./pieces/Knight.hpp"
+#include "./pieces/Queen.hpp"
+#include "./pieces/Rook.hpp"
 #include "utils.hpp"
+#include <iostream>
 
 void Piece::move(Board &board, int old_position, int new_position) {
 
@@ -17,12 +22,18 @@ void Piece::move(Board &board, int old_position, int new_position) {
     first_move = false;
 
   if (!board.is_empty(new_position)) {
-    board.kill_piece(board[new_position],
-                     board[new_position]->get_color(), new_position);
+    board.kill_piece(board[new_position], board[new_position]->get_color(),
+                     new_position);
   }
 
   board.set_piece(nullptr, old_position);
   board.set_piece(this, new_position);
+
+  // Promotion
+  if (this->type == Type::Pawn &&
+      (new_position / 8 == 0 || new_position / 8 == 7)) {
+    this->promotion(board, new_position);
+  }
 }
 
 void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
@@ -49,5 +60,37 @@ void Piece::updateEnPassantAvailability(Board &board,
     board.set_en_passant_available(new_position);
   } else {
     board.set_en_passant_available(-1);
+  }
+}
+
+void Piece::promotion(Board &board, int position) {
+  std::cout << "In which piece do you want to transform the pawn ? \nQueen "
+               "(q), Rook (r), Bishop (b), Knight (k) \n";
+  char type{};
+  std::cin >> type;
+
+  Piece *new_piece = nullptr;
+
+  switch (type) {
+      case 'r':
+          new_piece = new Rook(this->color);
+          break;
+      case 'b':
+          new_piece = new Bishop(this->color);
+          break;
+      case 'k':
+          new_piece = new Knight(this->color);
+          break;
+      case 'q':
+      default:
+          new_piece = new Queen(this->color);
+          break;
+  }
+
+  if (new_piece != nullptr) {
+    board.set_piece(new_piece, position);
+    delete this; // Supprime le pion
+  } else {
+    std::cerr << "Promotion Fatal Error" << std::endl; 
   }
 }
