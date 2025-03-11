@@ -1,5 +1,6 @@
 ﻿---
 BasedOnStyle: Google
+IndentWidth: "4"
 AccessModifierOffset: "-4"
 AlignAfterOpenBracket: BlockIndent
 AlignConsecutiveMacros: "true"
@@ -23,25 +24,7 @@ AlwaysBreakTemplateDeclarations: "Yes"
 BinPackArguments: "true"
 BinPackParameters: "true"
 BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeBraces: Custom
-BraceWrapping:
-  AfterCaseLabel: true
-  AfterClass: false
-  AfterControlStatement: true
-  AfterEnum: false
-  AfterFunction: true
-  AfterNamespace: false
-  AfterObjCDeclaration: true
-  AfterStruct: false
-  AfterUnion: false
-  AfterExternBlock: true
-  BeforeCatch: true
-  BeforeElse: true
-  BeforeLambdaBody: false
-  IndentBraces: false
-  SplitEmptyFunction: false
-  SplitEmptyRecord: false
-  SplitEmptyNamespace: true
+BreakBeforeBraces: "false"
 BreakBeforeTernaryOperators: "true"
 BreakConstructorInitializers: BeforeComma
 BreakInheritanceList: BeforeComma
@@ -49,8 +32,6 @@ BreakStringLiterals: "true"
 ColumnLimit: "0"
 CompactNamespaces: "true"
 ConstructorInitializerAllOnOneLineOrOnePerLine: "true"
-ConstructorInitializerIndentWidth: "4"
-ContinuationIndentWidth: "4"
 Cpp11BracedListStyle: "true"
 DerivePointerAlignment: "false"
 DisableFormat: "false"
@@ -59,7 +40,6 @@ FixNamespaceComments: "true"
 IncludeBlocks: Merge
 IndentCaseLabels: "false"
 IndentPPDirectives: None
-IndentWidth: "4"
 IndentWrappedFunctionNames: "true"
 KeepEmptyLinesAtTheStartOfBlocks: "false"
 Language: Cpp
