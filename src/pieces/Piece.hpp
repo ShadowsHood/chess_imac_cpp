@@ -37,4 +37,5 @@ public:
   virtual std::vector<int> get_possible_moves(const Board &board,
                                               int position) = 0;
   void move(Board &board, int old_position, int new_position);
+  void transform_pawn(Board & board, int new_position);
 };
