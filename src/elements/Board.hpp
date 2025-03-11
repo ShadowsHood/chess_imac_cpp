@@ -1,5 +1,5 @@
 #pragma once
-#include "./pieces/Piece.hpp"
+#include "./Piece.hpp"
 #include <array>
 #include <imgui.h>
 #include <optional>
@@ -17,44 +17,55 @@ private:
   std::optional<int> selected_piece_position{};
   bool moving{};
   int index_en_passant_available{};
+  bool in_game{true};
 
 private:
   void init_board();
 
 public:
   Board() { this->init_board(); }
-  ~Board() = default;
-  // Board(const Board &other);
-  // Board &operator=(const Board &other);
-  // Board(Board &&other) noexcept;
-  // Board &operator=(Board &&other) noexcept;
 
-  void draw_board(ImFont *main_font);
-  void draw_tile(int i, Piece *piece, ImFont *main_font, bool &is_a_possible_move);
-  void draw_dead_pieces(Color color, ImFont *main_font) const;
+  Piece *operator[](int position) const {
+    return this->positions_board[position] ? this->positions_board[position]
+                                           : nullptr;
+  };
+
+  // Actions click
   void handle_tile_click(int index, Piece *piece, bool &is_a_possible_move);
   void click_playable_piece(int index);
   void click_reachable_tile(int index);
 
-  bool en_passant_available(int position) const  {return this->index_en_passant_available == position;};
-  int get_en_passant_available()const {return this->index_en_passant_available;};
-  void set_en_passant_available(int position) {this->index_en_passant_available = position;};
+  // En passant
+  bool en_passant_available(int position) const {
+    return this->index_en_passant_available == position;
+  };
+  int get_en_passant_available() const {
+    return this->index_en_passant_available;
+  };
+  void set_en_passant_available(int position) {
+    this->index_en_passant_available = position;
+  };
 
-  const std::array<Piece *, 64> &get_positions_board() const {return this->positions_board;}
+  // Getters
+  std::vector<int> get_next_possible_moves() const {
+    return this->next_possible_moves;
+  };
+  std::stack<Piece *> get_dead_white_pieces() const {
+    return this->dead_white_pieces;
+  };
+  std::stack<Piece *> get_dead_black_pieces() const {
+    return this->dead_black_pieces;
+  };
+  bool get_in_game() const { return this->in_game; };
+
+  // Utils
   void deselect_piece();
-
   void set_piece(Piece *piece, int position);
-
   void kill_piece(Piece *piece, Color color, int position);
-
   bool is_in_board(std::pair<int, int> position) const;
-
-  Piece *get_piece(int position) {return this->positions_board[position] ? this->positions_board[position] : nullptr;};
-
   bool is_empty(int position) const {
     return this->positions_board[position] == nullptr;
   };
-
   bool is_other_color(int position, Color color) const {
     return this->positions_board[position]->get_color() != color;
   };

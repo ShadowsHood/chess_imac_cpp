@@ -1,12 +1,13 @@
 #include "./Board.hpp"
+#include "./Piece.hpp"
 #include "./pieces/Bishop.hpp"
 #include "./pieces/King.hpp"
 #include "./pieces/Knight.hpp"
 #include "./pieces/Pawn.hpp"
-#include "./pieces/Piece.hpp"
 #include "./pieces/Queen.hpp"
 #include "./pieces/Rook.hpp"
 #include "utils.hpp"
+#include <iostream>
 
 void Board::init_board() {
 
@@ -101,13 +102,19 @@ void Board::kill_piece(Piece *piece, Color color, int position) {
     this->dead_black_pieces.push(piece);
   }
   this->positions_board[position] = nullptr;
+
+  // End of game
+  if (piece->get_type() == Type::King) {
+    in_game = false;
+    std::cout << "Game over\n";
+  }
 }
 
 void Board::handle_tile_click(int index, Piece *piece,
                               bool &is_a_possible_move) {
 
-  if (!this->is_empty(index) &&
-      piece->get_color() == current_player && index != selected_piece_position) { // Si la  case est valide
+  if (!this->is_empty(index) && piece->get_color() == current_player &&
+      index != selected_piece_position) { // Si la  case est valide
     // Si je clique sur une pièce jouable
     click_playable_piece(index);
 
@@ -140,11 +147,11 @@ void Board::click_playable_piece(int index) {
   moving = true;
   selected_piece_position = index;
   next_possible_moves =
-      this->get_piece(index)->get_possible_moves(*this, index);
+      this->positions_board[index]->get_possible_moves(*this, index);
 }
 
 void Board::click_reachable_tile(int index) {
-  this->get_piece(*selected_piece_position)
+    this->positions_board[*selected_piece_position]
       ->move(*this, *selected_piece_position, index);
   moving = false;
   selected_piece_position.reset();

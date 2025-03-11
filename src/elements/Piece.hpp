@@ -1,36 +1,29 @@
 #pragma once
+#include "../utils.hpp"
+#include "./Color.hpp"
+#include "./Type.hpp"
 #include <vector>
 
 class Board;
 
-enum class Color : std::uint8_t { White, Black };
-enum class Type : std::uint8_t { Pawn, Rook, Knight, Bishop, Queen, King };
-
-enum class Direction : std::uint8_t {
-  Up,
-  Down,
-  Left,
-  Right,
-  UpLeft,
-  UpRight,
-  DownLeft,
-  DownRight
-};
-
 class Piece {
-protected:
+private:
   Color color;
   Type type;
   char character{};
   bool first_move{true};
 
 public:
-  Piece(Color color, Type type) : color(color), type(type) {};
+  Piece(Color color, Type type)
+      : color(color), type(type), character(get_sprite_char(color, type)) {};
   virtual ~Piece() = default;
+  Piece(const Piece &) = delete;
+  Piece(Piece &&) = delete;
+  Piece &operator=(const Piece &) = delete;
+  Piece &operator=(Piece &&) = delete;
 
   Color get_color() const { return this->color; };
   Type get_type() const { return this->type; };
-  void set_char(Color color, Type type);
   char get_char() const { return this->character; };
   bool get_first_move() const { return this->first_move; };
 

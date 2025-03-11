@@ -1,10 +1,8 @@
-#include "./Board.hpp"
 #include "./draw.hpp"
-#include "./utils.hpp"
-#include "./pieces/Piece.hpp"
+#include "./elements/Board.hpp"
 #include "quick_imgui/quick_imgui.hpp"
-#include <iostream>
 #include <imgui.h>
+#include <iostream>
 
 int main() {
   Board board;
@@ -30,11 +28,10 @@ int main() {
         set_background_color();
 
         // Draw the board
-        board.draw_dead_pieces(Color::White, main_font);
-        board.draw_board(main_font);
+        draw_dead_pieces(board, Color::White, main_font);
+        draw_board(board, main_font);
         ImGui::Spacing();
-        board.draw_dead_pieces(Color::Black, main_font);
-
+        draw_dead_pieces(board, Color::Black, main_font);
 
         ImGui::End();
       });

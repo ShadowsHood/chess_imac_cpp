@@ -2,29 +2,6 @@
 #include "./Board.hpp"
 #include "utils.hpp"
 
-void Piece::set_char(Color color, Type type) {
-  switch (type) {
-  case Type::Pawn:
-    this->character = (color == Color::White) ? 'p' : 'o';
-    break;
-  case Type::Rook:
-    this->character = (color == Color::White) ? 'r' : 't';
-    break;
-  case Type::Knight:
-    this->character = (color == Color::White) ? 'h' : 'j';
-    break;
-  case Type::Bishop:
-    this->character = (color == Color::White) ? 'b' : 'n';
-    break;
-  case Type::Queen:
-    this->character = (color == Color::White) ? 'q' : 'w';
-    break;
-  case Type::King:
-    this->character = (color == Color::White) ? 'k' : 'l';
-    break;
-  }
-}
-
 void Piece::move(Board &board, int old_position, int new_position) {
 
   std::pair<int, int> old_pos_2D = get_pos_2D(old_position);
@@ -40,8 +17,8 @@ void Piece::move(Board &board, int old_position, int new_position) {
     first_move = false;
 
   if (!board.is_empty(new_position)) {
-    board.kill_piece(board.get_piece(new_position),
-                     board.get_piece(new_position)->get_color(), new_position);
+    board.kill_piece(board[new_position],
+                     board[new_position]->get_color(), new_position);
   }
 
   board.set_piece(nullptr, old_position);
@@ -58,8 +35,8 @@ void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
   if ((new_pos_2D.first - 1 == en_passant_available_pos_2D.first ||
        new_pos_2D.first + 1 == en_passant_available_pos_2D.first) &&
       new_pos_2D.second == en_passant_available_pos_2D.second) {
-    board.kill_piece(board.get_piece(en_passant_available),
-                     board.get_piece(en_passant_available)->get_color(),
+    board.kill_piece(board[en_passant_available],
+                     board[en_passant_available]->get_color(),
                      en_passant_available);
   }
 }
