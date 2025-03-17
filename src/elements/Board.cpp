@@ -109,18 +109,19 @@ bool Board::is_in_board(std::pair<int, int> position) const {
 void Board::kill_piece(int position) {
   if (chess_board[position]) {
     std::unique_ptr<Piece> piece = std::move(chess_board[position]);
-    if (piece->get_color() == Color::White) {
-      dead_white_pieces.push_back(std::move(piece));
-    } else {
-      dead_black_pieces.push_back(std::move(piece));
-    }
-    chess_board[position] = nullptr;
 
     // Game over
     if (piece->get_type() == Type::King) {
       in_game = false;
       std::cout << "Game over\n";
     }
+
+    if (piece->get_color() == Color::White) {
+      dead_white_pieces.push_back(std::move(piece));
+    } else {
+      dead_black_pieces.push_back(std::move(piece));
+    }
+    chess_board[position] = nullptr;
   }
 }
 
