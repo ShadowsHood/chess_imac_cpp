@@ -68,7 +68,7 @@ void Piece::updateEnPassantAvailability(Board &board,
 
 void Piece::promotion(Board &board, int position) {
   std::cout << "In which piece do you want to transform the pawn ? \nQueen "
-               "(q), Rook (r), Bishop (b), Knight (k) \n";
+               "(q), Rook (r), Bishop (b), Knight (k), Racist (n) \n";
   char type{};
   std::cin >> type;
 
