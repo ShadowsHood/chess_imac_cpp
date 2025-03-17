@@ -86,13 +86,15 @@ void Board::init_board() {
       std::make_unique<Rook>(Color::White);
 }
 
-std::unique_ptr<Piece> Board::get_ptr(Piece* piece) {
-    for (int i = 0; i < 64; ++i) {
-        if (chess_board[i].get() == piece) {
-            return std::move(chess_board[i]);
-        }
+std::unique_ptr<Piece> Board::take_piece(Piece *piece) {
+  for (int i = 0; i < 64; ++i) {
+    if (chess_board[i].get() == piece) {
+      std::unique_ptr<Piece> taken_piece = std::move(chess_board[i]);
+      chess_board[i] = nullptr;
+      return taken_piece;
     }
-    return nullptr;
+  }
+  return nullptr;
 }
 
 void Board::set_piece(std::unique_ptr<Piece> piece, int position) {
@@ -108,9 +110,9 @@ void Board::kill_piece(int position) {
   if (chess_board[position]) {
     std::unique_ptr<Piece> piece = std::move(chess_board[position]);
     if (piece->get_color() == Color::White) {
-      dead_white_pieces.push(std::move(piece));
+      dead_white_pieces.push_back(std::move(piece));
     } else {
-      dead_black_pieces.push(std::move(piece));
+      dead_black_pieces.push_back(std::move(piece));
     }
     chess_board[position] = nullptr;
 

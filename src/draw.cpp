@@ -1,6 +1,6 @@
 #include "draw.hpp"
-#include <stack>
 #include <string>
+#include <vector>
 
 void set_background_color() {
   ImGui::StyleColorsDark();
@@ -46,7 +46,8 @@ void draw_tile(Board &board, int index, Piece const *piece, ImFont *main_font,
   // Draw tile
   if (ImGui::Button(name.c_str(), ImVec2{100.f, 100.f})) {
     if (board.get_in_game())
-      board.handle_tile_click(index, piece, is_a_possible_move); // std optional color ?
+      board.handle_tile_click(index, piece,
+                              is_a_possible_move); // std optional color ?
   }
 
   if (piece != nullptr)
@@ -59,17 +60,13 @@ void draw_tile(Board &board, int index, Piece const *piece, ImFont *main_font,
 }
 
 void draw_dead_pieces(const Board &board, Color color, ImFont *main_font) {
-  std::unique_ptr<Piece> top_piece{};
-  std::stack<std::unique_ptr<Piece>> dead_pieces =
-      color == Color::White ? board.get_dead_white_pieces()
-                            : board.get_dead_black_pieces();
-  while (!dead_pieces.empty()) {
-    top_piece = std::move(dead_pieces.top());
-    push_font(top_piece->get_color(), main_font);
+  std::vector<Piece const *> dead_pieces = board.get_dead_pieces(color);
+
+  for (Piece const *piece : dead_pieces) {
+    push_font(piece->get_color(), main_font);
     ImGui::SameLine();
-    std::string name = std::string(1, top_piece->get_char());
+    std::string name = std::string(1, piece->get_char());
     ImGui::Text("%s", name.c_str());
-    dead_pieces.pop();
     pop_font();
   }
 }

@@ -26,7 +26,7 @@ void Piece::move(Board &board, int old_position, int new_position) {
   }
 
   // board.set_piece(nullptr, old_position);
-  std::unique_ptr<Piece> piece = board.get_ptr(this);
+  std::unique_ptr<Piece> piece = board.take_piece(this);
   if (piece) {
     board.set_piece(std::move(piece), new_position);
   } else {

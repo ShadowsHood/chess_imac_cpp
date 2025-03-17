@@ -4,14 +4,13 @@
 #include <imgui.h>
 #include <memory>
 #include <optional>
-#include <stack>
 #include <vector>
 
 class Board {
 private:
   std::array<std::unique_ptr<Piece>, 64> chess_board{};
-  std::stack<std::unique_ptr<Piece>> dead_white_pieces{};
-  std::stack<std::unique_ptr<Piece>> dead_black_pieces{};
+  std::vector<std::unique_ptr<Piece>> dead_white_pieces{};
+  std::vector<std::unique_ptr<Piece>> dead_black_pieces{};
 
   Color current_player{};
   std::vector<int> next_possible_moves{};
@@ -51,17 +50,26 @@ public:
   std::vector<int> get_next_possible_moves() const {
     return this->next_possible_moves;
   };
-  const std::stack<std::unique_ptr<Piece>> &get_dead_white_pieces() const {
-    return this->dead_white_pieces;
-  };
-  const std::stack<std::unique_ptr<Piece>> &get_dead_black_pieces() const {
-    return this->dead_black_pieces;
+  std::vector<Piece const *> get_dead_pieces(Color color) const {
+    const std::vector<std::unique_ptr<Piece>> &source =
+        (color == Color::White ? this->dead_white_pieces
+                               : this->dead_black_pieces);
+
+    std::vector<Piece const *> result;
+    result.reserve(source.size()); // Optional: Reserve space for efficiency
+
+    for (const auto &piece_ptr : source) {
+      if (piece_ptr) { // Check if the unique_ptr is not null
+        result.push_back(piece_ptr.get());
+      }
+    }
+    return result;
   };
   bool get_in_game() const { return this->in_game; };
 
   // Utils
   void deselect_piece();
-  std::unique_ptr<Piece> get_ptr(Piece *piece);
+  std::unique_ptr<Piece> take_piece(Piece *piece);
   void set_piece(std::unique_ptr<Piece> piece, int position);
   void kill_piece(int position);
   bool is_in_board(std::pair<int, int> position) const;
