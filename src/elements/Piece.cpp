@@ -3,6 +3,7 @@
 #include "./pieces/Bishop.hpp"
 #include "./pieces/Knight.hpp"
 #include "./pieces/Queen.hpp"
+#include "./pieces/Racist.hpp"
 #include "./pieces/Rook.hpp"
 #include "utils.hpp"
 #include <iostream>
@@ -79,16 +80,16 @@ void Piece::promotion(Board &board, int position) {
     break;
   case 'b':
     new_piece = std::make_unique<Bishop>(this->color);
-    ;
     break;
   case 'k':
     new_piece = std::make_unique<Knight>(this->color);
-    ;
+    break;
+  case 'n':
+    new_piece = std::make_unique<Racist>(this->color);
     break;
   case 'q':
   default:
     new_piece = std::make_unique<Queen>(this->color);
-    ;
     break;
   }
 

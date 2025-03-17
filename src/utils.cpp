@@ -37,6 +37,7 @@ char get_sprite_char(Color color, Type type) {
   case Type::Rook:
     character = (color == Color::White) ? 'r' : 't';
     break;
+  case Type::Racist:
   case Type::Knight:
     character = (color == Color::White) ? 'h' : 'j';
     break;

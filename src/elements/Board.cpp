@@ -5,6 +5,7 @@
 #include "./pieces/Knight.hpp"
 #include "./pieces/Pawn.hpp"
 #include "./pieces/Queen.hpp"
+#include "./pieces/Racist.hpp"
 #include "./pieces/Rook.hpp"
 #include "utils.hpp"
 #include <iostream>
@@ -85,6 +86,22 @@ void Board::init_board() {
   this->chess_board[get_pos_1D(std::make_pair(7, 7))] =
       std::make_unique<Rook>(Color::White);
 }
+
+std::vector<Piece const *> Board::get_dead_pieces(Color color) const {
+  const std::vector<std::unique_ptr<Piece>> &source =
+      (color == Color::White ? this->dead_white_pieces
+                             : this->dead_black_pieces);
+
+  std::vector<Piece const *> result;
+  result.reserve(source.size()); // Optional: Reserve space for efficiency
+
+  for (const auto &piece_ptr : source) {
+    if (piece_ptr) {
+      result.push_back(piece_ptr.get());
+    }
+  }
+  return result;
+};
 
 std::unique_ptr<Piece> Board::take_piece(Piece *piece) {
   for (int i = 0; i < 64; ++i) {

@@ -50,21 +50,7 @@ public:
   std::vector<int> get_next_possible_moves() const {
     return this->next_possible_moves;
   };
-  std::vector<Piece const *> get_dead_pieces(Color color) const {
-    const std::vector<std::unique_ptr<Piece>> &source =
-        (color == Color::White ? this->dead_white_pieces
-                               : this->dead_black_pieces);
-
-    std::vector<Piece const *> result;
-    result.reserve(source.size()); // Optional: Reserve space for efficiency
-
-    for (const auto &piece_ptr : source) {
-      if (piece_ptr) { // Check if the unique_ptr is not null
-        result.push_back(piece_ptr.get());
-      }
-    }
-    return result;
-  };
+  std::vector<Piece const *> get_dead_pieces(Color color) const;
   bool get_in_game() const { return this->in_game; };
 
   // Utils
