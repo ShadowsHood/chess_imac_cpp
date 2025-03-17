@@ -2,15 +2,15 @@
 #include "./Piece.hpp"
 #include <array>
 #include <imgui.h>
+#include <memory>
 #include <optional>
-#include <stack>
 #include <vector>
 
 class Board {
 private:
-  std::array<Piece *, 64> positions_board{};
-  std::stack<Piece *> dead_white_pieces{};
-  std::stack<Piece *> dead_black_pieces{};
+  std::array<std::unique_ptr<Piece>, 64> chess_board{};
+  std::vector<std::unique_ptr<Piece>> dead_white_pieces{};
+  std::vector<std::unique_ptr<Piece>> dead_black_pieces{};
 
   Color current_player{};
   std::vector<int> next_possible_moves{};
@@ -25,13 +25,13 @@ private:
 public:
   Board() { this->init_board(); }
 
-  Piece *operator[](int position) const {
-    return this->positions_board[position] ? this->positions_board[position]
-                                           : nullptr;
+  Piece const *operator[](int position) const {
+    return this->chess_board[position].get();
   };
 
   // Actions click
-  void handle_tile_click(int index, Piece *piece, bool &is_a_possible_move);
+  void handle_tile_click(int index, Piece const *piece,
+                         bool &is_a_possible_move);
   void click_playable_piece(int index);
   void click_reachable_tile(int index);
 
@@ -50,23 +50,33 @@ public:
   std::vector<int> get_next_possible_moves() const {
     return this->next_possible_moves;
   };
-  std::stack<Piece *> get_dead_white_pieces() const {
-    return this->dead_white_pieces;
-  };
-  std::stack<Piece *> get_dead_black_pieces() const {
-    return this->dead_black_pieces;
+  std::vector<Piece const *> get_dead_pieces(Color color) const {
+    const std::vector<std::unique_ptr<Piece>> &source =
+        (color == Color::White ? this->dead_white_pieces
+                               : this->dead_black_pieces);
+
+    std::vector<Piece const *> result;
+    result.reserve(source.size()); // Optional: Reserve space for efficiency
+
+    for (const auto &piece_ptr : source) {
+      if (piece_ptr) { // Check if the unique_ptr is not null
+        result.push_back(piece_ptr.get());
+      }
+    }
+    return result;
   };
   bool get_in_game() const { return this->in_game; };
 
   // Utils
   void deselect_piece();
-  void set_piece(Piece *piece, int position);
-  void kill_piece(Piece *piece, Color color, int position);
+  std::unique_ptr<Piece> take_piece(Piece *piece);
+  void set_piece(std::unique_ptr<Piece> piece, int position);
+  void kill_piece(int position);
   bool is_in_board(std::pair<int, int> position) const;
   bool is_empty(int position) const {
-    return this->positions_board[position] == nullptr;
+    return this->chess_board[position] == nullptr;
   };
   bool is_other_color(int position, Color color) const {
-    return this->positions_board[position]->get_color() != color;
+    return this->chess_board[position]->get_color() != color;
   };
 };

@@ -1,0 +1,37 @@
+Piece(const Piece & other)
+    : color(other.color), type(other.type), character(other.character),
+  first_move(other.first_move){ };
+Piece & operator=(const Piece &other) {
+  if (this != & other) {
+    color = other.color;
+    type = other.type;
+    character = other.character;
+    first_move = other.first_move;
+  }
+  return * this;
+};
+Piece(Piece && other) noexcept
+: color(other.color), type(other.type), character(other.character),
+  first_move(other.first_move){ };
+Piece & operator=(Piece && other) noexcept {
+  if (this != & other) {
+    color = other.color;
+    type = other.type;
+    character = other.character;
+    first_move = other.first_move;
+  }
+  return * this;
+}
+
+
+std:: stack < Piece const *> get_dead_pieces(Color color) const {
+  std:: stack<Piece const *> dead_pieces;
+std:: stack < std:: unique_ptr < Piece >> temp_stack =
+(color == Color:: White ? this -> dead_white_pieces
+  : this -> dead_black_pieces);
+while (!temp_stack.empty()) {
+  dead_pieces.push(temp_stack.top().get());
+  temp_stack.pop();
+}
+return dead_pieces;
+};

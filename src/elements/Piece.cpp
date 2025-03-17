@@ -22,12 +22,16 @@ void Piece::move(Board &board, int old_position, int new_position) {
     first_move = false;
 
   if (!board.is_empty(new_position)) {
-    board.kill_piece(board[new_position], board[new_position]->get_color(),
-                     new_position);
+    board.kill_piece(new_position);
   }
 
-  board.set_piece(nullptr, old_position);
-  board.set_piece(this, new_position);
+  // board.set_piece(nullptr, old_position);
+  std::unique_ptr<Piece> piece = board.take_piece(this);
+  if (piece) {
+    board.set_piece(std::move(piece), new_position);
+  } else {
+    std::cerr << "Error: Piece not found on the board." << '\n';
+  }
 
   // Promotion
   if (this->type == Type::Pawn &&
@@ -46,9 +50,7 @@ void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
   if ((new_pos_2D.first - 1 == en_passant_available_pos_2D.first ||
        new_pos_2D.first + 1 == en_passant_available_pos_2D.first) &&
       new_pos_2D.second == en_passant_available_pos_2D.second) {
-    board.kill_piece(board[en_passant_available],
-                     board[en_passant_available]->get_color(),
-                     en_passant_available);
+    board.kill_piece(en_passant_available);
   }
 }
 
@@ -69,28 +71,30 @@ void Piece::promotion(Board &board, int position) {
   char type{};
   std::cin >> type;
 
-  Piece *new_piece = nullptr;
+  std::unique_ptr<Piece> new_piece;
 
   switch (type) {
-      case 'r':
-          new_piece = new Rook(this->color);
-          break;
-      case 'b':
-          new_piece = new Bishop(this->color);
-          break;
-      case 'k':
-          new_piece = new Knight(this->color);
-          break;
-      case 'q':
-      default:
-          new_piece = new Queen(this->color);
-          break;
+  case 'r':
+    new_piece = std::make_unique<Rook>(this->color);
+    break;
+  case 'b':
+    new_piece = std::make_unique<Bishop>(this->color);
+    ;
+    break;
+  case 'k':
+    new_piece = std::make_unique<Knight>(this->color);
+    ;
+    break;
+  case 'q':
+  default:
+    new_piece = std::make_unique<Queen>(this->color);
+    ;
+    break;
   }
 
   if (new_piece != nullptr) {
-    board.set_piece(new_piece, position);
-    delete this; // Supprime le pion
+    board.set_piece(std::move(new_piece), position);
   } else {
-    std::cerr << "Promotion Fatal Error" << std::endl; 
+    std::cerr << "Promotion Fatal Error" << '\n';
   }
 }

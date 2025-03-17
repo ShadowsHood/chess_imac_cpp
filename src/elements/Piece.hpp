@@ -17,10 +17,10 @@ public:
   Piece(Color color, Type type)
       : color(color), type(type), character(get_sprite_char(color, type)) {};
   virtual ~Piece() = default;
-  Piece(const Piece &) = delete;
-  Piece(Piece &&) = delete;
-  Piece &operator=(const Piece &) = delete;
-  Piece &operator=(Piece &&) = delete;
+  Piece(const Piece &other) = default;
+  Piece &operator=(const Piece &other) = default;
+  Piece(Piece &&other) = default;
+  Piece &operator=(Piece &&other) = default;
 
   Color get_color() const { return this->color; };
   Type get_type() const { return this->type; };
