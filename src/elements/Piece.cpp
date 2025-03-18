@@ -30,9 +30,9 @@ void Piece::move(Board &board, int old_position, int new_position) {
   board.set_piece(this, new_position);
 
   // Promotion
-  if (this->type == Type::Pawn &&
-      (new_position / 8 == 0 || new_position / 8 == 7)) {
-    this->promotion(board, new_position);
+  if (this->type == Type::Pawn && (new_position / 8 == 0 || new_position / 8 == 7)) {
+    board.set_is_popup_open(true);
+    // this->promotion(board, new_position);
   }
 }
 
@@ -63,34 +63,24 @@ void Piece::updateEnPassantAvailability(Board &board,
   }
 }
 
-void Piece::promotion(Board &board, int position) {
-  std::cout << "In which piece do you want to transform the pawn ? \nQueen "
-               "(q), Rook (r), Bishop (b), Knight (k) \n";
-  char type{};
-  std::cin >> type;
-
+void Piece::promotion(Board &board, int position) { 
   Piece *new_piece = nullptr;
 
-  switch (type) {
-      case 'r':
-          new_piece = new Rook(this->color);
-          break;
-      case 'b':
-          new_piece = new Bishop(this->color);
-          break;
-      case 'k':
-          new_piece = new Knight(this->color);
-          break;
-      case 'q':
-      default:
-          new_piece = new Queen(this->color);
-          break;
+  if (ImGui::BeginPopupModal("Promotion of your pawn", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+    ImGui::Text("Choose a piece for promotion:");
+
+    if (ImGui::Button("Queen")) { new_piece = new Queen(this->color); ImGui::CloseCurrentPopup(); }
+    if (ImGui::Button("Rook")) { new_piece = new Rook(this->color); ImGui::CloseCurrentPopup(); }
+    if (ImGui::Button("Bishop")) { new_piece = new Bishop(this->color); ImGui::CloseCurrentPopup(); }
+    if (ImGui::Button("Knight")) { new_piece = new Knight(this->color); ImGui::CloseCurrentPopup(); }
+
+    ImGui::EndPopup();
   }
 
   if (new_piece != nullptr) {
-    board.set_piece(new_piece, position);
-    delete this; // Supprime le pion
+      board.set_piece(new_piece, position);
+      delete this; 
   } else {
-    std::cerr << "Promotion Fatal Error" << std::endl; 
+      std::cerr << "Promotion Fatal Error" << std::endl;
   }
 }

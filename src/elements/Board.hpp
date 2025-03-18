@@ -18,6 +18,7 @@ private:
   bool moving{};
   int index_en_passant_available{};
   bool in_game{true};
+  bool is_popup_open{false};
 
 private:
   void init_board();
@@ -57,6 +58,8 @@ public:
     return this->dead_black_pieces;
   };
   bool get_in_game() const { return this->in_game; };
+  bool get_is_popup_open() const { return this->is_popup_open; };
+  void set_is_popup_open(bool b) { this->is_popup_open = b; };
 
   // Utils
   void deselect_piece();
