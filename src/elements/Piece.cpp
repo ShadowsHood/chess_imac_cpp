@@ -1,5 +1,6 @@
 #include "./Piece.hpp"
 #include "./Board.hpp"
+#include "../Draw.hpp"
 #include "./pieces/Bishop.hpp"
 #include "./pieces/Knight.hpp"
 #include "./pieces/Queen.hpp"
@@ -31,8 +32,10 @@ void Piece::move(Board &board, int old_position, int new_position) {
 
   // Promotion
   if (this->type == Type::Pawn && (new_position / 8 == 0 || new_position / 8 == 7)) {
-    board.set_is_popup_open(true);
-    // this->promotion(board, new_position);
+    std::cout << "BONCHOUR \n";
+    ImGui::OpenPopup("Promotion of your pawn");
+    char new_type = get_promotion_type_popup();
+    this->promotion(board, new_position, new_type);
   }
 }
 
@@ -63,18 +66,23 @@ void Piece::updateEnPassantAvailability(Board &board,
   }
 }
 
-void Piece::promotion(Board &board, int position) { 
+void Piece::promotion(Board &board, int position, char type) { 
   Piece *new_piece = nullptr;
 
-  if (ImGui::BeginPopupModal("Promotion of your pawn", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-    ImGui::Text("Choose a piece for promotion:");
-
-    if (ImGui::Button("Queen")) { new_piece = new Queen(this->color); ImGui::CloseCurrentPopup(); }
-    if (ImGui::Button("Rook")) { new_piece = new Rook(this->color); ImGui::CloseCurrentPopup(); }
-    if (ImGui::Button("Bishop")) { new_piece = new Bishop(this->color); ImGui::CloseCurrentPopup(); }
-    if (ImGui::Button("Knight")) { new_piece = new Knight(this->color); ImGui::CloseCurrentPopup(); }
-
-    ImGui::EndPopup();
+  switch (type) {
+    case 'r':
+      new_piece = new Rook(this->color);
+      break;
+    case 'b':
+      new_piece = new Bishop(this->color);
+      break;
+    case 'k':
+      new_piece = new Knight(this->color);
+      break;
+    case 'q':
+    default:
+      new_piece = new Queen(this->color);
+      break;
   }
 
   if (new_piece != nullptr) {

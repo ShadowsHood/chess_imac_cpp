@@ -1,6 +1,7 @@
 #include "draw.hpp"
 #include <stack>
 #include <string>
+#include <iostream>
 
 void set_background_color() {
   ImGui::StyleColorsDark();
@@ -73,6 +74,30 @@ void draw_dead_pieces(const Board &board, Color color,
     pop_font();
   }
 }
+
+char get_promotion_type_popup() {
+  std::cout << "aaaaaaaaaa \n";
+  char new_type {};
+  ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+  ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+  ImGui::SetNextWindowSize(ImVec2(500, 140));
+
+  if (ImGui::BeginPopupModal("Promotion of your pawn", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+    ImGui::Text("Choose a piece for promotion:");
+    std::cout << "bbbbbb \n";
+
+    if (ImGui::Button("Queen")) { new_type = 'q'; ImGui::CloseCurrentPopup(); }
+    if (ImGui::Button("Rook")) { new_type = 'r'; ImGui::CloseCurrentPopup(); }
+    if (ImGui::Button("Bishop")) { new_type = 'b'; ImGui::CloseCurrentPopup(); }
+    if (ImGui::Button("Knight")) { new_type = 'k'; ImGui::CloseCurrentPopup(); }
+
+    ImGui::EndPopup();
+  }
+  std::cout << new_type << "------------------------------";
+  return new_type;
+}
+
+
 // -
 // -
 // -
