@@ -3,8 +3,10 @@
 #include "./pieces/Bishop.hpp"
 #include "./pieces/Knight.hpp"
 #include "./pieces/Queen.hpp"
-#include "./pieces/Racist.hpp"
 #include "./pieces/Rook.hpp"
+
+#include "./pieces/bonus/Racist.hpp"
+
 #include "utils.hpp"
 #include <iostream>
 

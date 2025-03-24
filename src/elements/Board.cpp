@@ -5,8 +5,11 @@
 #include "./pieces/Knight.hpp"
 #include "./pieces/Pawn.hpp"
 #include "./pieces/Queen.hpp"
-#include "./pieces/Racist.hpp"
 #include "./pieces/Rook.hpp"
+
+#include "./pieces/bonus/Fool.hpp"
+#include "./pieces/bonus/Racist.hpp"
+
 #include "utils.hpp"
 #include <iostream>
 
@@ -74,8 +77,9 @@ void Board::init_board() {
   this->chess_board[get_pos_1D(std::make_pair(7, 1))] =
       std::make_unique<Knight>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(7, 2))] =
-      std::make_unique<Bishop>(Color::White);
+      std::make_unique<Fool>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(7, 3))] =
+  
       std::make_unique<Queen>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(7, 4))] =
       std::make_unique<King>(Color::White);

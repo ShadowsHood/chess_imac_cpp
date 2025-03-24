@@ -1,5 +1,5 @@
 #include "./Racist.hpp"
-#include "../move.hpp"
+#include "../../move.hpp"
 #include "utils.hpp"
 
 std::vector<int> Racist::get_possible_moves(const Board &board, int position) {

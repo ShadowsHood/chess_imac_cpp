@@ -1,10 +1,10 @@
 #pragma once
-#include "../Piece.hpp"
+#include "../../Piece.hpp"
 
-class Racist : public Piece {
+class Fool : public Piece {
 
 public:
-  explicit Racist(Color color) : Piece(color, Type::Racist) {};
+  explicit Fool(Color color) : Piece(color, Type::Fool) {};
 
   std::vector<int> get_possible_moves(const Board &board,
                                       int position) override;
