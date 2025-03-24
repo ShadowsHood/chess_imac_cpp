@@ -13,19 +13,14 @@ void App::launch() {
           .init =
               [this]() {
                 std::cout << "Init\n";
-                // Get the window
-                window = glfwGetCurrentContext();
-                if (!window) {
-                  std::cerr << "Error in getting the window" << '\n';
-                }
-                init_3D();
+                renderer3d.init_3d();
               },
           .loop =
               [this]() {
                 if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
                   board.deselect_piece();
-                chess_2D();
-                chess_3D();
+                chess_2d();
+                renderer3d.chess_3d();
               },
           .key_callback =
               [](int key, int scancode, int action, int mods) {
@@ -50,7 +45,7 @@ void App::launch() {
                 std::cout << "Resized: " << width << ' ' << height << '\n';
               },
       });
-  terminate_3D();
+  renderer3d.terminate_3d();
 }
 
 void App::init_font() {
@@ -61,7 +56,7 @@ void App::init_font() {
   IM_ASSERT(main_font != nullptr);
 }
 
-void App::chess_2D() {
+void App::chess_2d() {
   ImGui::Begin("Chess Game");
   ImGui::GetStyle().ItemSpacing = ImVec2(0.0f, 0.0f);
   set_background_color();
@@ -73,49 +68,4 @@ void App::chess_2D() {
   draw_dead_pieces(board, Color::Black, main_font);
 
   ImGui::End();
-}
-
-void App::chess_3D() {
-  glClearColor(1.f, 0.5f, 0.5f, 1.f);
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  // Nettoyer l'écran
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  glBindVertexArray(vao);
-  glDrawArrays(GL_TRIANGLES, 0, 3);
-  glBindVertexArray(0);
-
-//   glfwSwapBuffers(window);
-//   glfwPollEvents();
-}
-
-void App::init_3D() {
-
-  // Le VBO contient les données
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  GLfloat vertices[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
-  glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  // Le VAO décrit les données
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-  const GLuint VERTEX_ATTR_POSITION = 0;
-  glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glVertexAttribPointer(VERTEX_ATTR_POSITION, 2, GL_FLOAT, GL_FALSE,
-                        2 * sizeof(GLfloat), nullptr);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
-}
-
-void App::terminate_3D() {
-
-  // Libérer la mémoire
-  glDeleteBuffers(1, &vbo);
-  glDeleteVertexArrays(1, &vao);
-
-  //   glfwTerminate();
 }
