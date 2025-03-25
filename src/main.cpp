@@ -33,10 +33,10 @@ int main() {
         ImGui::Spacing();
         draw_dead_pieces(board, Color::Black, main_font);
         
-        // if (board.get_is_popup_open()) {
-        //   ImGui::OpenPopup("Promotion of your pawn"); // On ouvre la popup UNE SEULE FOIS
-        //   // board.set_is_popup_open(false); // On désactive immédiatement le flag
-        // }   
+        // Handle the popup of pawns promotion
+        if (board.is_promotion_activated()) {
+          board.handle_promotion(main_font);
+        }
 
         ImGui::End();
       });

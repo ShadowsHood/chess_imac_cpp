@@ -75,25 +75,36 @@ void draw_dead_pieces(const Board &board, Color color,
   }
 }
 
-char get_promotion_type_popup() {
-  std::cout << "aaaaaaaaaa \n";
+char get_promotion_type_popup(ImFont *main_font, Color color) {
   char new_type {};
   ImVec2 center = ImGui::GetMainViewport()->GetCenter();
   ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-  ImGui::SetNextWindowSize(ImVec2(500, 140));
+  ImGui::SetNextWindowSize(ImVec2(450, 180));
 
   if (ImGui::BeginPopupModal("Promotion of your pawn", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
     ImGui::Text("Choose a piece for promotion:");
-    std::cout << "bbbbbb \n";
+    ImGui::Dummy(ImVec2(0.0f, 20.0f)); 
+    ImGui::PushFont(main_font);
 
-    if (ImGui::Button("Queen")) { new_type = 'q'; ImGui::CloseCurrentPopup(); }
-    if (ImGui::Button("Rook")) { new_type = 'r'; ImGui::CloseCurrentPopup(); }
-    if (ImGui::Button("Bishop")) { new_type = 'b'; ImGui::CloseCurrentPopup(); }
-    if (ImGui::Button("Knight")) { new_type = 'k'; ImGui::CloseCurrentPopup(); }
+    // Font color & buttons color
+    ImVec4 textColor = (color == Color::White) ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f) : ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+    ImVec4 buttonColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); 
+    ImGui::PushStyleColor(ImGuiCol_Text, textColor);
+    ImGui::PushStyleColor(ImGuiCol_Button, buttonColor);
 
+    // Buttons to choose the new piece
+    if (ImGui::Button(std::string(1, color == Color::White ? 'q' : 'w').c_str(), ImVec2{100.f, 100.f})) { new_type = 'q'; ImGui::CloseCurrentPopup(); }
+    ImGui::SameLine(0, 10); 
+    if (ImGui::Button(std::string(1, color == Color::White ? 'r' : 't').c_str(), ImVec2{100.f, 100.f})) { new_type = 'r'; ImGui::CloseCurrentPopup(); }
+    ImGui::SameLine(0, 10); 
+    if (ImGui::Button(std::string(1, color == Color::White ? 'b' : 'n').c_str(), ImVec2{100.f, 100.f})) { new_type = 'b'; ImGui::CloseCurrentPopup(); }
+    ImGui::SameLine(0, 10); 
+    if (ImGui::Button(std::string(1, color == Color::White ? 'h' : 'j').c_str(), ImVec2{100.f, 100.f})) { new_type = 'k'; ImGui::CloseCurrentPopup(); }
+
+    ImGui::PopStyleColor(2);
+    ImGui::PopFont();
     ImGui::EndPopup();
   }
-  std::cout << new_type << "------------------------------";
   return new_type;
 }
 

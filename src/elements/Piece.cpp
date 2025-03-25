@@ -32,10 +32,8 @@ void Piece::move(Board &board, int old_position, int new_position) {
 
   // Promotion
   if (this->type == Type::Pawn && (new_position / 8 == 0 || new_position / 8 == 7)) {
-    std::cout << "BONCHOUR \n";
-    ImGui::OpenPopup("Promotion of your pawn");
-    char new_type = get_promotion_type_popup();
-    this->promotion(board, new_position, new_type);
+    board.set_promotion_activated(true);
+    board.set_selected_piece_position(new_position);
   }
 }
 

@@ -22,4 +22,4 @@ void draw_tile(Board &board, int i, Piece *piece, ImFont *main_font,
 void draw_dead_pieces(const Board &board, Color color,
                              ImFont *main_font);
 
-char get_promotion_type_popup();
+char get_promotion_type_popup(ImFont *main_font, Color color);

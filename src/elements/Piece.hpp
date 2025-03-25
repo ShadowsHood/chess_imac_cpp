@@ -2,6 +2,7 @@
 #include "../utils.hpp"
 #include "./Color.hpp"
 #include "./Type.hpp"
+#include <imgui.h>
 #include <vector>
 
 class Board;

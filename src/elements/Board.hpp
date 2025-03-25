@@ -18,7 +18,7 @@ private:
   bool moving{};
   int index_en_passant_available{};
   bool in_game{true};
-  bool is_popup_open{false};
+  bool promotion_activated{false};
 
 private:
   void init_board();
@@ -57,9 +57,20 @@ public:
   std::stack<Piece *> get_dead_black_pieces() const {
     return this->dead_black_pieces;
   };
+  std::optional<int> get_selected_piece_position() const {
+    return this->selected_piece_position;
+  };
   bool get_in_game() const { return this->in_game; };
-  bool get_is_popup_open() const { return this->is_popup_open; };
-  void set_is_popup_open(bool b) { this->is_popup_open = b; };
+
+  // Setters
+  void set_selected_piece_position(int position) {
+    this->selected_piece_position.emplace(position);
+  };
+
+  // Promotion
+  bool is_promotion_activated() const { return this->promotion_activated; };
+  void set_promotion_activated(bool b) { this->promotion_activated = b; };
+  void handle_promotion(ImFont *main_font);
 
   // Utils
   void deselect_piece();
