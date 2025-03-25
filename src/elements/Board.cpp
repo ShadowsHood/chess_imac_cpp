@@ -50,7 +50,7 @@ void Board::init_board() {
   this->positions_board[get_pos_1D(std::make_pair(1, 6))] =
       new Pawn(Color::Black);
   this->positions_board[get_pos_1D(std::make_pair(1, 7))] =
-      new Pawn(Color::White);
+      new Pawn(Color::Black);
 
   this->positions_board[get_pos_1D(std::make_pair(6, 0))] =
       new Pawn(Color::White);
@@ -67,7 +67,7 @@ void Board::init_board() {
   this->positions_board[get_pos_1D(std::make_pair(6, 6))] =
       new Pawn(Color::White);
   this->positions_board[get_pos_1D(std::make_pair(6, 7))] =
-      new Pawn(Color::Black);
+      new Pawn(Color::White);
 
   this->positions_board[get_pos_1D(std::make_pair(7, 0))] =
       new Rook(Color::White);
