@@ -34,6 +34,7 @@ public:
                          bool &is_a_possible_move);
   void click_playable_piece(int index);
   void click_reachable_tile(int index);
+  void end_turn();
 
   // En passant
   bool en_passant_available(int position) const {
