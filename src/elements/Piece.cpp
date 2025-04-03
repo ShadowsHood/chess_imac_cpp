@@ -3,8 +3,10 @@
 #include "./pieces/Bishop.hpp"
 #include "./pieces/Knight.hpp"
 #include "./pieces/Queen.hpp"
-#include "./pieces/Racist.hpp"
 #include "./pieces/Rook.hpp"
+
+#include "./pieces/bonus/Racist.hpp"
+
 #include "utils.hpp"
 #include <iostream>
 
@@ -51,7 +53,9 @@ void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
   if ((new_pos_2D.first - 1 == en_passant_available_pos_2D.first ||
        new_pos_2D.first + 1 == en_passant_available_pos_2D.first) &&
       new_pos_2D.second == en_passant_available_pos_2D.second) {
-    board.kill_piece(en_passant_available);
+        if (board[en_passant_available]->get_color() != this->get_color()) {
+          board.kill_piece(en_passant_available);
+      }
   }
 }
 

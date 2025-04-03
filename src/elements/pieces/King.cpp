@@ -21,6 +21,5 @@ std::vector<int> King::get_possible_moves(const Board &board, int position) {
                        this->get_color(), true);
   get_down_left_moves(possible_moves, board, get_pos_2D(position),
                       this->get_color(), true);
-  display_vector_pos(possible_moves);
   return possible_moves;
 }
