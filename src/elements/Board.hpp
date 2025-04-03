@@ -53,12 +53,8 @@ public:
     return this->next_possible_moves;
   };
 
-  std::stack<Piece *> get_dead_white_pieces() const {
-    return this->dead_white_pieces;
-  };
-  std::stack<Piece *> get_dead_black_pieces() const {
-    return this->dead_black_pieces;
-  };
+  std::vector<Piece const *> get_dead_pieces(Color color) const;
+
   std::optional<int> get_selected_piece_position() const {
     return this->selected_piece_position;
   };

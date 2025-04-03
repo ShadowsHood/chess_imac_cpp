@@ -18,10 +18,8 @@ void set_background_color();
 
 void draw_board(Board &board, ImFont *main_font);
 
-void draw_tile(Board &board, int i, Piece *piece, ImFont *main_font,
-                      bool &is_a_possible_move);
-void draw_dead_pieces(const Board &board, Color color,
-                             ImFont *main_font);
+void draw_tile(Board &board, int i, Piece const *piece, ImFont *main_font,
+               bool &is_a_possible_move);
+void draw_dead_pieces(const Board &board, Color color, ImFont *main_font);
 
-char get_promotion_type_popup(ImFont *main_font, Color color);
-
+char draw_promotion_popup(ImFont *main_font, Color color);

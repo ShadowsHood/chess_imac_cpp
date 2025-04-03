@@ -12,8 +12,8 @@
 
 #include "./random/random.hpp"
 #include "utils.hpp"
-#include <iostream>
 #include <draw.hpp>
+#include <iostream>
 
 void Board::init_board() {
 
@@ -49,7 +49,7 @@ void Board::init_board() {
   this->chess_board[get_pos_1D(std::make_pair(1, 3))] =
       std::make_unique<Pawn>(Color::Black);
   this->chess_board[get_pos_1D(std::make_pair(1, 4))] =
-      std::make_unique<Pawn>(Color::Black);
+      std::make_unique<Pawn>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(1, 5))] =
       std::make_unique<Pawn>(Color::Black);
   this->chess_board[get_pos_1D(std::make_pair(1, 6))] =
@@ -180,8 +180,8 @@ void Board::handle_tile_click(int index, Piece const *piece,
 }
 
 void Board::click_playable_piece(int index) {
-  std::cout << "Clicked tile : " << index << " ==> (" << get_pos_2D(index).first
-            << "," << get_pos_2D(index).second << ") \n";
+  // std::cout << "Clicked tile : " << index << " ==> (" << get_pos_2D(index).first
+  //           << "," << get_pos_2D(index).second << ") \n";
   moving = true;
   selected_piece_position = index;
   next_possible_moves =
@@ -221,13 +221,14 @@ void Board::deselect_piece() {
 }
 
 void Board::handle_promotion(ImFont *main_font) {
-    ImGui::OpenPopup("Promotion of your pawn");
-    if (this->is_promotion_activated()) {
-        char new_type = get_promotion_type_popup(main_font, current_player);
-        if (new_type != '\0') { 
-            this->positions_board[*selected_piece_position]->promotion(*this, selected_piece_position.value(), new_type);
-            promotion_activated = false;
-            selected_piece_position.reset();
-        }
+  ImGui::OpenPopup("Promotion of your pawn");
+  if (this->is_promotion_activated()) {
+    char new_type = draw_promotion_popup(main_font, current_player);
+    if (new_type != '\0') {
+      this->chess_board[*selected_piece_position]->promotion(
+          *this, selected_piece_position.value(), new_type);
+      promotion_activated = false;
+      selected_piece_position.reset();
     }
+  }
 }

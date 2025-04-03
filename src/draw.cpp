@@ -1,4 +1,6 @@
 #include "draw.hpp"
+#include <iostream>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -71,31 +73,39 @@ void draw_dead_pieces(const Board &board, Color color, ImFont *main_font) {
   }
 }
 
-char get_promotion_type_popup(ImFont *main_font, Color color) {
-  char new_type {};
+char draw_promotion_popup(ImFont *main_font, Color color) {
+  char new_type{};
   ImVec2 center = ImGui::GetMainViewport()->GetCenter();
   ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-  ImGui::SetNextWindowSize(ImVec2(450, 180));
+  // ImGui::SetNextWindowSize(ImVec2(450, 180));
 
-  if (ImGui::BeginPopupModal("Promotion of your pawn", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+  if (ImGui::BeginPopupModal("Promotion of your pawn", nullptr,
+                             ImGuiWindowFlags_AlwaysAutoResize)) {
     ImGui::Text("Choose a piece for promotion:");
-    ImGui::Dummy(ImVec2(0.0f, 20.0f)); 
+    ImGui::Dummy(ImVec2(0.0f, 20.0f));
     ImGui::PushFont(main_font);
 
     // Font color & buttons color
-    ImVec4 textColor = (color == Color::White) ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f) : ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
-    ImVec4 buttonColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); 
+    ImVec4 textColor = (color == Color::White) ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f)
+                                               : ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+    ImVec4 buttonColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
     ImGui::PushStyleColor(ImGuiCol_Text, textColor);
     ImGui::PushStyleColor(ImGuiCol_Button, buttonColor);
 
     // Buttons to choose the new piece
-    if (ImGui::Button(std::string(1, color == Color::White ? 'q' : 'w').c_str(), ImVec2{100.f, 100.f})) { new_type = 'q'; ImGui::CloseCurrentPopup(); }
-    ImGui::SameLine(0, 10); 
-    if (ImGui::Button(std::string(1, color == Color::White ? 'r' : 't').c_str(), ImVec2{100.f, 100.f})) { new_type = 'r'; ImGui::CloseCurrentPopup(); }
-    ImGui::SameLine(0, 10); 
-    if (ImGui::Button(std::string(1, color == Color::White ? 'b' : 'n').c_str(), ImVec2{100.f, 100.f})) { new_type = 'b'; ImGui::CloseCurrentPopup(); }
-    ImGui::SameLine(0, 10); 
-    if (ImGui::Button(std::string(1, color == Color::White ? 'h' : 'j').c_str(), ImVec2{100.f, 100.f})) { new_type = 'k'; ImGui::CloseCurrentPopup(); }
+    std::unordered_map<char, Type> types = {{'q', Type::Queen},  {'r', Type::Rook},
+                                  {'k', Type::Knight}, {'b', Type::Bishop},
+                                  {'n', Type::Racist}, {'f', Type::Fool}};
+
+    for (auto &[key, type] : types) {
+      std::string spriteChar(1, get_sprite_char(color, type));
+      if (ImGui::Button((spriteChar + "##" + key).c_str(), ImVec2{100.f, 100.f})) {
+        std::cout << "New type: " << key << '\n';
+        new_type = key;
+        ImGui::CloseCurrentPopup();
+      }
+      ImGui::SameLine(0, 10);
+    }
 
     ImGui::PopStyleColor(2);
     ImGui::PopFont();
@@ -103,7 +113,6 @@ char get_promotion_type_popup(ImFont *main_font, Color color) {
   }
   return new_type;
 }
-
 
 // -
 // -

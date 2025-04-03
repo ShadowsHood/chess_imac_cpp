@@ -7,6 +7,7 @@
 #include "./pieces/Rook.hpp"
 
 #include "./pieces/bonus/Racist.hpp"
+#include "./pieces/bonus/Fool.hpp"
 
 #include "utils.hpp"
 #include <iostream>
@@ -76,26 +77,28 @@ void Piece::promotion(Board &board, int position, char type) {
 
   switch (type) {
     case 'r':
-      new_piece = new Rook(this->color);
+      new_piece = std::make_unique<Rook>(this->color).release();
       break;
     case 'b':
-      new_piece = new Bishop(this->color);
+      new_piece = std::make_unique<Bishop>(this->color).release();
       break;
     case 'k':
-      new_piece = new Knight(this->color);
+      new_piece = std::make_unique<Knight>(this->color).release();
       break;
     case 'n':
-      new_piece = std::make_unique<Racist>(this->color);
+      new_piece = std::make_unique<Racist>(this->color).release();
+      break;
+    case 'f':
+      new_piece = std::make_unique<Fool>(this->color).release();
       break;
     case 'q':
     default:
-      new_piece = new Queen(this->color);
+      new_piece = std::make_unique<Queen>(this->color).release();
       break;
   }
 
   if (new_piece != nullptr) {
-      board.set_piece(new_piece, position);
-      delete this; 
+      board.set_piece(std::unique_ptr<Piece>(new_piece), position);
   } else {
       std::cerr << "Promotion Fatal Error" << std::endl;
   }
