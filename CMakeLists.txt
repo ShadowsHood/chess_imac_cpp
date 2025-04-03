@@ -44,6 +44,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 add_subdirectory(lib/quick_imgui)
 target_link_libraries(${PROJECT_NAME} PRIVATE quick_imgui::quick_imgui)
 
+# Ajout de la bibliothèque glimac
+add_subdirectory(lib/glimac)
+target_link_libraries(${PROJECT_NAME} PRIVATE glimac)
+
 # Ajout de la bibliothèque glmax
 add_subdirectory(lib/glmax)
 target_link_libraries(${PROJECT_NAME} PRIVATE glmax)
