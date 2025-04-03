@@ -77,6 +77,9 @@
         "xmemory": "cpp",
         "xtr1common": "cpp",
         "xutility": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "fstream": "cpp",
+        "map": "cpp",
+        "xtree": "cpp"
     }
 }

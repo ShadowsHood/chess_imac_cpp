@@ -1,10 +1,13 @@
 #include "./Piece.hpp"
 #include "./Board.hpp"
+#include "../Draw.hpp"
 #include "./pieces/Bishop.hpp"
 #include "./pieces/Knight.hpp"
 #include "./pieces/Queen.hpp"
-#include "./pieces/Racist.hpp"
 #include "./pieces/Rook.hpp"
+
+#include "./pieces/bonus/Racist.hpp"
+
 #include "utils.hpp"
 #include <iostream>
 
@@ -35,9 +38,9 @@ void Piece::move(Board &board, int old_position, int new_position) {
   }
 
   // Promotion
-  if (this->type == Type::Pawn &&
-      (new_position / 8 == 0 || new_position / 8 == 7)) {
-    this->promotion(board, new_position);
+  if (this->type == Type::Pawn && (new_position / 8 == 0 || new_position / 8 == 7)) {
+    board.set_promotion_activated(true);
+    board.set_selected_piece_position(new_position);
   }
 }
 
@@ -51,7 +54,9 @@ void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
   if ((new_pos_2D.first - 1 == en_passant_available_pos_2D.first ||
        new_pos_2D.first + 1 == en_passant_available_pos_2D.first) &&
       new_pos_2D.second == en_passant_available_pos_2D.second) {
-    board.kill_piece(en_passant_available);
+        if (board[en_passant_available]->get_color() != this->get_color()) {
+          board.kill_piece(en_passant_available);
+      }
   }
 }
 
@@ -66,36 +71,32 @@ void Piece::updateEnPassantAvailability(Board &board,
   }
 }
 
-void Piece::promotion(Board &board, int position) {
-  std::cout << "In which piece do you want to transform the pawn ? \nQueen "
-               "(q), Rook (r), Bishop (b), Knight (k), Racist (n) \n";
-  char type{};
-  std::cin >> type;
-
-  std::unique_ptr<Piece> new_piece;
+void Piece::promotion(Board &board, int position, char type) { 
+  Piece *new_piece = nullptr;
 
   switch (type) {
-  case 'r':
-    new_piece = std::make_unique<Rook>(this->color);
-    break;
-  case 'b':
-    new_piece = std::make_unique<Bishop>(this->color);
-    break;
-  case 'k':
-    new_piece = std::make_unique<Knight>(this->color);
-    break;
-  case 'n':
-    new_piece = std::make_unique<Racist>(this->color);
-    break;
-  case 'q':
-  default:
-    new_piece = std::make_unique<Queen>(this->color);
-    break;
+    case 'r':
+      new_piece = new Rook(this->color);
+      break;
+    case 'b':
+      new_piece = new Bishop(this->color);
+      break;
+    case 'k':
+      new_piece = new Knight(this->color);
+      break;
+    case 'n':
+      new_piece = std::make_unique<Racist>(this->color);
+      break;
+    case 'q':
+    default:
+      new_piece = new Queen(this->color);
+      break;
   }
 
   if (new_piece != nullptr) {
-    board.set_piece(std::move(new_piece), position);
+      board.set_piece(new_piece, position);
+      delete this; 
   } else {
-    std::cerr << "Promotion Fatal Error" << '\n';
+      std::cerr << "Promotion Fatal Error" << std::endl;
   }
 }

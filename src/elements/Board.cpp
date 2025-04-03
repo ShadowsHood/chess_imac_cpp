@@ -5,10 +5,15 @@
 #include "./pieces/Knight.hpp"
 #include "./pieces/Pawn.hpp"
 #include "./pieces/Queen.hpp"
-#include "./pieces/Racist.hpp"
 #include "./pieces/Rook.hpp"
+
+#include "./pieces/bonus/Fool.hpp"
+#include "./pieces/bonus/Racist.hpp"
+
+#include "./random/random.hpp"
 #include "utils.hpp"
 #include <iostream>
+#include <draw.hpp>
 
 void Board::init_board() {
 
@@ -74,8 +79,9 @@ void Board::init_board() {
   this->chess_board[get_pos_1D(std::make_pair(7, 1))] =
       std::make_unique<Knight>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(7, 2))] =
-      std::make_unique<Bishop>(Color::White);
+      std::make_unique<Fool>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(7, 3))] =
+
       std::make_unique<Queen>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(7, 4))] =
       std::make_unique<King>(Color::White);
@@ -180,13 +186,29 @@ void Board::click_playable_piece(int index) {
   selected_piece_position = index;
   next_possible_moves =
       this->chess_board[index]->get_possible_moves(*this, index);
+
+  if (this->chess_board[index]->get_type() == Type::Fool) {
+    if (dynamic_cast<Fool *>(this->chess_board[index].get())->canMove()) {
+      int i{Random::random_int(
+          0, static_cast<int>(next_possible_moves.size() - 1))};
+      click_reachable_tile(next_possible_moves[i]);
+    } else {
+      std::cout << "cheh" << '\n';
+      end_turn();
+    }
+  }
 }
 
 void Board::click_reachable_tile(int index) {
   this->chess_board[*selected_piece_position]->move(
       *this, *selected_piece_position, index);
+  end_turn();
+}
+
+void Board::end_turn() {
   moving = false;
-  selected_piece_position.reset();
+  if (!promotion_activated)
+    selected_piece_position.reset();
   next_possible_moves.clear();
   current_player =
       (current_player == Color::White) ? Color::Black : Color::White;
@@ -196,4 +218,16 @@ void Board::deselect_piece() {
   moving = false;
   selected_piece_position.reset();
   next_possible_moves.clear();
+}
+
+void Board::handle_promotion(ImFont *main_font) {
+    ImGui::OpenPopup("Promotion of your pawn");
+    if (this->is_promotion_activated()) {
+        char new_type = get_promotion_type_popup(main_font, current_player);
+        if (new_type != '\0') { 
+            this->positions_board[*selected_piece_position]->promotion(*this, selected_piece_position.value(), new_type);
+            promotion_activated = false;
+            selected_piece_position.reset();
+        }
+    }
 }

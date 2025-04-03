@@ -18,6 +18,7 @@ private:
   bool moving{};
   int index_en_passant_available{};
   bool in_game{true};
+  bool promotion_activated{false};
 
 private:
   void init_board();
@@ -34,6 +35,7 @@ public:
                          bool &is_a_possible_move);
   void click_playable_piece(int index);
   void click_reachable_tile(int index);
+  void end_turn();
 
   // En passant
   bool en_passant_available(int position) const {
@@ -50,8 +52,28 @@ public:
   std::vector<int> get_next_possible_moves() const {
     return this->next_possible_moves;
   };
-  std::vector<Piece const *> get_dead_pieces(Color color) const;
+
+  std::stack<Piece *> get_dead_white_pieces() const {
+    return this->dead_white_pieces;
+  };
+  std::stack<Piece *> get_dead_black_pieces() const {
+    return this->dead_black_pieces;
+  };
+  std::optional<int> get_selected_piece_position() const {
+    return this->selected_piece_position;
+  };
+  
   bool get_in_game() const { return this->in_game; };
+
+  // Setters
+  void set_selected_piece_position(int position) {
+    this->selected_piece_position.emplace(position);
+  };
+
+  // Promotion
+  bool is_promotion_activated() const { return this->promotion_activated; };
+  void set_promotion_activated(bool b) { this->promotion_activated = b; };
+  void handle_promotion(ImFont *main_font);
 
   // Utils
   void deselect_piece();

@@ -21,6 +21,5 @@ std::vector<int> Queen::get_possible_moves(const Board &board, int position) {
                        this->get_color(), false);
   get_down_left_moves(possible_moves, board, get_pos_2D(position),
                       this->get_color(), false);
-  display_vector_pos(possible_moves);
   return possible_moves;
 }

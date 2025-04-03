@@ -41,6 +41,7 @@ char get_sprite_char(Color color, Type type) {
   case Type::Knight:
     character = (color == Color::White) ? 'h' : 'j';
     break;
+  case Type::Fool:
   case Type::Bishop:
     character = (color == Color::White) ? 'b' : 'n';
     break;
