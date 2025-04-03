@@ -5,6 +5,9 @@
 #include "./pieces/Knight.hpp"
 #include "./pieces/Queen.hpp"
 #include "./pieces/Rook.hpp"
+
+#include "./pieces/bonus/Racist.hpp"
+
 #include "utils.hpp"
 #include <iostream>
 
@@ -23,12 +26,16 @@ void Piece::move(Board &board, int old_position, int new_position) {
     first_move = false;
 
   if (!board.is_empty(new_position)) {
-    board.kill_piece(board[new_position], board[new_position]->get_color(),
-                     new_position);
+    board.kill_piece(new_position);
   }
 
-  board.set_piece(nullptr, old_position);
-  board.set_piece(this, new_position);
+  // board.set_piece(nullptr, old_position);
+  std::unique_ptr<Piece> piece = board.take_piece(this);
+  if (piece) {
+    board.set_piece(std::move(piece), new_position);
+  } else {
+    std::cerr << "Error: Piece not found on the board." << '\n';
+  }
 
   // Promotion
   if (this->type == Type::Pawn && (new_position / 8 == 0 || new_position / 8 == 7)) {
@@ -47,9 +54,9 @@ void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
   if ((new_pos_2D.first - 1 == en_passant_available_pos_2D.first ||
        new_pos_2D.first + 1 == en_passant_available_pos_2D.first) &&
       new_pos_2D.second == en_passant_available_pos_2D.second) {
-    board.kill_piece(board[en_passant_available],
-                     board[en_passant_available]->get_color(),
-                     en_passant_available);
+        if (board[en_passant_available]->get_color() != this->get_color()) {
+          board.kill_piece(en_passant_available);
+      }
   }
 }
 
@@ -76,6 +83,9 @@ void Piece::promotion(Board &board, int position, char type) {
       break;
     case 'k':
       new_piece = new Knight(this->color);
+      break;
+    case 'n':
+      new_piece = std::make_unique<Racist>(this->color);
       break;
     case 'q':
     default:

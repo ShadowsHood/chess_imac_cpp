@@ -6,6 +6,11 @@
 #include "./pieces/Pawn.hpp"
 #include "./pieces/Queen.hpp"
 #include "./pieces/Rook.hpp"
+
+#include "./pieces/bonus/Fool.hpp"
+#include "./pieces/bonus/Racist.hpp"
+
+#include "./random/random.hpp"
 #include "utils.hpp"
 #include <iostream>
 #include <draw.hpp>
@@ -18,77 +23,105 @@ void Board::init_board() {
   this->next_possible_moves.clear();
   this->index_en_passant_available = -1;
 
-  this->positions_board[get_pos_1D(std::make_pair(0, 0))] =
-      new Rook(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(0, 1))] =
-      new Knight(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(0, 2))] =
-      new Bishop(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(0, 3))] =
-      new Queen(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(0, 4))] =
-      new King(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(0, 5))] =
-      new Bishop(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(0, 6))] =
-      new Knight(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(0, 7))] =
-      new Rook(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(0, 0))] =
+      std::make_unique<Rook>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(0, 1))] =
+      std::make_unique<Knight>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(0, 2))] =
+      std::make_unique<Bishop>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(0, 3))] =
+      std::make_unique<Queen>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(0, 4))] =
+      std::make_unique<King>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(0, 5))] =
+      std::make_unique<Bishop>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(0, 6))] =
+      std::make_unique<Knight>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(0, 7))] =
+      std::make_unique<Rook>(Color::Black);
 
-  this->positions_board[get_pos_1D(std::make_pair(1, 0))] =
-      new Pawn(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(1, 1))] =
-      new Pawn(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(1, 2))] =
-      new Pawn(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(1, 3))] =
-      new Pawn(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(1, 4))] =
-      new Pawn(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(1, 5))] =
-      new Pawn(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(1, 6))] =
-      new Pawn(Color::Black);
-  this->positions_board[get_pos_1D(std::make_pair(1, 7))] =
-      new Pawn(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(1, 0))] =
+      std::make_unique<Pawn>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(1, 1))] =
+      std::make_unique<Pawn>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(1, 2))] =
+      std::make_unique<Pawn>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(1, 3))] =
+      std::make_unique<Pawn>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(1, 4))] =
+      std::make_unique<Pawn>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(1, 5))] =
+      std::make_unique<Pawn>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(1, 6))] =
+      std::make_unique<Pawn>(Color::Black);
+  this->chess_board[get_pos_1D(std::make_pair(1, 7))] =
+      std::make_unique<Pawn>(Color::Black);
 
-  this->positions_board[get_pos_1D(std::make_pair(6, 0))] =
-      new Pawn(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(6, 1))] =
-      new Pawn(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(6, 2))] =
-      new Pawn(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(6, 3))] =
-      new Pawn(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(6, 4))] =
-      new Pawn(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(6, 5))] =
-      new Pawn(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(6, 6))] =
-      new Pawn(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(6, 7))] =
-      new Pawn(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(6, 0))] =
+      std::make_unique<Pawn>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(6, 1))] =
+      std::make_unique<Pawn>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(6, 2))] =
+      std::make_unique<Pawn>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(6, 3))] =
+      std::make_unique<Pawn>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(6, 4))] =
+      std::make_unique<Pawn>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(6, 5))] =
+      std::make_unique<Pawn>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(6, 6))] =
+      std::make_unique<Pawn>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(6, 7))] =
+      std::make_unique<Pawn>(Color::White);
 
-  this->positions_board[get_pos_1D(std::make_pair(7, 0))] =
-      new Rook(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(7, 1))] =
-      new Knight(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(7, 2))] =
-      new Bishop(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(7, 3))] =
-      new Queen(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(7, 4))] =
-      new King(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(7, 5))] =
-      new Bishop(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(7, 6))] =
-      new Knight(Color::White);
-  this->positions_board[get_pos_1D(std::make_pair(7, 7))] =
-      new Rook(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(7, 0))] =
+      std::make_unique<Rook>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(7, 1))] =
+      std::make_unique<Knight>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(7, 2))] =
+      std::make_unique<Fool>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(7, 3))] =
+
+      std::make_unique<Queen>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(7, 4))] =
+      std::make_unique<King>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(7, 5))] =
+      std::make_unique<Bishop>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(7, 6))] =
+      std::make_unique<Knight>(Color::White);
+  this->chess_board[get_pos_1D(std::make_pair(7, 7))] =
+      std::make_unique<Rook>(Color::White);
 }
 
-void Board::set_piece(Piece *piece, int position) {
-  this->positions_board[position] = piece;
+std::vector<Piece const *> Board::get_dead_pieces(Color color) const {
+  const std::vector<std::unique_ptr<Piece>> &source =
+      (color == Color::White ? this->dead_white_pieces
+                             : this->dead_black_pieces);
+
+  std::vector<Piece const *> result;
+  result.reserve(source.size()); // Optional: Reserve space for efficiency
+
+  for (const auto &piece_ptr : source) {
+    if (piece_ptr) {
+      result.push_back(piece_ptr.get());
+    }
+  }
+  return result;
+};
+
+std::unique_ptr<Piece> Board::take_piece(Piece *piece) {
+  for (int i = 0; i < 64; ++i) {
+    if (chess_board[i].get() == piece) {
+      std::unique_ptr<Piece> taken_piece = std::move(chess_board[i]);
+      chess_board[i] = nullptr;
+      return taken_piece;
+    }
+  }
+  return nullptr;
+}
+
+void Board::set_piece(std::unique_ptr<Piece> piece, int position) {
+  this->chess_board[position] = std::move(piece);
 };
 
 bool Board::is_in_board(std::pair<int, int> position) const {
@@ -96,22 +129,26 @@ bool Board::is_in_board(std::pair<int, int> position) const {
          position.second < 8;
 }
 
-void Board::kill_piece(Piece *piece, Color color, int position) {
-  if (color == Color::White) {
-    this->dead_white_pieces.push(piece);
-  } else {
-    this->dead_black_pieces.push(piece);
-  }
-  this->positions_board[position] = nullptr;
+void Board::kill_piece(int position) {
+  if (chess_board[position]) {
+    std::unique_ptr<Piece> piece = std::move(chess_board[position]);
 
-  // End of game
-  if (piece->get_type() == Type::King) {
-    in_game = false;
-    std::cout << "Game over\n";
+    // Game over
+    if (piece->get_type() == Type::King) {
+      in_game = false;
+      std::cout << "Game over\n";
+    }
+
+    if (piece->get_color() == Color::White) {
+      dead_white_pieces.push_back(std::move(piece));
+    } else {
+      dead_black_pieces.push_back(std::move(piece));
+    }
+    chess_board[position] = nullptr;
   }
 }
 
-void Board::handle_tile_click(int index, Piece *piece,
+void Board::handle_tile_click(int index, Piece const *piece,
                               bool &is_a_possible_move) {
 
   if (!this->is_empty(index) && piece->get_color() == current_player &&
@@ -148,12 +185,27 @@ void Board::click_playable_piece(int index) {
   moving = true;
   selected_piece_position = index;
   next_possible_moves =
-      this->positions_board[index]->get_possible_moves(*this, index);
+      this->chess_board[index]->get_possible_moves(*this, index);
+
+  if (this->chess_board[index]->get_type() == Type::Fool) {
+    if (dynamic_cast<Fool *>(this->chess_board[index].get())->canMove()) {
+      int i{Random::random_int(
+          0, static_cast<int>(next_possible_moves.size() - 1))};
+      click_reachable_tile(next_possible_moves[i]);
+    } else {
+      std::cout << "cheh" << '\n';
+      end_turn();
+    }
+  }
 }
 
 void Board::click_reachable_tile(int index) {
-    this->positions_board[*selected_piece_position]
-      ->move(*this, *selected_piece_position, index);
+  this->chess_board[*selected_piece_position]->move(
+      *this, *selected_piece_position, index);
+  end_turn();
+}
+
+void Board::end_turn() {
   moving = false;
   if (!promotion_activated)
     selected_piece_position.reset();
