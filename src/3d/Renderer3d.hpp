@@ -18,9 +18,11 @@ class Renderer3d {
 public:
   GLuint vao{};
   GLuint vbo{};
-  glmax::Shader shader;
-  glmax::Camera camera{true};
-  //
+  glfeur::Shader shader;
+  glfeur::Camera camera{true};
+  int window_width = 1280;
+  int window_height = 720;
+
   Model3D model;
 
   Renderer3d() = default;
