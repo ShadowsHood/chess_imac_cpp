@@ -9,7 +9,6 @@
 #include "./App.hpp"
 
 #define GLFW_INCLUDE_NONE
-#include "./3d/test.hpp"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
