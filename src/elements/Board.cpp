@@ -13,6 +13,7 @@
 #include "./random/random.hpp"
 #include "utils.hpp"
 #include <iostream>
+#include <draw.hpp>
 
 void Board::init_board() {
 
@@ -206,7 +207,8 @@ void Board::click_reachable_tile(int index) {
 
 void Board::end_turn() {
   moving = false;
-  selected_piece_position.reset();
+  if (!promotion_activated)
+    selected_piece_position.reset();
   next_possible_moves.clear();
   current_player =
       (current_player == Color::White) ? Color::Black : Color::White;
@@ -216,4 +218,16 @@ void Board::deselect_piece() {
   moving = false;
   selected_piece_position.reset();
   next_possible_moves.clear();
+}
+
+void Board::handle_promotion(ImFont *main_font) {
+    ImGui::OpenPopup("Promotion of your pawn");
+    if (this->is_promotion_activated()) {
+        char new_type = get_promotion_type_popup(main_font, current_player);
+        if (new_type != '\0') { 
+            this->positions_board[*selected_piece_position]->promotion(*this, selected_piece_position.value(), new_type);
+            promotion_activated = false;
+            selected_piece_position.reset();
+        }
+    }
 }

@@ -2,6 +2,7 @@
 #include "../utils.hpp"
 #include "./Color.hpp"
 #include "./Type.hpp"
+#include <imgui.h>
 #include <vector>
 
 class Board;
@@ -33,5 +34,5 @@ public:
   void handleEnPassant(Board &board, std::pair<int, int> new_pos_2D);
   void updateEnPassantAvailability(Board &board, std::pair<int, int> new_pos_2D,
                                    int new_position);
-  void promotion(Board &board, int position);
+  void promotion(Board &board, int position, char new_type);
 };

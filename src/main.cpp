@@ -34,6 +34,11 @@ int main() {
         draw_board(board, main_font);
         ImGui::Spacing();
         draw_dead_pieces(board, Color::Black, main_font);
+        
+        // Handle the popup of pawns promotion
+        if (board.is_promotion_activated()) {
+          board.handle_promotion(main_font);
+        }
 
         ImGui::End();
       });
