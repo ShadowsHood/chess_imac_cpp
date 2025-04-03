@@ -44,16 +44,12 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 add_subdirectory(lib/quick_imgui)
 target_link_libraries(${PROJECT_NAME} PRIVATE quick_imgui::quick_imgui)
 
-# Ajout de la bibliothèque glimac
-add_subdirectory(lib/glimac)
-target_link_libraries(${PROJECT_NAME} PRIVATE glimac)
-
-# Ajout de la bibliothèque glmax
-add_subdirectory(lib/glmax)
-target_link_libraries(${PROJECT_NAME} PRIVATE glmax)
+# Ajout de la bibliothèque glfeur
+add_subdirectory(lib/glfeur)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfeur)
 
 include("./CMakeUtils/files_and_folders.cmake")
-Cool__target_copy_folder(${PROJECT_NAME} fonts)
+Cool__target_copy_folder(${PROJECT_NAME} assets)
 
 # Cool__target_copy_folder(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/fonts ${CMAKE_BINARY_DIR}/fonts)
 # Cool__target_copy_folder(${PROJECT_NAME} src/fonts ${CMAKE_BINARY_DIR}/fonts)
