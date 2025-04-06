@@ -35,7 +35,7 @@ int Random::geometric_law_int() {
   return round;
 }
 
-double Random::cauchy_law_double(double x0, double gamma) {
+double Random::cauchy_law_double(double m, double gamma) {
   double u = ((double) rand() / RAND_MAX);
-  return x0 + gamma * tan(M_PI * (u - 0.5));
+  return m + gamma * tan(M_PI * (u - 0.5));
 }
