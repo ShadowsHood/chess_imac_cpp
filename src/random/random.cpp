@@ -23,3 +23,13 @@ double Random::random_double(int min, int max) {
   std::uniform_real_distribution<double> uniformRealDistribution(min, max);
   return uniformRealDistribution(generator);
 }
+
+int Random::geometric_law_int() {
+  int value {};
+  int round {0};
+  do {
+    value = Random::random_int(0, 10);
+    round ++;
+  } while (value != 10);
+  return round;
+}

@@ -8,6 +8,7 @@
 
 #include "./pieces/bonus/Racist.hpp"
 #include "./pieces/bonus/Fool.hpp"
+#include "./pieces/bonus/Kamikaze.hpp"
 
 #include "utils.hpp"
 #include <iostream>
@@ -91,7 +92,9 @@ void Piece::promotion(Board &board, int position, char type) {
     case 'f':
       new_piece = std::make_unique<Fool>(this->color).release();
       break;
-    case 'q':
+    case 'z':
+      new_piece = std::make_unique<Kamikaze>(this->color).release();
+      break;
     default:
       new_piece = std::make_unique<Queen>(this->color).release();
       break;
@@ -99,6 +102,9 @@ void Piece::promotion(Board &board, int position, char type) {
 
   if (new_piece != nullptr) {
       board.set_piece(std::unique_ptr<Piece>(new_piece), position);
+      if (new_piece->get_type() == Type::Kamikaze) {
+        board.add_kamikaze(dynamic_cast<Kamikaze*>(new_piece));
+      }
   } else {
       std::cerr << "Promotion Fatal Error" << std::endl;
   }

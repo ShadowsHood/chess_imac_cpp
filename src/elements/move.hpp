@@ -45,4 +45,4 @@ void get_knight_tile_from_step(std::vector<int> &moves, const Board &board,
 
 void get_pawn_moves(std::vector<int> &moves, const Board &board,
                     const std::pair<int, int> &position, Color color,
-                    bool first_move);
+                    bool first_move, bool reversed = false);

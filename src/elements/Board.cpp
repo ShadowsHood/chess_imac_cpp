@@ -14,6 +14,7 @@
 #include "utils.hpp"
 #include <draw.hpp>
 #include <iostream>
+#include "pieces/bonus/Kamikaze.hpp"
 
 void Board::init_board() {
 
@@ -70,7 +71,7 @@ void Board::init_board() {
   this->chess_board[get_pos_1D(std::make_pair(6, 5))] =
       std::make_unique<Pawn>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(6, 6))] =
-      std::make_unique<Pawn>(Color::White);
+      std::make_unique<Pawn>(Color::Black);
   this->chess_board[get_pos_1D(std::make_pair(6, 7))] =
       std::make_unique<Pawn>(Color::White);
 
@@ -210,8 +211,20 @@ void Board::end_turn() {
   if (!promotion_activated)
     selected_piece_position.reset();
   next_possible_moves.clear();
-  current_player =
-      (current_player == Color::White) ? Color::Black : Color::White;
+  current_player = (current_player == Color::White) ? Color::Black : Color::White;
+
+  // Update kamiakazes time before explosion
+  if (current_player == Color::White && !active_kamikazes.empty()) {
+    for (auto it = active_kamikazes.begin(); it != active_kamikazes.end();) {
+      (*it)->update_time_before_explosion(*this);
+      if ((*it)->get_time_before_explosion() <= 0) {
+        (*it)->explode(*this);
+        it = active_kamikazes.erase(it);
+      } else {
+        ++it;
+      }
+    }  
+  }
 }
 
 void Board::deselect_piece() {
@@ -231,4 +244,17 @@ void Board::handle_promotion(ImFont *main_font) {
       selected_piece_position.reset();
     }
   }
+}
+
+void Board::add_kamikaze(Kamikaze *kamikaze) {
+  this->active_kamikazes.push_back(kamikaze);
+}
+
+int Board::get_piece_position(const Piece* piece) const {
+  for (int i = 0; i < 64; ++i) {
+      if (chess_board[i] && chess_board[i].get() == piece) {
+          return i;
+      }
+  }
+  return -1;
 }

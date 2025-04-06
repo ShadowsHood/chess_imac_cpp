@@ -9,5 +9,6 @@ enum class Type : std::uint8_t {
   Queen,
   King,
   Racist,
-  Fool
+  Fool,
+  Kamikaze,
 };

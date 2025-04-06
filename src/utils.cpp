@@ -31,6 +31,7 @@ int distance_between_two_tiles(int tile1, int tile2) {
 char get_sprite_char(Color color, Type type) {
   char character{};
   switch (type) {
+  case Type::Kamikaze:
   case Type::Pawn:
     character = (color == Color::White) ? 'p' : 'o';
     break;

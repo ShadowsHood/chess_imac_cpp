@@ -86,7 +86,7 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
     ImGui::PushFont(main_font);
 
     // Font color & buttons color
-    ImVec4 textColor = (color == Color::White) ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f)
+    ImVec4 textColor = (color == Color::Black) ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f)
                                                : ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
     ImVec4 buttonColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
     ImGui::PushStyleColor(ImGuiCol_Text, textColor);
@@ -95,7 +95,8 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
     // Buttons to choose the new piece
     std::unordered_map<char, Type> types = {{'q', Type::Queen},  {'r', Type::Rook},
                                   {'k', Type::Knight}, {'b', Type::Bishop},
-                                  {'n', Type::Racist}, {'f', Type::Fool}};
+                                  {'n', Type::Racist}, {'f', Type::Fool},
+                                  {'z', Type::Kamikaze}};
 
     for (auto &[key, type] : types) {
       std::string spriteChar(1, get_sprite_char(color, type));
