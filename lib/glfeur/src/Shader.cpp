@@ -1,3 +1,7 @@
+#ifndef SHADER_DIR
+#define SHADER_DIR "./shaders" // valeur de secours pour l'IDE
+#endif
+
 #include "Shader.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include <fstream>
@@ -5,16 +9,16 @@
 #include <optional>
 #include <sstream>
 
-
 namespace glfeur {
 
 void Shader::load_shader(const std::string &vertexPath,
                          const std::string &fragmentPath) {
-  std::string relativePath = "../../shaders/";
-  GLuint vertexShader =
-      compile_shader(relativePath + vertexPath, GL_VERTEX_SHADER);
+  std::string vertexShaderPath = std::string(SHADER_DIR) + "/" + vertexPath;
+  std::string fragmentShaderPath = std::string(SHADER_DIR) + "/" + fragmentPath;
+
+  GLuint vertexShader = compile_shader(vertexShaderPath, GL_VERTEX_SHADER);
   GLuint fragmentShader =
-      compile_shader(relativePath + fragmentPath, GL_FRAGMENT_SHADER);
+      compile_shader(fragmentShaderPath, GL_FRAGMENT_SHADER);
   m_programID = glCreateProgram();
   glAttachShader(m_programID, vertexShader);
   glAttachShader(m_programID, fragmentShader);
@@ -25,8 +29,7 @@ void Shader::load_shader(const std::string &vertexPath,
   if (!success) {
     char infoLog[512];
     glGetProgramInfoLog(m_programID, 512, nullptr, infoLog);
-    std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
-              << infoLog << std::endl;
+    std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << '\n';
   }
 
   glDeleteShader(vertexShader);
@@ -41,6 +44,9 @@ GLuint Shader::getID() const { return m_programID; }
 
 GLuint Shader::compile_shader(const std::string &path, GLenum type) {
   std::string sourceCode = read_file(path);
+  if (sourceCode.empty()) {
+    std::cerr << "Shader file is empty or could not be read: " << path << '\n';
+  }
   const char *code = sourceCode.c_str();
 
   GLuint shader = glCreateShader(type);
@@ -52,15 +58,22 @@ GLuint Shader::compile_shader(const std::string &path, GLenum type) {
   if (!success) {
     char infoLog[512];
     glGetShaderInfoLog(shader, 512, nullptr, infoLog);
-    std::cerr << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+    std::cerr << "ERROR::SHADER::COMPILATION_FAILED\n"
+              << "Shader path: " << path << "\n"
+              << infoLog << '\n';
   }
 
   return shader;
 }
 
 std::string Shader::read_file(const std::string &path) {
-  std::ifstream file(path);
-  std::stringstream buffer;
+  std::ifstream file(path, std::ios::in | std::ios::binary);
+  if (!file) {
+    std::cerr << "Failed to open shader file: " << path << '\n';
+    return "";
+  }
+  std::ostringstream buffer;
+  // std::stringstream buffer;
   buffer << file.rdbuf();
   return buffer.str();
 }

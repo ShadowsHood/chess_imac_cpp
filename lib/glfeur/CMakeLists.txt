@@ -15,10 +15,11 @@ target_include_directories(glfeur PUBLIC src third-party)
 target_link_libraries(glfeur PRIVATE stb_image)
 
 # ---Add glm---
-#target_include_directories(glfeur PUBLIC third-party/glm)
+# target_include_directories(glfeur PUBLIC third-party/glm)
 add_subdirectory(third-party/glm)
 target_link_libraries(glfeur PUBLIC glm)
 
 # Add quick_imgui for glad
 target_link_libraries(glfeur PUBLIC quick_imgui)
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE SHADER_DIR="${CMAKE_SOURCE_DIR}/shaders")

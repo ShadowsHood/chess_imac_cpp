@@ -100,7 +100,7 @@ void fill_material(Material &mat, const tinyobj::material_t &material) {
 
 // load .obj mesh
 void Mesh::load(const std::string &obj_path, const std::string &mtl_path) {
-  std::string relativePath = "../../assets/models/";
+  std::string relativePath = "assets/models/";
   tinyobj::ObjReaderConfig reader_config;
   reader_config.mtl_search_path = relativePath + mtl_path;
 

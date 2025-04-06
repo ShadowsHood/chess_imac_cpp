@@ -22,10 +22,33 @@ void App::launch() {
                 chess_2d();
                 renderer3d.chess_3d();
               },
+          .key_callback =
+              [&](int key, int scancode, int action, int mods) {
+                std::cout << "Key: " << key << " Scancode: " << scancode
+                          << " Action: " << action << " Mods: " << mods << '\n';
+              },
+          .mouse_button_callback =
+              [&](int button, int action, int mods) {
+                std::cout << "Button: " << button << " Action: " << action
+                          << " Mods: " << mods << '\n';
+              },
+          .cursor_position_callback =
+              [&](double xpos, double ypos) {
+                renderer3d.camera.track_ball_move_callback(xpos, ypos);
+              },
+          .scroll_callback =
+              [&](double xoffset, double yoffset) {
+                renderer3d.camera.process_scroll(yoffset);
+              },
+          .window_size_callback =
+              [&](int width, int height) {
+                std::cout << "Resized: " << width << ' ' << height << '\n';
+              },
           // .key_callback =
           //     [](int key, int scancode, int action, int mods) {
           //       std::cout << "Key: " << key << " Scancode: " << scancode
-          //                 << " Action: " << action << " Mods: " << mods << '\n';
+          //                 << " Action: " << action << " Mods: " << mods <<
+          //                 '\n';
           //     },
           // .mouse_button_callback =
           //     [](int button, int action, int mods) {
@@ -52,7 +75,7 @@ void App::init_font() {
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
   io.Fonts->AddFontDefault();
-  main_font = io.Fonts->AddFontFromFileTTF("fonts/CHEQ_TT.TTF", 60.0f);
+  main_font = io.Fonts->AddFontFromFileTTF("assets/fonts/CHEQ_TT.TTF", 60.0f);
   IM_ASSERT(main_font != nullptr);
 }
 

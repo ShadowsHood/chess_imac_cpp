@@ -2,6 +2,7 @@
 #include "./elements/Board.hpp"
 #include "./random/random.hpp"
 #include "quick_imgui/quick_imgui.hpp"
+// #include <filesystem>
 
 #include <imgui.h>
 #include <iostream>
@@ -13,6 +14,9 @@
 #include <glad/glad.h>
 
 int main() {
+  // std::cout << "Current working directory: " <<
+  // std::filesystem::current_path()
+  //           << "\n";
   App app;
   app.launch();
 }
