@@ -2,6 +2,7 @@
 #include "random/random.hpp"
 #include <chrono>
 #include <random>
+#include <corecrt_math_defines.h>
 
 int Random::random_binary() {
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -32,4 +33,9 @@ int Random::geometric_law_int() {
     round ++;
   } while (value != 10);
   return round;
+}
+
+double Random::cauchy_law_double(double x0, double gamma) {
+  double u = ((double) rand() / RAND_MAX);
+  return x0 + gamma * tan(M_PI * (u - 0.5));
 }

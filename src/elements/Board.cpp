@@ -9,6 +9,7 @@
 
 #include "./pieces/bonus/Fool.hpp"
 #include "./pieces/bonus/Racist.hpp"
+#include "./pieces/bonus/Elevator.hpp"
 
 #include "./random/random.hpp"
 #include "utils.hpp"
@@ -188,6 +189,7 @@ void Board::click_playable_piece(int index) {
   next_possible_moves =
       this->chess_board[index]->get_possible_moves(*this, index);
 
+  // Gestion du Fool
   if (this->chess_board[index]->get_type() == Type::Fool) {
     if (dynamic_cast<Fool *>(this->chess_board[index].get())->canMove()) {
       int i{Random::random_int(
@@ -196,6 +198,15 @@ void Board::click_playable_piece(int index) {
     } else {
       std::cout << "cheh" << '\n';
       end_turn();
+    }
+  } 
+  // Gestion du Elevator
+  else if (this->chess_board[index]->get_type() == Type::Elevator) {
+    Elevator *elevator = dynamic_cast<Elevator *>(this->chess_board[index].get());
+    int jump = next_possible_moves[0];
+    click_reachable_tile(index + (8*jump));
+    if (index + (8*jump) < 8 || index + (8*jump) > 55) {
+      elevator->switch_direction();
     }
   }
 }

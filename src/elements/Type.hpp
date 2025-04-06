@@ -11,4 +11,5 @@ enum class Type : std::uint8_t {
   Racist,
   Fool,
   Kamikaze,
+  Elevator,
 };
