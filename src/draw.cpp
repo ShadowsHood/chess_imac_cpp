@@ -31,7 +31,7 @@ void draw_board(Board &board, ImFont *main_font) {
 void draw_tile(Board &board, int index, Piece const *piece, ImFont *main_font,
                bool &is_a_possible_move) {
   // Set color of the tile (black or white)
-  ImVec4 tileColor = get_tile_color(index, board.get_offsets_tiles_color());
+  ImVec4 tileColor = get_tile_color(index, board.get_tiles_color_offsets());
   ImGui::PushStyleColor(ImGuiCol_Button, tileColor);
 
   // Set the name of the piece
@@ -129,18 +129,18 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
 // -
 // -
 
-void initialize_offsets_tiles_color(std::array<float, 32> &offsets_tiles_color) {
+void initialize_tiles_color_offsets(std::array<float, 32> &tiles_color_offsets) {
   for (int i = 0; i < 32; i++) {
-    offsets_tiles_color[i] = Random::gaussian_law(0.0f, 0.05f);
+    tiles_color_offsets[i] = Random::gaussian_law(0.0f, 0.05f);
   }
 }
 
-ImVec4 get_tile_color(int i, std::array<float, 32> &offsets_tiles_color) {
+ImVec4 get_tile_color(int i, std::array<float, 32> &tiles_color_offsets) {
   int x = i % 8;
   int y = i / 8;
   if ((x + y) % 2 == 0)
     return ImVec4{0.8f, 0.8f, 0.8f, 1.f};
-  float offset = offsets_tiles_color[i/2]; // Variation de la couleur des cases noires selon notre loi gaussienne
+  float offset = tiles_color_offsets[i/2]; // Variation de la couleur des cases noires selon notre loi gaussienne
   return ImVec4{0.45f - offset, 0.23f - offset, 0.f, 1.f};
 }
 
