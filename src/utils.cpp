@@ -1,5 +1,10 @@
 #include "./utils.hpp"
+#define MINIAUDIO_IMPLEMENTATION
+#include "../lib/miniaudio/miniaudio.h"
 #include <iostream>
+#include <string>
+#include <thread>
+#include <chrono>
 
 template <typename T> bool is_in_vec(std::vector<T> &vec, T value) {
   return std::find(vec.begin(), vec.end(), value) != vec.end();
@@ -55,4 +60,35 @@ char get_sprite_char(Color color, Type type) {
     break;
   }
   return character;
+}
+
+void play_sound(std::string file_name) {
+  file_name = "../../sounds/" + file_name;
+
+  ma_engine engine;
+  if (ma_engine_init(nullptr, &engine) != MA_SUCCESS) {
+      std::cout << "Failed to init engine.\n";
+      return;
+  }
+
+  ma_sound sound;
+  if (ma_sound_init_from_file(&engine, file_name.c_str(), 0, nullptr, nullptr, &sound) != MA_SUCCESS) {
+      std::cout << "Failed to load sound.\n";
+      ma_engine_uninit(&engine);
+      return;
+  }
+
+  if (ma_sound_start(&sound) != MA_SUCCESS) {
+      std::cout << "Failed to start.\n";
+      ma_sound_uninit(&sound);
+      ma_engine_uninit(&engine);
+      return;
+  }
+
+  while (ma_sound_is_playing(&sound)) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  }
+
+  ma_sound_uninit(&sound);
+  ma_engine_uninit(&engine);
 }

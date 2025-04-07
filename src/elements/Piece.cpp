@@ -13,6 +13,8 @@
 
 #include "utils.hpp"
 #include <iostream>
+#include <thread>
+#include <random/random.hpp>
 
 void Piece::move(Board &board, int old_position, int new_position) {
 
@@ -45,6 +47,10 @@ void Piece::move(Board &board, int old_position, int new_position) {
     board.set_promotion_activated(true);
     board.set_selected_piece_position(new_position);
   }
+
+  // Random on sound
+  if (Random::bernoulli_law(0.5))
+    std::thread(play_sound, "move.wav").detach();
 }
 
 void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
