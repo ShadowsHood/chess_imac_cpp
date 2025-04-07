@@ -12,7 +12,7 @@ std::vector<int> Kamikaze::get_possible_moves(const Board &board, int position) 
 }
 
 void Kamikaze::init_time_before_explosion() {
-  this->time_before_explosion = Random::geometric_law_int();
+  this->time_before_explosion = Random::geometric_law();
 }
 
 int Kamikaze::get_time_before_explosion() {

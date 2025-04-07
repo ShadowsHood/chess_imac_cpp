@@ -1,5 +1,4 @@
 #include "./random.hpp"
-#include "random/random.hpp"
 #include <chrono>
 #include <random>
 #include <corecrt_math_defines.h>
@@ -25,7 +24,7 @@ double Random::random_double(int min, int max) {
   return uniformRealDistribution(generator);
 }
 
-int Random::geometric_law_int() {
+int Random::geometric_law() {
   int value {};
   int round {0};
   do {
@@ -35,7 +34,22 @@ int Random::geometric_law_int() {
   return round;
 }
 
-double Random::cauchy_law_double(double m, double gamma) {
+double Random::cauchy_law(double m, double gamma) {
   double u = ((double) rand() / RAND_MAX);
   return m + gamma * tan(M_PI * (u - 0.5));
+}
+
+float Random::gaussian_law(float mean, float stddev) {
+  double u1 = Random::random_double(0, 1);
+  double u2 = Random::random_double(0, 1);
+
+  if (u1 < 1e-6) u1 = 1e-6;
+
+  double z0 = std::sqrt(-2.0 * std::log(u1)) * std::cos(2 * M_PI * u2);
+  double value = mean + z0 * stddev;
+
+  if (value < -0.1f) value = -0.1f;
+  if (value > 0.1f) value = 0.1f;
+
+  return static_cast<float>(value);
 }

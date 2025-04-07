@@ -13,6 +13,7 @@ void App::launch() {
           .init =
               [this]() {
                 // std::cout << "Init\n";
+                initialize_offsets_tiles_color(board.get_offsets_tiles_color());
                 renderer3d.init_3d();
               },
           .loop =

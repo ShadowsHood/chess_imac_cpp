@@ -10,6 +10,7 @@
 class Board {
 private:
   std::array<std::unique_ptr<Piece>, 64> chess_board{};
+  std::array<float, 32> offsets_tiles_color{};
   std::vector<std::unique_ptr<Piece>> dead_white_pieces{};
   std::vector<std::unique_ptr<Piece>> dead_black_pieces{};
   std::vector<Kamikaze*> active_kamikazes{};
@@ -65,6 +66,10 @@ public:
 
   std::vector<Kamikaze*> & get_active_kamikazes() {
     return this->active_kamikazes;
+  };
+
+  std::array<float, 32> & get_offsets_tiles_color() {
+    return this->offsets_tiles_color;
   };
 
   // Setters

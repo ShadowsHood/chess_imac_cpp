@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include "random/random.hpp"
 
 void set_background_color() {
   ImGui::StyleColorsDark();
@@ -30,7 +31,7 @@ void draw_board(Board &board, ImFont *main_font) {
 void draw_tile(Board &board, int index, Piece const *piece, ImFont *main_font,
                bool &is_a_possible_move) {
   // Set color of the tile (black or white)
-  ImVec4 tileColor = get_tile_color(index);
+  ImVec4 tileColor = get_tile_color(index, board.get_offsets_tiles_color());
   ImGui::PushStyleColor(ImGuiCol_Button, tileColor);
 
   // Set the name of the piece
@@ -128,13 +129,19 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
 // -
 // -
 
-ImVec4 get_tile_color(int i) {
+void initialize_offsets_tiles_color(std::array<float, 32> &offsets_tiles_color) {
+  for (int i = 0; i < 32; i++) {
+    offsets_tiles_color[i] = Random::gaussian_law(0.0f, 0.05f);
+  }
+}
+
+ImVec4 get_tile_color(int i, std::array<float, 32> &offsets_tiles_color) {
   int x = i % 8;
   int y = i / 8;
-  return (x + y) % 2 == 0 ? ImVec4{0.8f, 0.8f, 0.8f, 1.f}
-                          : ImVec4{0.4f, 0.2f, 0.8f, 1.f};
-  //   return (x + y) % 2 == 0 ? ImVec4{0.8f, 0.8f, 0.8f, 1.f}
-  //                           : ImVec4{0.2f, 0.2f, 0.2f, 1.f};
+  if ((x + y) % 2 == 0)
+    return ImVec4{0.8f, 0.8f, 0.8f, 1.f};
+  float offset = offsets_tiles_color[i/2]; // Variation de la couleur des cases noires selon notre loi gaussienne
+  return ImVec4{0.45f - offset, 0.23f - offset, 0.f, 1.f};
 }
 
 bool is_possible_move(const std::vector<int> &next_possible_moves, int i) {

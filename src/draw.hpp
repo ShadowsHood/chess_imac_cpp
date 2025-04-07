@@ -4,7 +4,8 @@
 #include <imgui.h>
 #include <vector>
 
-ImVec4 get_tile_color(int i);
+ImVec4 get_tile_color(int i, std::array<float, 32> &offsets_tiles_color);
+void initialize_offsets_tiles_color(std::array<float, 32> &offsets_tiles_color);
 
 bool is_possible_move(const std::vector<int> &next_possible_moves, int i);
 
