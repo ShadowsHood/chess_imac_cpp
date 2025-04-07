@@ -3,11 +3,13 @@
 
 class VAO {
 public:
-    VAO();
-    ~VAO();
-    void init();
-    void bind() const;
-    void unbind() const;
+  VAO();
+  ~VAO();
+  void init();
+  void bind() const;
+  void unbind() const;
+  void release();
+
 private:
-    GLuint m_id;
+  GLuint m_id;
 };

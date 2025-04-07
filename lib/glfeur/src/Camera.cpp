@@ -29,13 +29,13 @@ void Camera::process_mouse_movement(double xpos, double ypos) {
   _last_x = xpos;
   _last_y = ypos;
 
-  _yaw += xoffset * _sensitivity;
-  _pitch -= yoffset * _sensitivity;
+  _yaw -= xoffset * _sensitivity;
+  _pitch += yoffset * _sensitivity;
 
-  if (_pitch > 45.0f)
-    _pitch = 45.0f;
-  if (_pitch < 0.0f)
-    _pitch = 0.0f;
+  if (_pitch > 80.0f)
+    _pitch = 80.0f;
+  if (_pitch < -45.0f)
+    _pitch = -45.0f;
 }
 
 void Camera::process_scroll(double yoffset) {
@@ -76,4 +76,15 @@ void Camera::track_ball_move_callback(double xpos, double ypos) {
   if (is_track_ball() && !_isLocked)
     process_mouse_movement(xpos, ypos);
 }
+
+void Camera::set_first_mouse() { _first_mouse = true; }
+
+bool Camera::is_first_mouse() const { return _first_mouse; }
+
+void Camera::init_mouse_position(double xpos, double ypos) {
+  _last_x = xpos;
+  _last_y = ypos;
+  _first_mouse = false;
+}
+
 } // namespace glfeur

@@ -45,6 +45,10 @@ public:
   void free_move_callback(int key, int action);
   void zoom_callback(double yoffset);
   void track_ball_move_callback(double xpos, double ypos);
+
+  void set_first_mouse();
+  bool is_first_mouse() const;
+  void init_mouse_position(double xpos, double ypos);
 };
 
 } // namespace glfeur
