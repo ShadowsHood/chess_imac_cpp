@@ -2,6 +2,8 @@
 #include "glm/ext/matrix_transform.hpp"
 #include <GLFW/glfw3.h>
 
+#include <algorithm>
+
 namespace glfeur {
 
 glm::mat4 Camera::get_view_matrix() {
@@ -32,18 +34,14 @@ void Camera::process_mouse_movement(double xpos, double ypos) {
   _yaw -= xoffset * _sensitivity;
   _pitch += yoffset * _sensitivity;
 
-  if (_pitch > 80.0f)
-    _pitch = 80.0f;
-  if (_pitch < -45.0f)
-    _pitch = -45.0f;
+  _pitch = std::min(_pitch, 80.0f);
+  _pitch = std::max(_pitch, -45.0f);
 }
 
 void Camera::process_scroll(double yoffset) {
-  _radius -= yoffset * 0.1f;
-  if (_radius < 1.0f)
-    _radius = 1.0f;
-  if (_radius > 32.0f)
-    _radius = 32.0f;
+  _radius -= yoffset * 0.3f;
+  _radius = std::max(_radius, 1.0f);
+  _radius = std::min(_radius, 32.0f);
 }
 
 void Camera::process_input(int key, int action) {

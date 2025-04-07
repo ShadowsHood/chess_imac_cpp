@@ -46,7 +46,7 @@ void draw_tile(Board &board, int index, Piece const *piece, ImFont *main_font,
     push_possible_move_color();
 
   // Draw tile
-  if (ImGui::Button(name.c_str(), ImVec2{100.f, 100.f})) {
+  if (ImGui::Button(name.c_str(), ImVec2{60.f, 60.f})) {
     if (board.get_in_game())
       board.handle_tile_click(index, piece,
                               is_a_possible_move); // std optional color ?

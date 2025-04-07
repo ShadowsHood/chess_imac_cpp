@@ -30,7 +30,6 @@ public:
   //     m_vbo = std::move(other.m_vbo);
   //     m_ebo = std::move(other.m_ebo);
   //     m_mesh = std::move(other.m_mesh);
-
   //     // Réinitialiser l'autre objet
   //     other.m_vao = VAO();
   //     other.m_vbo = VBO();

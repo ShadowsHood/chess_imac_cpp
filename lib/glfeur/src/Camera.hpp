@@ -13,7 +13,7 @@ private:
 
   float _yaw = 0.0f;
   float _pitch = 24.0f;
-  float _radius = 16.0f;
+  float _radius = 8.0f;
 
   float _sensitivity = 0.2f;
   float _last_x = 0.0f;

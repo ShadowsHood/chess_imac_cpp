@@ -64,7 +64,7 @@ void App::init_font() {
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
   io.Fonts->AddFontDefault();
-  main_font = io.Fonts->AddFontFromFileTTF("assets/fonts/CHEQ_TT.TTF", 60.0f);
+  main_font = io.Fonts->AddFontFromFileTTF("assets/fonts/CHEQ_TT.TTF", 36.0f);
   IM_ASSERT(main_font != nullptr);
 }
 

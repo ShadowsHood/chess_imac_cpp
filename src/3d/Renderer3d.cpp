@@ -49,7 +49,7 @@ void Renderer3d ::init_3d() {
   model2.load_mesh("pawn/pawn.obj", "pawn");
 
   models.push_back(std::move(model1));
-  models.push_back(std::move(model1));
+  models.push_back(std::move(model2));
 
   for (auto &model : models) {
     model.setup_buffers();
