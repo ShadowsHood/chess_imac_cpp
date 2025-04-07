@@ -53,3 +53,18 @@ float Random::gaussian_law(float mean, float stddev) {
 
   return static_cast<float>(value);
 }
+
+int Random::exponential_law(double lambda) {
+  double u;
+  do {
+      u = Random::random_double(0, 1);
+  } while (u <= 0.0); 
+
+  double result = -std::log(u) / lambda;
+  return static_cast<int>(result); 
+}
+
+bool Random::bernoulli_law(double p) {
+  double u = Random::random_double(0, 1);
+  return u < p;
+}
