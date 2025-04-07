@@ -8,6 +8,7 @@
 #include "./pieces/Rook.hpp"
 
 #include "./pieces/bonus/Fool.hpp"
+#include "./pieces/bonus/Kamikaze.hpp"
 #include "./pieces/bonus/Racist.hpp"
 #include "./pieces/bonus/Elevator.hpp"
 
@@ -15,7 +16,6 @@
 #include "utils.hpp"
 #include <draw.hpp>
 #include <iostream>
-#include "pieces/bonus/Kamikaze.hpp"
 
 void Board::init_board() {
 
