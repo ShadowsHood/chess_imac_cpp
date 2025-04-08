@@ -132,9 +132,15 @@ void Mesh::load(const std::string &obj_path, const std::string &mtl_path) {
   // for multiple materials management
   unsigned int index_offset = 0;
   for (const tinyobj::shape_t &shape : shapes) {
+    // std::cout << "Traitement de shape : " << shape.name << '\n'; // debug
     Submesh submesh{};
     submesh.m_index_offset = index_offset;
-    submesh.m_material_id = shape.mesh.material_ids[0];
+    if (!shape.mesh.material_ids.empty()) {
+      submesh.m_material_id = shape.mesh.material_ids[0];
+    } else {
+      std::cout << "⚠️ Aucun material ID pour shape : " << shape.name << '\n';
+      submesh.m_material_id = -1;
+    }
     // shape = triangle = fragment
     unsigned int index_count = 0;
     for (const tinyobj::index_t index : shape.mesh.indices) {
@@ -145,6 +151,8 @@ void Mesh::load(const std::string &obj_path, const std::string &mtl_path) {
     submesh.m_index_count = index_count;
     index_offset += index_count;
     m_submeshes.push_back(submesh);
+    // std::cout << "Submesh ajouté : indices = " << index_count << '\n'; //
+    // debug
   }
 }
 } // namespace glfeur

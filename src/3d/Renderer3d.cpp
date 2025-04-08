@@ -32,7 +32,11 @@ void Renderer3d ::chess_3d() {
   //   model.render(shader); // Render the model
   // }
   for (size_t i = 0; i < models.size(); ++i) {
-    glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(i * 2.0f, 0.0f, 0.0f)); // Example transformation
+
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    // modelMatrix = glm::scale(modelMatrix, glm::vec3(0.2f));
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(i * 2.0f, 0.0f, 0.0f));
+
     shader.set_uniform_matrix_4fv("model", modelMatrix);
     models[i].render(shader);
   }

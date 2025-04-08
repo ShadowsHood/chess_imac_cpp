@@ -46,8 +46,16 @@ void Model3D::render(glfeur::Shader &shader) const {
   m_vao.bind();
 
   for (const glfeur::Submesh &submesh : m_mesh.get_submeshes()) {
-    const glfeur::Material &material =
-        m_mesh.get_materials().at(submesh.m_material_id);
+    glfeur::Material defaultMat; // une version par défaut si besoin
+    const glfeur::Material *materialPtr = nullptr;
+    if (submesh.m_material_id >= 0 &&
+        submesh.m_material_id <
+            static_cast<int>(m_mesh.get_materials().size())) {
+      materialPtr = &m_mesh.get_materials()[submesh.m_material_id];
+    } else {
+      materialPtr = &defaultMat;
+    }
+    const glfeur::Material &material = *materialPtr;
 
     // Configurer les uniformes pour les propriétés du matériau
     shader.set_uniform_3fv("Kd", material.m_Kd);
