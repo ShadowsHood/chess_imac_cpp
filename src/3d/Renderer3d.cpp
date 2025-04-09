@@ -6,7 +6,7 @@ void Renderer3d ::chess_3d() {
   // glClearColor(0.847f, 0.82f, 0.929f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
-  //
+
   glm::mat4 projection = glm::perspective(glm::radians(45.0f),
                                           static_cast<float>(window_width) /
                                               static_cast<float>(window_height),
@@ -26,19 +26,23 @@ void Renderer3d ::chess_3d() {
   shader.set_uniform_3fv("viewPos", camera.get_position());
 
   // MODEL RENDER
-  // for (const auto &model : models) {
-  //   glm::mat4 modelMatrix = model.get_model_matrix(); // Each model has its
-  //   own transformation shader.set_uniform_matrix_4fv("model", modelMatrix);
-  //   model.render(shader); // Render the model
-  // }
-  for (size_t i = 0; i < models.size(); ++i) {
+  if (!models_ready) {
+    std::cout << "Chargement des modèles...\n";
+  } else {
+    // for (const auto &model : models) {
+    //   glm::mat4 modelMatrix = model.get_model_matrix(); // Each model has its
+    //   own transformation shader.set_uniform_matrix_4fv("model", modelMatrix);
+    //   model.render(shader); // Render the model
+    // }
+    for (size_t i = 0; i < models.size(); ++i) {
+      glm::mat4 modelMatrix = glm::mat4(1.0f);
+      // modelMatrix = glm::scale(modelMatrix, glm::vec3(0.2f));
+      modelMatrix =
+          glm::translate(modelMatrix, glm::vec3(i * 2.0f, 0.0f, 0.0f));
 
-    glm::mat4 modelMatrix = glm::mat4(1.0f);
-    // modelMatrix = glm::scale(modelMatrix, glm::vec3(0.2f));
-    modelMatrix = glm::translate(modelMatrix, glm::vec3(i * 2.0f, 0.0f, 0.0f));
-
-    shader.set_uniform_matrix_4fv("model", modelMatrix);
-    models[i].render(shader);
+      shader.set_uniform_matrix_4fv("model", modelMatrix);
+      models[i].render(shader);
+    }
   }
 }
 
@@ -47,17 +51,28 @@ void Renderer3d ::init_3d() {
 
   models.clear();
 
-  Model3D model1;
-  Model3D model2;
-  model1.load_mesh("creeper/creeper.obj", "creeper");
-  model2.load_mesh("pawn/pawn.obj", "pawn");
+  models_ready = false;
+  load_models_async();
+}
 
-  models.push_back(std::move(model1));
-  models.push_back(std::move(model2));
+void Renderer3d::load_models_async() {
+  loader_thread = std::thread([this]() {
+    Model3D model1;
+    Model3D model2;
+    model1.load_mesh("creeper/creeper.obj", "creeper");
+    model2.load_mesh("pawn/pawn.obj", "pawn");
 
-  for (auto &model : models) {
-    model.setup_buffers();
-  }
+    models.push_back(std::move(model1));
+    models.push_back(std::move(model2));
+
+    for (auto &model : models) {
+      model.setup_buffers();
+    }
+
+    std::cout << "Chargement terminé\n";
+    models_ready = true;
+  });
+  // loader_thread.detach();
 }
 
 void Renderer3d ::terminate_3d() {

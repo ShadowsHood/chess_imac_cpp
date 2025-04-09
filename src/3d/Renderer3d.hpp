@@ -13,6 +13,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <thread>
 
 class Renderer3d {
 public:
@@ -24,10 +25,13 @@ public:
   int window_height = 1080;
 
   std::vector<Model3D> models;
+  std::thread loader_thread;
+  bool models_ready = false;
 
   Renderer3d() = default;
 
   void init_3d();
+  void load_models_async();
   void terminate_3d();
   void chess_3d();
 };
