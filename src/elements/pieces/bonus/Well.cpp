@@ -1,10 +1,10 @@
-#include "./Elevator.hpp"
+#include "./Well.hpp"
 #include "../../../random/random.hpp"
 #include "../../Board.hpp"
 #include "../../move.hpp" 
 #include <cmath>
 
-std::vector<int> Elevator::get_possible_moves(const Board &board, int position) {
+std::vector<int> Well::get_possible_moves(const Board &board, int position) {
   std::vector<int> possible_moves {};
   double x = Random::cauchy_law(1, 1);
   int value = static_cast<int>(std::round(x));
@@ -15,7 +15,7 @@ std::vector<int> Elevator::get_possible_moves(const Board &board, int position) 
   return possible_moves;
 }
 
-void Elevator::switch_direction() {
+void Well::switch_direction() {
   direction = -direction;
   max_move = 7;
 }

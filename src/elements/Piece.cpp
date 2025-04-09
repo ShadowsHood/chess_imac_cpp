@@ -9,7 +9,7 @@
 #include "./pieces/bonus/Racist.hpp"
 #include "./pieces/bonus/Fool.hpp"
 #include "./pieces/bonus/Kamikaze.hpp"
-#include "pieces/bonus/Elevator.hpp"
+#include "pieces/bonus/Well.hpp"
 
 #include "utils.hpp"
 #include <iostream>
@@ -103,7 +103,7 @@ void Piece::promotion(Board &board, int position, char type) {
       new_piece = std::make_unique<Kamikaze>(this->color).release();
       break;
     case 'w':
-      new_piece = std::make_unique<Elevator>(this->color).release();
+      new_piece = std::make_unique<Well>(this->color).release();
       break;
     default:
       new_piece = std::make_unique<Queen>(this->color).release();

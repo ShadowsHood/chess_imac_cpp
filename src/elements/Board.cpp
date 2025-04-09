@@ -10,7 +10,7 @@
 #include "./pieces/bonus/Fool.hpp"
 #include "./pieces/bonus/Kamikaze.hpp"
 #include "./pieces/bonus/Racist.hpp"
-#include "./pieces/bonus/Elevator.hpp"
+#include "./pieces/bonus/Well.hpp"
 
 #include "./random/random.hpp"
 #include "utils.hpp"
@@ -200,13 +200,13 @@ void Board::click_playable_piece(int index) {
       end_turn();
     }
   } 
-  // Gestion du Elevator
-  else if (this->chess_board[index]->get_type() == Type::Elevator) {
-    Elevator *elevator = dynamic_cast<Elevator *>(this->chess_board[index].get());
+  // Gestion du Well
+  else if (this->chess_board[index]->get_type() == Type::Well) {
+    Well *well = dynamic_cast<Well *>(this->chess_board[index].get());
     int jump = next_possible_moves[0];
     click_reachable_tile(index + (8*jump));
     if (index + (8*jump) < 8 || index + (8*jump) > 55) {
-      elevator->switch_direction();
+      well->switch_direction();
     }
   }
 }

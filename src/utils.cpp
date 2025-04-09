@@ -37,7 +37,7 @@ char get_sprite_char(Color color, Type type) {
   char character{};
   switch (type) {
   case Type::Kamikaze:
-  case Type::Elevator:
+  case Type::Well:
   case Type::Pawn:
     character = (color == Color::White) ? 'p' : 'o';
     break;
