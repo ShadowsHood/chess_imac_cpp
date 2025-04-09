@@ -49,7 +49,7 @@ void Piece::move(Board &board, int old_position, int new_position) {
   }
 
   // Random on sound
-  if (this->type != Type::Fool && this->type != Type::Kamikaze && Random::bernoulli_law(1))
+  if (this->type != Type::Fool && this->type != Type::Kamikaze && Random::bernoulli_law(0.5))
     std::thread(play_sound, this->sound).detach();
 }
 
