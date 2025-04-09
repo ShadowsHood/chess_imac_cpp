@@ -22,10 +22,10 @@ void Piece::move(Board &board, int old_position, int new_position) {
   std::pair<int, int> new_pos_2D = get_pos_2D(new_position);
 
   if (type == Type::Pawn) {
-    handleEnPassant(board, new_pos_2D);
+    handle_en_passant(board, new_pos_2D);
   }
 
-  updateEnPassantAvailability(board, new_pos_2D, new_position);
+  update_en_passant_availability(board, new_pos_2D, new_position);
 
   if (first_move)
     first_move = false;
@@ -49,11 +49,11 @@ void Piece::move(Board &board, int old_position, int new_position) {
   }
 
   // Random on sound
-  if (Random::bernoulli_law(0.5))
-    std::thread(play_sound, "move.wav").detach();
+  if (this->type != Type::Fool && this->type != Type::Kamikaze && Random::bernoulli_law(1))
+    std::thread(play_sound, this->sound).detach();
 }
 
-void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
+void Piece::handle_en_passant(Board &board, std::pair<int, int> new_pos_2D) {
   const int invalid = -1;
   int en_passant_available = board.get_en_passant_available();
   std::pair<int, int> en_passant_available_pos_2D =
@@ -69,7 +69,7 @@ void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
   }
 }
 
-void Piece::updateEnPassantAvailability(Board &board,
+void Piece::update_en_passant_availability(Board &board,
                                         std::pair<int, int> new_pos_2D,
                                         int new_position) {
   if (type == Type::Pawn && first_move &&
@@ -80,7 +80,8 @@ void Piece::updateEnPassantAvailability(Board &board,
   }
 }
 
-void Piece::promotion(Board &board, int position, char type) { 
+void Piece::promotion(Board &board, int position, char type) {
+  std::thread(play_sound, "promotion.mp3").detach();
   Piece *new_piece = nullptr;
 
   switch (type) {

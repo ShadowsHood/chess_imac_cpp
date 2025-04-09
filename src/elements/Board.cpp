@@ -16,6 +16,7 @@
 #include "utils.hpp"
 #include <draw.hpp>
 #include <iostream>
+#include <thread>
 
 void Board::init_board() {
 
@@ -195,7 +196,9 @@ void Board::click_playable_piece(int index) {
       int i{Random::random_int(
           0, static_cast<int>(next_possible_moves.size() - 1))};
       click_reachable_tile(next_possible_moves[i]);
+      std::thread(play_sound, "fool-success.mp3").detach();
     } else {
+      std::thread(play_sound, "fool-fail.mp3").detach();
       std::cout << "cheh" << '\n';
       end_turn();
     }

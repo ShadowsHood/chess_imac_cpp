@@ -3,6 +3,7 @@
 #include "../../../random/random.hpp"
 #include "../../move.hpp" 
 #include <algorithm>
+#include <thread>
 
 std::vector<int> Kamikaze::get_possible_moves(const Board &board, int position) {
   std::vector<int> possible_moves;
@@ -24,6 +25,7 @@ void Kamikaze::update_time_before_explosion(Board &board) {
 }
 
 void Kamikaze::explode(Board &board) {
+  std::thread(play_sound, "kamikaze.mp3").detach();
   int kamikaze_position = board.get_piece_position(this);
   for (int i = 0; i < 64; ++i) {
     if (distance_between_two_tiles(kamikaze_position, i) == 1) {

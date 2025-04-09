@@ -6,7 +6,7 @@ private:
   int time_before_explosion{};
 
 public:
-  explicit Kamikaze(Color color) : Piece(color, Type::Kamikaze) { init_time_before_explosion(); };
+  explicit Kamikaze(Color color) : Piece(color, Type::Kamikaze, "") { init_time_before_explosion(); };
 
   std::vector<int> get_possible_moves(const Board &board,
                                       int position) override;
