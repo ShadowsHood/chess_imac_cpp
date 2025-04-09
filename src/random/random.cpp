@@ -68,3 +68,22 @@ bool Random::bernoulli_law(double p) {
   double u = Random::random_double(0, 1);
   return u < p;
 }
+
+double Random::poisson_law(int lambda, int k) {
+  double lambda_k = std::pow(lambda, k);
+  double exp_neg_lambda = std::exp(-lambda);
+  
+  double factorial_k = 1.0;
+  for (int i = 1; i <= k; ++i) {
+      factorial_k *= i;
+  }
+  double probability = (lambda_k * exp_neg_lambda) / factorial_k;
+  return probability;
+}
+
+double Random::pareto_law(double alpha, double x_m) {
+  double u = Random::random_double(0.0, 1.0);
+
+  double result = x_m * std::pow(1.0 / u, 1.0 / alpha);
+  return result;
+}
