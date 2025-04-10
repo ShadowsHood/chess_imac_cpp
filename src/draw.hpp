@@ -4,8 +4,6 @@
 #include <imgui.h>
 #include <vector>
 
-ImVec4 get_tile_color(int i);
-
 bool is_possible_move(const std::vector<int> &next_possible_moves, int i);
 
 void push_font(Color color, ImFont *&main_font);

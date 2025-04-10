@@ -1,7 +1,7 @@
 #include "draw.hpp"
 #include <iostream>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 void set_background_color() {
@@ -93,13 +93,14 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
     ImGui::PushStyleColor(ImGuiCol_Button, buttonColor);
 
     // Buttons to choose the new piece
-    std::unordered_map<char, Type> types = {{'q', Type::Queen},  {'r', Type::Rook},
-                                  {'k', Type::Knight}, {'b', Type::Bishop},
-                                  {'n', Type::Racist}, {'f', Type::Fool}};
+    std::unordered_map<char, Type> types = {
+        {'q', Type::Queen},  {'r', Type::Rook},   {'k', Type::Knight},
+        {'b', Type::Bishop}, {'n', Type::Racist}, {'f', Type::Fool}};
 
     for (auto &[key, type] : types) {
       std::string spriteChar(1, get_sprite_char(color, type));
-      if (ImGui::Button((spriteChar + "##" + key).c_str(), ImVec2{100.f, 100.f})) {
+      if (ImGui::Button((spriteChar + "##" + key).c_str(),
+                        ImVec2{100.f, 100.f})) {
         std::cout << "New type: " << key << '\n';
         new_type = key;
         ImGui::CloseCurrentPopup();
@@ -126,15 +127,6 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
 // -
 // -
 // -
-
-ImVec4 get_tile_color(int i) {
-  int x = i % 8;
-  int y = i / 8;
-  return (x + y) % 2 == 0 ? ImVec4{0.8f, 0.8f, 0.8f, 1.f}
-                          : ImVec4{0.4f, 0.2f, 0.8f, 1.f};
-  //   return (x + y) % 2 == 0 ? ImVec4{0.8f, 0.8f, 0.8f, 1.f}
-  //                           : ImVec4{0.2f, 0.2f, 0.2f, 1.f};
-}
 
 bool is_possible_move(const std::vector<int> &next_possible_moves, int i) {
   return std::find(next_possible_moves.begin(), next_possible_moves.end(), i) !=

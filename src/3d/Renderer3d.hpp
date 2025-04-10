@@ -36,5 +36,3 @@ public:
   void terminate_3d();
   void chess_3d();
 };
-
-glm::vec3 get_tile_color_vec3(int i);

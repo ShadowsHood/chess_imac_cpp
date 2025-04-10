@@ -40,11 +40,14 @@ void Renderer3d ::chess_3d() {
 
     // Mise à l'échelle pour définir la taille du cube
     tileMatrix = glm::scale(tileMatrix, glm::vec3(tileSize, 0.1, tileSize));
+    int rotation = i * i%3;
+    tileMatrix =
+        glm::rotate(tileMatrix, glm::radians(90.0f * rotation), glm::vec3(0, 1, 0));
 
     // Passer la matrice de modèle au shader
     shader.set_uniform_matrix_4fv("model", tileMatrix);
 
-    // shader.set_uniform_3fv("objectColor", get_tile_color_vec3(i));
+    shader.set_uniform_3fv("objectColor", get_tile_color_vec3(i));
 
     // Rendre le cube en utilisant l'instance de Model3D
     cube_model.render(shader);
@@ -74,7 +77,7 @@ void Renderer3d ::chess_3d() {
 void Renderer3d ::init_3d() {
   shader.load_shader("model.vs.glsl", "model.fs.glsl");
   models.clear();
-  cube_model.load_mesh("tile/tile.obj", "tile");
+  cube_model.load_mesh("tile/tile_2.obj", "tile");
   cube_model.setup_buffers();
   models_ready = false;
   load_models_async();
@@ -103,11 +106,4 @@ void Renderer3d::load_models_async() {
 void Renderer3d ::terminate_3d() {
   glDeleteBuffers(1, &vbo);
   glDeleteVertexArrays(1, &vao);
-}
-
-glm::vec3 get_tile_color(int i) {
-  int x = i % 8;
-  int y = i / 8;
-  return (x + y) % 2 == 0 ? glm::vec3(0.8f, 0.8f, 0.8f)
-                          : glm::vec3(0.2f, 0.2f, 0.2f);
 }

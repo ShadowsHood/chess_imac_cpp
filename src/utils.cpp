@@ -63,3 +63,17 @@ char get_sprite_char(Color color, Type type) {
   }
   return character;
 }
+
+ImVec4 get_tile_color(int i) {
+  int x = i % 8;
+  int y = i / 8;
+  return (x + y) % 2 == 0 ? ImVec4{0.8f, 0.8f, 0.8f, 1.f}
+                          : ImVec4{0.4f, 0.2f, 0.8f, 1.f};
+}
+
+glm::vec3 get_tile_color_vec3(int i) {
+  int x = i % 8;
+  int y = i / 8;
+  return (x + y) % 2 == 0 ? glm::vec3(0.8f, 0.8f, 0.8f)
+                          : glm::vec3(0.2f, 0.2f, 0.2f);
+}
