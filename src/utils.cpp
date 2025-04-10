@@ -7,7 +7,6 @@
 #include <thread>
 #include <chrono>
 
-
 template <typename T> bool is_in_vec(std::vector<T> &vec, T value) {
   return std::find(vec.begin(), vec.end(), value) != vec.end();
 }
