@@ -1,4 +1,5 @@
 #include "./App.hpp"
+#include "./utils.hpp"
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -69,7 +70,9 @@ void App::init_font() {
 }
 
 void App::chess_2d() {
-  ImGui::Begin("Chess Game");
+  static std::string window_title = "Chess Game";
+  update_chess_game_title(window_title);
+  ImGui::Begin(window_title.c_str());
   ImGui::GetStyle().ItemSpacing = ImVec2(0.0f, 0.0f);
   set_background_color();
 

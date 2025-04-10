@@ -31,3 +31,5 @@ ImVec4 get_tile_color(int i, std::array<float, 32> const&tiles_color_offsets);
 glm::vec3 get_tile_color_vec3(int i, std::array<float, 32> const &tiles_color_offsets);
 
 void play_sound(std::string file_name);
+
+void update_chess_game_title(std::string& window_title);
