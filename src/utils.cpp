@@ -1,19 +1,20 @@
 #include "./utils.hpp"
-#include "draw.hpp"
 #define MINIAUDIO_IMPLEMENTATION
 #include "../lib/miniaudio/miniaudio.h"
+#include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
 #include <thread>
+#include <vector>
 
 glm::vec3 get_pos_3D(int index, float tileSize, float spacing) {
   std::pair<int, int> pos2D = get_pos_2D(index);
   float realSpacing =
       spacing + tileSize; // Adjust the spacing to center the tiles
-  float x = pos2D.second * (tileSize + realSpacing);
-  float z = pos2D.first * (tileSize + realSpacing);
-  return glm::vec3(x, 0.0f, z);
+  float x = static_cast<float>(pos2D.second) * (tileSize + realSpacing);
+  float z = static_cast<float>(pos2D.first) * (tileSize + realSpacing);
+  return {x, 0.0f, z};
 }
 
 template <typename T> bool is_in_vec(std::vector<T> &vec, T value) {

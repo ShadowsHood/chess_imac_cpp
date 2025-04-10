@@ -1,11 +1,7 @@
-#include "./draw.hpp"
-#include "./elements/Board.hpp"
-#include "./random/random.hpp"
-#include "quick_imgui/quick_imgui.hpp"
+// #include <iostream>
 // #include <filesystem>
 
 #include <imgui.h>
-#include <iostream>
 
 #include "./App.hpp"
 
