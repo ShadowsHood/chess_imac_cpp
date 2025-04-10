@@ -140,6 +140,7 @@ void Board::kill_piece(int position) {
     if (piece->get_type() == Type::King) {
       in_game = false;
       std::cout << "Game over\n";
+      std::thread(play_sound, "win.mp3").detach();
     }
 
     if (piece->get_color() == Color::White) {
