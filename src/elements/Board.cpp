@@ -94,6 +94,9 @@ void Board::init_board() {
       std::make_unique<Knight>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(7, 7))] =
       std::make_unique<Rook>(Color::White);
+
+  // Initialize the offset for the black tiles
+  initialize_tiles_color_offsets();
 }
 
 std::vector<Piece const *> Board::get_dead_pieces(Color color) const {
@@ -270,4 +273,10 @@ int Board::get_piece_position(const Piece* piece) const {
       }
   }
   return -1;
+}
+
+void Board::initialize_tiles_color_offsets() {
+  for (int i = 0; i < 32; i++) {
+    this->tiles_color_offsets[i] = Random::gaussian_law(0.0f, 0.05f);
+  }
 }

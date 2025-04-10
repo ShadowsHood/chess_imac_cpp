@@ -76,6 +76,7 @@ public:
   void set_selected_piece_position(int position) {
     this->selected_piece_position.emplace(position);
   };
+  void initialize_tiles_color_offsets();
 
   // Promotion
   bool is_promotion_activated() const { return this->promotion_activated; };

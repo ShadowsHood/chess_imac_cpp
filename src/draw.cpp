@@ -129,12 +129,6 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
 // -
 // -
 
-void initialize_tiles_color_offsets(std::array<float, 32> &tiles_color_offsets) {
-  for (int i = 0; i < 32; i++) {
-    tiles_color_offsets[i] = Random::gaussian_law(0.0f, 0.05f);
-  }
-}
-
 bool is_possible_move(const std::vector<int> &next_possible_moves, int i) {
   return std::find(next_possible_moves.begin(), next_possible_moves.end(), i) !=
          next_possible_moves.end();
