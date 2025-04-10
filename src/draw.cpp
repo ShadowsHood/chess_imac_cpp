@@ -1,7 +1,7 @@
 #include "draw.hpp"
 #include <iostream>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include "random/random.hpp"
 
@@ -47,7 +47,7 @@ void draw_tile(Board &board, int index, Piece const *piece, ImFont *main_font,
     push_possible_move_color();
 
   // Draw tile
-  if (ImGui::Button(name.c_str(), ImVec2{100.f, 100.f})) {
+  if (ImGui::Button(name.c_str(), ImVec2{60.f, 60.f})) {
     if (board.get_in_game())
       board.handle_tile_click(index, piece,
                               is_a_possible_move); // std optional color ?
@@ -101,7 +101,8 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
 
     for (auto &[key, type] : types) {
       std::string spriteChar(1, get_sprite_char(color, type));
-      if (ImGui::Button((spriteChar + "##" + key).c_str(), ImVec2{100.f, 100.f})) {
+      if (ImGui::Button((spriteChar + "##" + key).c_str(),
+                        ImVec2{100.f, 100.f})) {
         std::cout << "New type: " << key << '\n';
         new_type = key;
         ImGui::CloseCurrentPopup();

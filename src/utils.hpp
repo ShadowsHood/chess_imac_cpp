@@ -1,9 +1,14 @@
 #pragma once
 #include "./elements/Color.hpp"
 #include "./elements/Type.hpp"
+
+#include <glm/glm.hpp>
 #include <imgui.h>
 #include <vector>
 #include <string>
+
+glm::vec3 get_pos_3D(int index, float tileSize, float spacing);
+
 
 inline std::pair<int, int> get_pos_2D(int pos1D) {
   return std::make_pair(pos1D / 8, pos1D % 8);
@@ -18,6 +23,12 @@ void display_vector_pos(std::vector<int> &possible_moves);
 int distance_between_two_tiles(int tile1, int tile2);
 
 char get_sprite_char(Color color, Type type);
+
+
+ImVec4 get_tile_color(int i);
+glm::vec3 get_tile_color_vec3(int i);
+
+std::string type_string(Type type);
 
 ImVec4 get_tile_color(int i, std::array<float, 32> &tiles_color_offsets);
 
