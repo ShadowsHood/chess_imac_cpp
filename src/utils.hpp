@@ -1,7 +1,10 @@
 #pragma once
 #include "./elements/Color.hpp"
 #include "./elements/Type.hpp"
+#include <glm/glm.hpp>
 #include <vector>
+
+glm::vec3 get_pos_3D(int index, float tileSize, float spacing);
 
 inline std::pair<int, int> get_pos_2D(int pos1D) {
   return std::make_pair(pos1D / 8, pos1D % 8);

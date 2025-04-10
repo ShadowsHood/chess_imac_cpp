@@ -1,6 +1,15 @@
 #include "./utils.hpp"
 #include <iostream>
 
+glm::vec3 get_pos_3D(int index, float tileSize, float spacing) {
+  std::pair<int, int> pos2D = get_pos_2D(index);
+  float realSpacing =
+      spacing + tileSize; // Adjust the spacing to center the tiles
+  float x = pos2D.second * (tileSize + realSpacing);
+  float z = pos2D.first * (tileSize + realSpacing);
+  return glm::vec3(x, 0.0f, z);
+}
+
 template <typename T> bool is_in_vec(std::vector<T> &vec, T value) {
   return std::find(vec.begin(), vec.end(), value) != vec.end();
 }

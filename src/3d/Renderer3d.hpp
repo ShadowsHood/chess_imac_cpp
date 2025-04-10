@@ -27,6 +27,7 @@ public:
   std::vector<Model3D> models;
   std::thread loader_thread;
   bool models_ready = false;
+  Model3D cube_model;
 
   Renderer3d() = default;
 
@@ -35,3 +36,5 @@ public:
   void terminate_3d();
   void chess_3d();
 };
+
+glm::vec3 get_tile_color_vec3(int i);

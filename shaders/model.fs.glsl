@@ -18,6 +18,8 @@ uniform float Ns;
 uniform bool useTexture;
 uniform sampler2D map_Kd;
 
+uniform vec3 objectColor;
+
 void main() {
 
     vec3 diffuseColor = useTexture ? texture(map_Kd, TexCoords).rgb : Kd;
@@ -38,6 +40,7 @@ void main() {
     vec3 specular = spec * Ks * lightColor;
 
     // => Blinn-Phong
-    vec3 result = ambient + diffuse + specular;
+    // vec3 result = (ambient + diffuse + specular);
+    vec3 result = (ambient + diffuse + specular) * objectColor;
     FragColor = vec4(result, 1.0);
 }
