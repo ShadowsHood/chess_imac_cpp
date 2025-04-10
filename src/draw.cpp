@@ -97,7 +97,7 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
     std::unordered_map<char, Type> types = {{'q', Type::Queen},  {'r', Type::Rook},
                                   {'k', Type::Knight}, {'b', Type::Bishop},
                                   {'n', Type::Racist}, {'f', Type::Fool},
-                                  {'z', Type::Kamikaze}, {'w', Type::Well}};
+                                  {'w', Type::Well}};
 
     for (auto &[key, type] : types) {
       std::string spriteChar(1, get_sprite_char(color, type));

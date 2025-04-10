@@ -136,14 +136,10 @@ void get_knight_tile_from_step(std::vector<int> &moves, const Board &board,
 
 void get_pawn_moves(std::vector<int> &moves, const Board &board,
                     const std::pair<int, int> &position, Color color,
-                    bool first_move, bool reversed) {
+                    bool first_move) {
 
-  int orientation {};
-  if (reversed) 
-    orientation = color == Color::Black ? -1 : 1;
-  else 
-    orientation = color == Color::Black ? 1 : -1;
-
+  int orientation = (color == Color::Black ? 1 : -1);
+  
   // Move forward
   std::pair<int, int> new_position(position.first + orientation,
                                    position.second);

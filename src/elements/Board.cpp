@@ -44,7 +44,7 @@ void Board::init_board() {
       std::make_unique<Rook>(Color::Black);
 
   this->chess_board[get_pos_1D(std::make_pair(1, 0))] =
-      std::make_unique<Pawn>(Color::Black);
+      std::make_unique<Kamikaze>(Color::Black);
   this->chess_board[get_pos_1D(std::make_pair(1, 1))] =
       std::make_unique<Pawn>(Color::Black);
   this->chess_board[get_pos_1D(std::make_pair(1, 2))] =
@@ -183,8 +183,6 @@ void Board::handle_tile_click(int index, Piece const *piece,
 }
 
 void Board::click_playable_piece(int index) {
-  // std::cout << "Clicked tile : " << index << " ==> (" << get_pos_2D(index).first
-  //           << "," << get_pos_2D(index).second << ") \n";
   moving = true;
   selected_piece_position = index;
   next_possible_moves =

@@ -29,12 +29,13 @@ void Piece::move(Board &board, int old_position, int new_position) {
 
   if (first_move)
     first_move = false;
+    if (type == Type::Kamikaze)
+      dynamic_cast<Kamikaze *>(this)->init_time_before_explosion(board);
 
   if (!board.is_empty(new_position)) {
     board.kill_piece(new_position);
   }
 
-  // board.set_piece(nullptr, old_position);
   std::unique_ptr<Piece> piece = board.take_piece(this);
   if (piece) {
     board.set_piece(std::move(piece), new_position);
@@ -100,9 +101,6 @@ void Piece::promotion(Board &board, int position, char type) {
     case 'f':
       new_piece = std::make_unique<Fool>(this->color).release();
       break;
-    case 'z':
-      new_piece = std::make_unique<Kamikaze>(this->color).release();
-      break;
     case 'w':
       new_piece = std::make_unique<Well>(this->color).release();
       break;
@@ -113,9 +111,6 @@ void Piece::promotion(Board &board, int position, char type) {
 
   if (new_piece != nullptr) {
       board.set_piece(std::unique_ptr<Piece>(new_piece), position);
-      if (new_piece->get_type() == Type::Kamikaze) {
-        board.add_kamikaze(dynamic_cast<Kamikaze*>(new_piece));
-      }
   } else {
       std::cerr << "Promotion Fatal Error" << std::endl;
   }
