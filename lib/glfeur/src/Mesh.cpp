@@ -9,8 +9,8 @@
 namespace glfeur {
 
 // create vertex
-Vertex create_vertex(const tinyobj::index_t &index,
-                     const tinyobj::attrib_t &attrib) {
+static Vertex create_vertex(const tinyobj::index_t &index,
+                            const tinyobj::attrib_t &attrib) {
   Vertex vertex{};
 
   // Remplissage de la position
@@ -18,7 +18,7 @@ Vertex create_vertex(const tinyobj::index_t &index,
                                 attrib.vertices[3 * index.vertex_index + 1],
                                 attrib.vertices[3 * index.vertex_index + 2]);
 
-  // Remplissage de la normale (vérifiez si l'index est valide)
+  // Remplissage de la normale
   if (index.normal_index >= 0) {
     vertex.m_normal = glm::vec3(attrib.normals[3 * index.normal_index],
                                 attrib.normals[3 * index.normal_index + 1],
@@ -29,7 +29,7 @@ Vertex create_vertex(const tinyobj::index_t &index,
     std::cerr << "Warning: Normal index is -1 for a vertex in the model.\n";
   }
 
-  // Remplissage des coordonnées de texture (vérifiez si l'index est valide)
+  // Remplissage des coordonnées de texture
   if (index.texcoord_index >= 0) {
     vertex.m_tex_coord =
         glm::vec2(attrib.texcoords[2 * index.texcoord_index],
@@ -45,8 +45,9 @@ Vertex create_vertex(const tinyobj::index_t &index,
 }
 
 // save vertex or not, save index btw
-void save_vertex(std::vector<Vertex> &vertices,
-                 std::vector<unsigned int> &indices, const Vertex vertex) {
+static void save_vertex(std::vector<Vertex> &vertices,
+                        std::vector<unsigned int> &indices,
+                        const Vertex vertex) {
   bool found{false};
   for (size_t i{0}; i < vertices.size(); i++) {
     if (vertices[i].m_position == vertex.m_position &&
@@ -64,7 +65,7 @@ void save_vertex(std::vector<Vertex> &vertices,
 }
 
 // create material
-void fill_material(Material &mat, const tinyobj::material_t &material) {
+static void fill_material(Material &mat, const tinyobj::material_t &material) {
   mat.m_name = material.name;
   mat.m_Ka =
       glm::vec3(material.ambient[0], material.ambient[1], material.ambient[2]);
@@ -137,15 +138,12 @@ void Mesh::load(const std::string &obj_path, const std::string &mtl_path) {
   const std::vector<tinyobj::shape_t> &shapes = reader.GetShapes();
   const std::vector<tinyobj::material_t> &materials = reader.GetMaterials();
 
-  // push materials first
   m_materials.reserve(materials.size());
   for (const tinyobj::material_t &material : materials) {
     m_materials.push_back(Material{});
     fill_material(m_materials.back(), material);
   }
 
-  // create vertex & give indices, in parallel we have to specify the submesh
-  // for multiple materials management
   unsigned int index_offset = 0;
   for (const tinyobj::shape_t &shape : shapes) {
     // std::cout << "Traitement de shape : " << shape.name << '\n'; // debug

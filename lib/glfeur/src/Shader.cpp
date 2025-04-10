@@ -4,10 +4,12 @@
 
 #include "Shader.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <optional>
 #include <sstream>
+
 
 namespace glfeur {
 
@@ -27,9 +29,10 @@ void Shader::load_shader(const std::string &vertexPath,
   GLint success{};
   glGetProgramiv(m_programID, GL_LINK_STATUS, &success);
   if (!success) {
-    char infoLog[512];
-    glGetProgramInfoLog(m_programID, 512, nullptr, infoLog);
-    std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << '\n';
+    std::array<char, 512> infoLog{};
+    glGetProgramInfoLog(m_programID, 512, nullptr, infoLog.data());
+    std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
+              << infoLog.data() << '\n';
   }
 
   glDeleteShader(vertexShader);
@@ -56,11 +59,11 @@ GLuint Shader::compile_shader(const std::string &path, GLenum type) {
   GLint success{};
   glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
   if (!success) {
-    char infoLog[512];
-    glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+    std::array<char, 512> infoLog{};
+    glGetShaderInfoLog(shader, 512, nullptr, infoLog.data());
     std::cerr << "ERROR::SHADER::COMPILATION_FAILED\n"
               << "Shader path: " << path << "\n"
-              << infoLog << '\n';
+              << infoLog.data() << '\n';
   }
 
   return shader;

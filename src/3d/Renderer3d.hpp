@@ -5,18 +5,14 @@
 #include "Camera.hpp"
 #include "Model3D.hpp"
 #include "Shader.hpp"
-#include "glm/ext/matrix_clip_space.hpp"
-#include "glm/fwd.hpp"
-#include "quick_imgui/quick_imgui.hpp"
 #include <glm/glm.hpp>
 #include <imgui.h>
-#include <iostream>
 #include <map>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
-#include <thread>
+// #include <thread>
 
 class Renderer3d {
 public:

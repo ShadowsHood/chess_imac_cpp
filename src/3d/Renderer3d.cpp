@@ -1,6 +1,10 @@
 #include "./Renderer3d.hpp"
 #include "../utils.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
+#include "glm/fwd.hpp"
+// #include "quick_imgui/quick_imgui.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 void Renderer3d ::chess_3d(Board const &board) {
   glClearColor(0.5f, 0.1f, 0.2f, 1.f);
@@ -43,7 +47,7 @@ void Renderer3d ::chess_3d(Board const &board) {
       }
     }
   }
-
+  // TEST MODELS
   // int index{0};
   // for (auto &[type, model] : models) {
   //   glm::mat4 modelMatrix = glm::mat4(1.0f);
@@ -88,7 +92,8 @@ void Renderer3d ::render_tile(
   tileMatrix = glm::translate(tileMatrix, position);
   tileMatrix = glm::scale(tileMatrix, glm::vec3(tileSize, 0.1, tileSize));
   int rotation = index * index % 3;
-  tileMatrix = glm::rotate(tileMatrix, glm::radians(90.0f * rotation),
+  tileMatrix = glm::rotate(tileMatrix,
+                           glm::radians(90.0f * static_cast<float>(rotation)),
                            glm::vec3(0, 1, 0));
 
   shader.set_uniform_matrix_4fv("model", tileMatrix);

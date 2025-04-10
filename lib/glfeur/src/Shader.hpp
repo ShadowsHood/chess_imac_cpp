@@ -23,7 +23,7 @@ public:
   void set_uniform_1i(const std::string &name, int value);
 
 private:
-  GLuint m_programID;
+  GLuint m_programID{};
   std::unordered_map<std::string, GLint> m_uniform_cache;
   //
   GLuint compile_shader(const std::string &path, GLenum type);

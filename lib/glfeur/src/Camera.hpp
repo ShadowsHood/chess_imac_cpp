@@ -24,7 +24,7 @@ private:
   bool _isLocked = false;
 
 public:
-  Camera(bool is_track_ball) : _is_track_ball(is_track_ball) {};
+  explicit Camera(bool is_track_ball) : _is_track_ball(is_track_ball) {};
 
   glm::mat4 get_view_matrix();
   glm::vec3 get_position() { return _position; };
@@ -36,11 +36,11 @@ public:
   void set_front(const glm::vec3 &front) { _front = front; }
   void set_up(const glm::vec3 &up) { _up = up; }
   void set_sensitivity(float sensitivity) { _sensitivity = sensitivity; }
-  //
+  
   void toggle_lock() { _isLocked = !_isLocked; };
-  //
+  
   bool is_track_ball() const { return _is_track_ball; };
-  //
+  
   // callbacks
   void free_move_callback(int key, int action);
   void zoom_callback(double yoffset);

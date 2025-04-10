@@ -21,15 +21,15 @@ glm::mat4 Camera::get_view_matrix() {
 
 void Camera::process_mouse_movement(double xpos, double ypos) {
   if (_first_mouse) {
-    _last_x = xpos;
-    _last_y = ypos;
+    _last_x = static_cast<float>(xpos);
+    _last_y = static_cast<float>(ypos);
     _first_mouse = false;
   }
 
-  float xoffset = xpos - _last_x;
-  float yoffset = ypos - _last_y;
-  _last_x = xpos;
-  _last_y = ypos;
+  auto xoffset = static_cast<float>(xpos - _last_x);
+  auto yoffset = static_cast<float>(ypos - _last_y);
+  _last_x = static_cast<float>(xpos);
+  _last_y = static_cast<float>(ypos);
 
   _yaw -= xoffset * _sensitivity;
   _pitch += yoffset * _sensitivity;
@@ -39,7 +39,7 @@ void Camera::process_mouse_movement(double xpos, double ypos) {
 }
 
 void Camera::process_scroll(double yoffset) {
-  _radius -= yoffset * 0.3f;
+  _radius -= static_cast<float>(yoffset) * 0.3f;
   _radius = std::max(_radius, 1.0f);
   _radius = std::min(_radius, 32.0f);
 }
@@ -80,8 +80,8 @@ void Camera::set_first_mouse() { _first_mouse = true; }
 bool Camera::is_first_mouse() const { return _first_mouse; }
 
 void Camera::init_mouse_position(double xpos, double ypos) {
-  _last_x = xpos;
-  _last_y = ypos;
+  _last_x = static_cast<float>(xpos);
+  _last_y = static_cast<float>(ypos);
   _first_mouse = false;
 }
 

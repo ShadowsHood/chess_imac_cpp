@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 
-
 namespace glfeur {
 
 Texture::Texture(const std::string &filePath) { load_texture(filePath); }
@@ -24,7 +23,7 @@ void Texture::load_texture(const std::string &filePath) {
       stbi_load(filePath.c_str(), &width, &height, &nrChannels, 4);
   if (!data) {
     std::cerr << "Erreur : Impossible de charger la texture " << filePath
-              << std::endl;
+              << '\n';
     return;
   }
 

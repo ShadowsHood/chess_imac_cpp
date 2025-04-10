@@ -6,7 +6,7 @@ void Model3D::load_mesh(const std::string &path, const std::string &name) {
 }
 
 void Model3D::setup_buffers() {
-  // Lier et configurer les buffers pour les pions (VBO, EBO)
+  // Lier et configurer les buffers pour les pieces (VBO, EBO)
   m_vbo.init();
   m_vbo.bind();
   m_vbo.set_data(m_mesh.get_vertices().data(),
