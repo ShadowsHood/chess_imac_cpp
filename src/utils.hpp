@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <imgui.h>
 #include <vector>
+#include <string>
 
 glm::vec3 get_pos_3D(int index, float tileSize, float spacing);
 
@@ -23,3 +24,5 @@ char get_sprite_char(Color color, Type type);
 
 ImVec4 get_tile_color(int i);
 glm::vec3 get_tile_color_vec3(int i);
+
+std::string type_string(Type type);

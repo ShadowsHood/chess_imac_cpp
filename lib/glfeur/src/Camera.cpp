@@ -35,7 +35,7 @@ void Camera::process_mouse_movement(double xpos, double ypos) {
   _pitch += yoffset * _sensitivity;
 
   _pitch = std::min(_pitch, 80.0f);
-  _pitch = std::max(_pitch, -45.0f);
+  _pitch = std::max(_pitch, 5.0f);
 }
 
 void Camera::process_scroll(double yoffset) {

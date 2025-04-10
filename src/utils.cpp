@@ -77,3 +77,30 @@ glm::vec3 get_tile_color_vec3(int i) {
   return (x + y) % 2 == 0 ? glm::vec3(0.8f, 0.8f, 0.8f)
                           : glm::vec3(0.2f, 0.2f, 0.2f);
 }
+
+std::string type_string(Type type) {
+  switch (type) {
+  case Type::Pawn:
+    return "pawn";
+  case Type::Queen:
+    return "queen";
+  case Type::King:
+    return "king";
+  case Type::Rook:
+    return "rook";
+  case Type::Knight:
+    return "knight";
+  case Type::Bishop:
+    return "bishop";
+  case Type::Well:
+    return "well";
+  case Type::Racist:
+    return "racist";
+  case Type::Kamikaze:
+    return "kamikaze";
+  case Type::Fool:
+    return "fool";
+  default:
+    return "unknown";
+  }
+}

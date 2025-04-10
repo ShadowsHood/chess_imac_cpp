@@ -12,18 +12,34 @@ namespace glfeur {
 Vertex create_vertex(const tinyobj::index_t &index,
                      const tinyobj::attrib_t &attrib) {
   Vertex vertex{};
-  // Remplissage des attributs du vertex
+
+  // Remplissage de la position
   vertex.m_position = glm::vec3(attrib.vertices[3 * index.vertex_index],
                                 attrib.vertices[3 * index.vertex_index + 1],
                                 attrib.vertices[3 * index.vertex_index + 2]);
 
-  vertex.m_normal = glm::vec3(attrib.normals[3 * index.normal_index],
-                              attrib.normals[3 * index.normal_index + 1],
-                              attrib.normals[3 * index.normal_index + 2]);
+  // Remplissage de la normale (vérifiez si l'index est valide)
+  if (index.normal_index >= 0) {
+    vertex.m_normal = glm::vec3(attrib.normals[3 * index.normal_index],
+                                attrib.normals[3 * index.normal_index + 1],
+                                attrib.normals[3 * index.normal_index + 2]);
+  } else {
+    vertex.m_normal = glm::vec3(
+        0.0f, 1.0f, 0.0f); // Normale par défaut (vers le haut) si non définie
+    std::cerr << "Warning: Normal index is -1 for a vertex in the model.\n";
+  }
 
-  vertex.m_tex_coord =
-      glm::vec2(attrib.texcoords[2 * index.texcoord_index],
-                attrib.texcoords[2 * index.texcoord_index + 1]);
+  // Remplissage des coordonnées de texture (vérifiez si l'index est valide)
+  if (index.texcoord_index >= 0) {
+    vertex.m_tex_coord =
+        glm::vec2(attrib.texcoords[2 * index.texcoord_index],
+                  attrib.texcoords[2 * index.texcoord_index + 1]);
+  } else {
+    vertex.m_tex_coord = glm::vec2(
+        0.0f, 0.0f); // Coordonnées de texture par défaut si non définies
+    std::cerr << "Warning: Texture coordinate index is -1 for a vertex in the "
+                 "model.\n";
+  }
 
   return vertex;
 }

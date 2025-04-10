@@ -20,7 +20,7 @@ void App::launch() {
                 if (ImGui::IsMouseClicked(ImGuiMouseButton_Right))
                   board.deselect_piece();
                 chess_2d();
-                renderer3d.chess_3d();
+                renderer3d.chess_3d(board);
               },
           .key_callback =
               [&](int key, int scancode, int action, int mods) {
