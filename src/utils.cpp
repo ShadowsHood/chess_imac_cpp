@@ -2,10 +2,10 @@
 #include "draw.hpp"
 #define MINIAUDIO_IMPLEMENTATION
 #include "../lib/miniaudio/miniaudio.h"
+#include <chrono>
 #include <iostream>
 #include <string>
 #include <thread>
-#include <chrono>
 
 glm::vec3 get_pos_3D(int index, float tileSize, float spacing) {
   std::pair<int, int> pos2D = get_pos_2D(index);
@@ -99,56 +99,55 @@ std::string type_string(Type type) {
   }
 }
 
-ImVec4 get_tile_color(int i, std::array<float, 32> &tiles_color_offsets) {
+ImVec4 get_tile_color(int i, std::array<float, 32> const &tiles_color_offsets) {
   int x = i % 8;
   int y = i / 8;
   if ((x + y) % 2 == 0)
     return ImVec4{0.8f, 0.8f, 0.8f, 1.f};
-  float offset = tiles_color_offsets[i/2]; // Variation de la couleur des cases noires selon notre loi gaussienne
+  float offset =
+      tiles_color_offsets[i / 2]; // Variation de la couleur des cases noires
+                                  // selon loi gaussienne
   return ImVec4{0.45f - offset, 0.23f - offset, 0.f, 1.f};
 }
-ImVec4 get_tile_color(int i) {
-  int x = i % 8;
-  int y = i / 8;
-  return (x + y) % 2 == 0 ? ImVec4{0.8f, 0.8f, 0.8f, 1.f}
-                          : ImVec4{0.4f, 0.2f, 0.8f, 1.f};
-}
 
-glm::vec3 get_tile_color_vec3(int i) {
+glm::vec3
+get_tile_color_vec3(int i, std::array<float, 32> const &tiles_color_offsets) {
   int x = i % 8;
   int y = i / 8;
-  return (x + y) % 2 == 0 ? glm::vec3(0.8f, 0.8f, 0.8f)
-                          : glm::vec3(0.2f, 0.2f, 0.2f);
+  if ((x + y) % 2 == 0)
+    return {0.8f, 0.8f, 0.8f};
+  float offset = tiles_color_offsets[i / 2];
+  return {0.45f - offset, 0.23f - offset, 0.f};
 }
 
 void play_sound(std::string file_name) {
-  file_name = "../../sounds/" + file_name;
+  file_name = "../../assets/sounds/" + file_name;
 
   ma_engine engine;
   if (ma_engine_init(nullptr, &engine) != MA_SUCCESS) {
-      std::cout << "Failed to init engine.\n";
-      return;
+    std::cout << "Failed to init engine.\n";
+    return;
   }
 
   ma_sound sound;
-  if (ma_sound_init_from_file(&engine, file_name.c_str(), 0, nullptr, nullptr, &sound) != MA_SUCCESS) {
-      std::cout << "Failed to load sound.\n";
-      ma_engine_uninit(&engine);
-      return;
+  if (ma_sound_init_from_file(&engine, file_name.c_str(), 0, nullptr, nullptr,
+                              &sound) != MA_SUCCESS) {
+    std::cout << "Failed to load sound.\n";
+    ma_engine_uninit(&engine);
+    return;
   }
 
   if (ma_sound_start(&sound) != MA_SUCCESS) {
-      std::cout << "Failed to start.\n";
-      ma_sound_uninit(&sound);
-      ma_engine_uninit(&engine);
-      return;
+    std::cout << "Failed to start.\n";
+    ma_sound_uninit(&sound);
+    ma_engine_uninit(&engine);
+    return;
   }
 
   while (ma_sound_is_playing(&sound)) {
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 
   ma_sound_uninit(&sound);
   ma_engine_uninit(&engine);
 }
-

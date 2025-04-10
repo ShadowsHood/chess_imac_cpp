@@ -38,7 +38,8 @@ public:
   void load_models_async();
   void terminate_3d();
   void chess_3d(Board const &board);
-  void render_tile(int index, float tileSize, float tileSpacing);
+  void render_tile(int index, float tileSize, float tileSpacing,
+                   std::array<float, 32> const &tiles_color_offsets);
   void render_base(float tileSize, float tileSpacing);
   void render_piece(Type type, Color color, int index, float tileSize,
                     float tileSpacing);

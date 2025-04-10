@@ -1,11 +1,11 @@
 #pragma once
 #include "./Piece.hpp"
+#include "./pieces/bonus/Kamikaze.hpp"
 #include <array>
 #include <imgui.h>
 #include <memory>
 #include <optional>
 #include <vector>
-#include "./pieces/bonus/Kamikaze.hpp"
 
 class Board {
 private:
@@ -13,7 +13,7 @@ private:
   std::array<float, 32> tiles_color_offsets{};
   std::vector<std::unique_ptr<Piece>> dead_white_pieces{};
   std::vector<std::unique_ptr<Piece>> dead_black_pieces{};
-  std::vector<Kamikaze*> active_kamikazes{};
+  std::vector<Kamikaze *> active_kamikazes{};
 
   Color current_player{};
   std::vector<int> next_possible_moves{};
@@ -61,14 +61,14 @@ public:
   std::optional<int> get_selected_piece_position() const {
     return this->selected_piece_position;
   };
-  
+
   bool get_in_game() const { return this->in_game; };
 
-  std::vector<Kamikaze*> & get_active_kamikazes() {
+  std::vector<Kamikaze *> &get_active_kamikazes() {
     return this->active_kamikazes;
   };
 
-  std::array<float, 32> & get_tiles_color_offsets() {
+  std::array<float, 32> const &get_tiles_color_offsets() const {
     return this->tiles_color_offsets;
   };
 
@@ -96,5 +96,5 @@ public:
   bool is_other_color(int position, Color color) const {
     return this->chess_board[position]->get_color() != color;
   };
-  int get_piece_position(const Piece* piece) const;
+  int get_piece_position(const Piece *piece) const;
 };

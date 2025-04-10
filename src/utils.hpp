@@ -25,11 +25,9 @@ int distance_between_two_tiles(int tile1, int tile2);
 char get_sprite_char(Color color, Type type);
 
 
-ImVec4 get_tile_color(int i);
-glm::vec3 get_tile_color_vec3(int i);
-
 std::string type_string(Type type);
 
-ImVec4 get_tile_color(int i, std::array<float, 32> &tiles_color_offsets);
+ImVec4 get_tile_color(int i, std::array<float, 32> const&tiles_color_offsets);
+glm::vec3 get_tile_color_vec3(int i, std::array<float, 32> const &tiles_color_offsets);
 
 void play_sound(std::string file_name);

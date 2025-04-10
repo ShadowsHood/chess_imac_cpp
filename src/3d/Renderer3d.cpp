@@ -25,13 +25,14 @@ void Renderer3d ::chess_3d(Board const &board) {
 
   // CAMERA SETTINGS
   shader.set_uniform_3fv("viewPos", camera.get_position());
+  shader.set_uniform_3fv("objectColor", glm::vec3(1.0f, 0.0f, 0.0f));
 
   // Board render
   float tileSize = 0.7f;
   float tileSpacing = 0.2f;
   render_base(tileSize, tileSpacing);
   for (int i = 0; i < 64; ++i) {
-    render_tile(i, tileSize, tileSpacing);
+    render_tile(i, tileSize, tileSpacing, board.get_tiles_color_offsets());
     if (!models_ready) {
       std::cout << "Chargement des modèles...\n";
     } else {
@@ -70,13 +71,15 @@ void Renderer3d ::render_piece(Type type, Color color, int index,
 
   shader.set_uniform_matrix_4fv("model", modelMatrix);
   shader.set_uniform_3fv("objectColor", color == Color::Black
-                                            ? glm::vec3(0.25f, 0.2f, 0.15f)
+                                            ? glm::vec3(0.35f, 0.15f, 0.0f)
                                             : glm::vec3(0.8f, 0.8f, 0.8f));
 
   models[type].render(shader);
 }
 
-void Renderer3d ::render_tile(int index, float tileSize, float tileSpacing) {
+void Renderer3d ::render_tile(
+    int index, float tileSize, float tileSpacing,
+    std::array<float, 32> const &tiles_color_offsets) {
   glm::mat4 tileMatrix = glm::mat4(1.0f);
   glm::vec3 position = get_pos_3D(index, tileSize, tileSpacing);
 
@@ -89,7 +92,8 @@ void Renderer3d ::render_tile(int index, float tileSize, float tileSpacing) {
                            glm::vec3(0, 1, 0));
 
   shader.set_uniform_matrix_4fv("model", tileMatrix);
-  shader.set_uniform_3fv("objectColor", get_tile_color_vec3(index));
+  shader.set_uniform_3fv("objectColor",
+                         get_tile_color_vec3(index, tiles_color_offsets));
 
   cube_model.render(shader);
 }
@@ -103,7 +107,7 @@ void Renderer3d ::render_base(float tileSize, float tileSpacing) {
   tileMatrix = glm::scale(tileMatrix, glm::vec3(base_size, 0.04, base_size));
 
   shader.set_uniform_matrix_4fv("model", tileMatrix);
-  shader.set_uniform_3fv("objectColor", glm::vec3(0.5f, 0.5f, 0.5f));
+  shader.set_uniform_3fv("objectColor", glm::vec3(0.25f, 0.25f, 0.25f));
 
   cube_model.render(shader);
 }
@@ -121,9 +125,9 @@ void Renderer3d::load_models_async() {
   // loader_thread = std::thread([this]() {
   std::vector<std::pair<Type, std::string>> model_data = {
       {Type::Pawn, "pawn/pawn.obj"},
+      {Type::Well, "well/well.obj"},
       {Type::Queen, "queen/queen.obj"},
       {Type::King, "king/king.obj"},
-      {Type::Well, "well/well.obj"},
       {Type::Racist, "racist/racist.obj"},
       {Type::Kamikaze, "kamikaze/kamikaze.obj"},
       {Type::Fool, "fool/fool.obj"},

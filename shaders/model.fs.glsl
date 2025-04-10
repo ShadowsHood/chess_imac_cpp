@@ -23,6 +23,8 @@ uniform vec3 objectColor;
 void main() {
 
     vec3 diffuseColor = useTexture ? texture(map_Kd, TexCoords).rgb : Kd;
+    // vec3 baseColor = useTexture ? texture(map_Kd, TexCoords).rgb : Kd;
+    // vec3 diffuseColor = baseColor * objectColor;
 
     // Ambient
     vec3 ambient = Ka * (lightColor * 0.25);
