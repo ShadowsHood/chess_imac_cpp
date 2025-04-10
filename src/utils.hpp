@@ -1,6 +1,7 @@
 #pragma once
 #include "./elements/Color.hpp"
 #include "./elements/Type.hpp"
+#include <imgui.h>
 #include <vector>
 #include <string>
 
@@ -17,5 +18,7 @@ void display_vector_pos(std::vector<int> &possible_moves);
 int distance_between_two_tiles(int tile1, int tile2);
 
 char get_sprite_char(Color color, Type type);
+
+ImVec4 get_tile_color(int i, std::array<float, 32> &tiles_color_offsets);
 
 void play_sound(std::string file_name);

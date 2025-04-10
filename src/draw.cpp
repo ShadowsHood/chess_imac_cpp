@@ -135,15 +135,6 @@ void initialize_tiles_color_offsets(std::array<float, 32> &tiles_color_offsets) 
   }
 }
 
-ImVec4 get_tile_color(int i, std::array<float, 32> &tiles_color_offsets) {
-  int x = i % 8;
-  int y = i / 8;
-  if ((x + y) % 2 == 0)
-    return ImVec4{0.8f, 0.8f, 0.8f, 1.f};
-  float offset = tiles_color_offsets[i/2]; // Variation de la couleur des cases noires selon notre loi gaussienne
-  return ImVec4{0.45f - offset, 0.23f - offset, 0.f, 1.f};
-}
-
 bool is_possible_move(const std::vector<int> &next_possible_moves, int i) {
   return std::find(next_possible_moves.begin(), next_possible_moves.end(), i) !=
          next_possible_moves.end();

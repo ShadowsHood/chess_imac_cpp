@@ -1,10 +1,12 @@
 #include "./utils.hpp"
+#include "draw.hpp"
 #define MINIAUDIO_IMPLEMENTATION
 #include "../lib/miniaudio/miniaudio.h"
 #include <iostream>
 #include <string>
 #include <thread>
 #include <chrono>
+
 
 template <typename T> bool is_in_vec(std::vector<T> &vec, T value) {
   return std::find(vec.begin(), vec.end(), value) != vec.end();
@@ -60,6 +62,15 @@ char get_sprite_char(Color color, Type type) {
     break;
   }
   return character;
+}
+
+ImVec4 get_tile_color(int i, std::array<float, 32> &tiles_color_offsets) {
+  int x = i % 8;
+  int y = i / 8;
+  if ((x + y) % 2 == 0)
+    return ImVec4{0.8f, 0.8f, 0.8f, 1.f};
+  float offset = tiles_color_offsets[i/2]; // Variation de la couleur des cases noires selon notre loi gaussienne
+  return ImVec4{0.45f - offset, 0.23f - offset, 0.f, 1.f};
 }
 
 void play_sound(std::string file_name) {
