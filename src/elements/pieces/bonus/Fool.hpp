@@ -6,7 +6,7 @@ private:
   int markovChain{0};
 
 public:
-  explicit Fool(Color color) : Piece(color, Type::Fool) {};
+  explicit Fool(Color color) : Piece(color, Type::Fool, "") {};
 
   bool canMove();
 

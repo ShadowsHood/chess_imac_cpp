@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include "random/random.hpp"
 
 void set_background_color() {
   ImGui::StyleColorsDark();
@@ -30,7 +31,7 @@ void draw_board(Board &board, ImFont *main_font) {
 void draw_tile(Board &board, int index, Piece const *piece, ImFont *main_font,
                bool &is_a_possible_move) {
   // Set color of the tile (black or white)
-  ImVec4 tileColor = get_tile_color(index);
+  ImVec4 tileColor = get_tile_color(index, board.get_tiles_color_offsets());
   ImGui::PushStyleColor(ImGuiCol_Button, tileColor);
 
   // Set the name of the piece
@@ -86,7 +87,7 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
     ImGui::PushFont(main_font);
 
     // Font color & buttons color
-    ImVec4 textColor = (color == Color::White) ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f)
+    ImVec4 textColor = (color == Color::Black) ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f)
                                                : ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
     ImVec4 buttonColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
     ImGui::PushStyleColor(ImGuiCol_Text, textColor);
@@ -95,7 +96,8 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
     // Buttons to choose the new piece
     std::unordered_map<char, Type> types = {{'q', Type::Queen},  {'r', Type::Rook},
                                   {'k', Type::Knight}, {'b', Type::Bishop},
-                                  {'n', Type::Racist}, {'f', Type::Fool}};
+                                  {'n', Type::Racist}, {'f', Type::Fool},
+                                  {'w', Type::Well}};
 
     for (auto &[key, type] : types) {
       std::string spriteChar(1, get_sprite_char(color, type));
@@ -126,15 +128,6 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
 // -
 // -
 // -
-
-ImVec4 get_tile_color(int i) {
-  int x = i % 8;
-  int y = i / 8;
-  return (x + y) % 2 == 0 ? ImVec4{0.8f, 0.8f, 0.8f, 1.f}
-                          : ImVec4{0.4f, 0.2f, 0.8f, 1.f};
-  //   return (x + y) % 2 == 0 ? ImVec4{0.8f, 0.8f, 0.8f, 1.f}
-  //                           : ImVec4{0.2f, 0.2f, 0.2f, 1.f};
-}
 
 bool is_possible_move(const std::vector<int> &next_possible_moves, int i) {
   return std::find(next_possible_moves.begin(), next_possible_moves.end(), i) !=

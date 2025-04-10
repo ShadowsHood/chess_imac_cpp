@@ -8,9 +8,13 @@
 
 #include "./pieces/bonus/Racist.hpp"
 #include "./pieces/bonus/Fool.hpp"
+#include "./pieces/bonus/Kamikaze.hpp"
+#include "pieces/bonus/Well.hpp"
 
 #include "utils.hpp"
 #include <iostream>
+#include <thread>
+#include <random/random.hpp>
 
 void Piece::move(Board &board, int old_position, int new_position) {
 
@@ -18,19 +22,20 @@ void Piece::move(Board &board, int old_position, int new_position) {
   std::pair<int, int> new_pos_2D = get_pos_2D(new_position);
 
   if (type == Type::Pawn) {
-    handleEnPassant(board, new_pos_2D);
+    handle_en_passant(board, new_pos_2D);
   }
 
-  updateEnPassantAvailability(board, new_pos_2D, new_position);
+  update_en_passant_availability(board, new_pos_2D, new_position);
 
   if (first_move)
     first_move = false;
+    if (type == Type::Kamikaze)
+      dynamic_cast<Kamikaze *>(this)->init_time_before_explosion(board);
 
   if (!board.is_empty(new_position)) {
     board.kill_piece(new_position);
   }
 
-  // board.set_piece(nullptr, old_position);
   std::unique_ptr<Piece> piece = board.take_piece(this);
   if (piece) {
     board.set_piece(std::move(piece), new_position);
@@ -43,9 +48,13 @@ void Piece::move(Board &board, int old_position, int new_position) {
     board.set_promotion_activated(true);
     board.set_selected_piece_position(new_position);
   }
+
+  // Random on sound
+  if (this->type != Type::Fool && this->type != Type::Kamikaze && Random::bernoulli_law(0.5))
+    std::thread(play_sound, this->sound).detach();
 }
 
-void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
+void Piece::handle_en_passant(Board &board, std::pair<int, int> new_pos_2D) {
   const int invalid = -1;
   int en_passant_available = board.get_en_passant_available();
   std::pair<int, int> en_passant_available_pos_2D =
@@ -61,7 +70,7 @@ void Piece::handleEnPassant(Board &board, std::pair<int, int> new_pos_2D) {
   }
 }
 
-void Piece::updateEnPassantAvailability(Board &board,
+void Piece::update_en_passant_availability(Board &board,
                                         std::pair<int, int> new_pos_2D,
                                         int new_position) {
   if (type == Type::Pawn && first_move &&
@@ -72,7 +81,8 @@ void Piece::updateEnPassantAvailability(Board &board,
   }
 }
 
-void Piece::promotion(Board &board, int position, char type) { 
+void Piece::promotion(Board &board, int position, char type) {
+  std::thread(play_sound, "promotion.mp3").detach();
   Piece *new_piece = nullptr;
 
   switch (type) {
@@ -91,7 +101,9 @@ void Piece::promotion(Board &board, int position, char type) {
     case 'f':
       new_piece = std::make_unique<Fool>(this->color).release();
       break;
-    case 'q':
+    case 'w':
+      new_piece = std::make_unique<Well>(this->color).release();
+      break;
     default:
       new_piece = std::make_unique<Queen>(this->color).release();
       break;

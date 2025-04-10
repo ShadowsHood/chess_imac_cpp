@@ -137,7 +137,8 @@ void get_knight_tile_from_step(std::vector<int> &moves, const Board &board,
 void get_pawn_moves(std::vector<int> &moves, const Board &board,
                     const std::pair<int, int> &position, Color color,
                     bool first_move) {
-  int orientation{color == Color::White ? -1 : 1};
+
+  int orientation = (color == Color::Black ? 1 : -1);
 
   // Move forward
   std::pair<int, int> new_position(position.first + orientation,
@@ -156,7 +157,7 @@ void get_pawn_moves(std::vector<int> &moves, const Board &board,
     }
   }
 
-  // Capture  possible ?
+  // Capture possible ?
   for (int i = -1; i <= 1; i += 2) {
     new_position = {position.first + orientation, position.second + i};
     new_position_1D = get_pos_1D(new_position);
