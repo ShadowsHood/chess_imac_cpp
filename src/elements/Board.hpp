@@ -5,12 +5,15 @@
 #include <memory>
 #include <optional>
 #include <vector>
+#include "./pieces/bonus/Kamikaze.hpp"
 
 class Board {
 private:
   std::array<std::unique_ptr<Piece>, 64> chess_board{};
+  std::array<float, 32> tiles_color_offsets{};
   std::vector<std::unique_ptr<Piece>> dead_white_pieces{};
   std::vector<std::unique_ptr<Piece>> dead_black_pieces{};
+  std::vector<Kamikaze*> active_kamikazes{};
 
   Color current_player{};
   std::vector<int> next_possible_moves{};
@@ -61,15 +64,25 @@ public:
   
   bool get_in_game() const { return this->in_game; };
 
+  std::vector<Kamikaze*> & get_active_kamikazes() {
+    return this->active_kamikazes;
+  };
+
+  std::array<float, 32> & get_tiles_color_offsets() {
+    return this->tiles_color_offsets;
+  };
+
   // Setters
   void set_selected_piece_position(int position) {
     this->selected_piece_position.emplace(position);
   };
+  void initialize_tiles_color_offsets();
 
   // Promotion
   bool is_promotion_activated() const { return this->promotion_activated; };
   void set_promotion_activated(bool b) { this->promotion_activated = b; };
   void handle_promotion(ImFont *main_font);
+  void add_kamikaze(Kamikaze *kamikaze);
 
   // Utils
   void deselect_piece();
@@ -83,4 +96,5 @@ public:
   bool is_other_color(int position, Color color) const {
     return this->chess_board[position]->get_color() != color;
   };
+  int get_piece_position(const Piece* piece) const;
 };

@@ -8,12 +8,15 @@
 #include "./pieces/Rook.hpp"
 
 #include "./pieces/bonus/Fool.hpp"
+#include "./pieces/bonus/Kamikaze.hpp"
 #include "./pieces/bonus/Racist.hpp"
+#include "./pieces/bonus/Well.hpp"
 
 #include "./random/random.hpp"
 #include "utils.hpp"
 #include <draw.hpp>
 #include <iostream>
+#include <thread>
 
 void Board::init_board() {
 
@@ -41,7 +44,7 @@ void Board::init_board() {
       std::make_unique<Rook>(Color::Black);
 
   this->chess_board[get_pos_1D(std::make_pair(1, 0))] =
-      std::make_unique<Pawn>(Color::Black);
+      std::make_unique<Kamikaze>(Color::Black);
   this->chess_board[get_pos_1D(std::make_pair(1, 1))] =
       std::make_unique<Pawn>(Color::Black);
   this->chess_board[get_pos_1D(std::make_pair(1, 2))] =
@@ -58,7 +61,7 @@ void Board::init_board() {
       std::make_unique<Pawn>(Color::Black);
 
   this->chess_board[get_pos_1D(std::make_pair(6, 0))] =
-      std::make_unique<Pawn>(Color::White);
+      std::make_unique<Kamikaze>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(6, 1))] =
       std::make_unique<Pawn>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(6, 2))] =
@@ -70,7 +73,7 @@ void Board::init_board() {
   this->chess_board[get_pos_1D(std::make_pair(6, 5))] =
       std::make_unique<Pawn>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(6, 6))] =
-      std::make_unique<Pawn>(Color::White);
+      std::make_unique<Pawn>(Color::Black);
   this->chess_board[get_pos_1D(std::make_pair(6, 7))] =
       std::make_unique<Pawn>(Color::White);
 
@@ -91,6 +94,9 @@ void Board::init_board() {
       std::make_unique<Knight>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(7, 7))] =
       std::make_unique<Rook>(Color::White);
+
+  // Initialize the offset for the black tiles
+  initialize_tiles_color_offsets();
 }
 
 std::vector<Piece const *> Board::get_dead_pieces(Color color) const {
@@ -137,6 +143,7 @@ void Board::kill_piece(int position) {
     if (piece->get_type() == Type::King) {
       in_game = false;
       std::cout << "Game over\n";
+      std::thread(play_sound, "win.mp3").detach();
     }
 
     if (piece->get_color() == Color::White) {
@@ -180,21 +187,31 @@ void Board::handle_tile_click(int index, Piece const *piece,
 }
 
 void Board::click_playable_piece(int index) {
-  // std::cout << "Clicked tile : " << index << " ==> (" << get_pos_2D(index).first
-  //           << "," << get_pos_2D(index).second << ") \n";
   moving = true;
   selected_piece_position = index;
   next_possible_moves =
       this->chess_board[index]->get_possible_moves(*this, index);
 
+  // Gestion du Fool
   if (this->chess_board[index]->get_type() == Type::Fool) {
     if (dynamic_cast<Fool *>(this->chess_board[index].get())->canMove()) {
       int i{Random::random_int(
           0, static_cast<int>(next_possible_moves.size() - 1))};
       click_reachable_tile(next_possible_moves[i]);
+      std::thread(play_sound, "fool-success.mp3").detach();
     } else {
+      std::thread(play_sound, "fool-fail.mp3").detach();
       std::cout << "cheh" << '\n';
       end_turn();
+    }
+  } 
+  // Gestion du Well
+  else if (this->chess_board[index]->get_type() == Type::Well) {
+    Well *well = dynamic_cast<Well *>(this->chess_board[index].get());
+    int jump = next_possible_moves[0];
+    click_reachable_tile(index + (8*jump));
+    if (index + (8*jump) < 8 || index + (8*jump) > 55) {
+      well->switch_direction();
     }
   }
 }
@@ -210,8 +227,20 @@ void Board::end_turn() {
   if (!promotion_activated)
     selected_piece_position.reset();
   next_possible_moves.clear();
-  current_player =
-      (current_player == Color::White) ? Color::Black : Color::White;
+  current_player = (current_player == Color::White) ? Color::Black : Color::White;
+
+  // Update kamiakazes time before explosion
+  if (!active_kamikazes.empty()) {
+    for (auto it = active_kamikazes.begin(); it != active_kamikazes.end();) {
+      (*it)->update_time_before_explosion(*this);
+      if ((*it)->get_time_before_explosion() <= 0 && (*it)->get_color() == current_player) {
+        (*it)->explode(*this);
+        it = active_kamikazes.erase(it);
+      } else {
+        ++it;
+      }
+    }  
+  }
 }
 
 void Board::deselect_piece() {
@@ -230,5 +259,24 @@ void Board::handle_promotion(ImFont *main_font) {
       promotion_activated = false;
       selected_piece_position.reset();
     }
+  }
+}
+
+void Board::add_kamikaze(Kamikaze *kamikaze) {
+  this->active_kamikazes.push_back(kamikaze);
+}
+
+int Board::get_piece_position(const Piece* piece) const {
+  for (int i = 0; i < 64; ++i) {
+      if (chess_board[i] && chess_board[i].get() == piece) {
+          return i;
+      }
+  }
+  return -1;
+}
+
+void Board::initialize_tiles_color_offsets() {
+  for (int i = 0; i < 32; i++) {
+    this->tiles_color_offsets[i] = Random::gaussian_law(0.0f, 0.05f);
   }
 }
