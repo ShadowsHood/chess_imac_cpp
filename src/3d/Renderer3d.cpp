@@ -30,6 +30,14 @@ void Renderer3d ::chess_3d(Board const &board) {
     shader.set_uniform_3fv("lightColor", glm::vec3(1.0f, 0.7f, 0.5f));
   }
 
+  // LIGHT SETTINGS (2nd)
+  float time = glfwGetTime();
+  float radius = 5.0f; // Rayon de la rotation
+  float lightX = radius * std::cos(time);
+  float lightZ = radius * std::sin(time);
+  shader.set_uniform_3fv("lightPos2", glm::vec3(lightX, 4.0f, lightZ));
+  shader.set_uniform_3fv("lightColor2", glm::vec3(0.4f, 0.1f, 1.0f));
+
   // CAMERA SETTINGS
   shader.set_uniform_3fv("viewPos", camera.get_position());
   shader.set_uniform_3fv("objectColor", glm::vec3(1.0f, 0.0f, 0.0f));
