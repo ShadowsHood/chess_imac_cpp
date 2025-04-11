@@ -9,7 +9,7 @@
 
 #include "./pieces/bonus/Fool.hpp"
 #include "./pieces/bonus/Kamikaze.hpp"
-#include "./pieces/bonus/Racist.hpp"
+// #include "./pieces/bonus/Racist.hpp"
 #include "./pieces/bonus/Well.hpp"
 
 #include "./random/random.hpp"
@@ -105,7 +105,7 @@ std::vector<Piece const *> Board::get_dead_pieces(Color color) const {
                              : this->dead_black_pieces);
 
   std::vector<Piece const *> result;
-  result.reserve(source.size()); // Optional: Reserve space for efficiency
+  result.reserve(source.size());
 
   for (const auto &piece_ptr : source) {
     if (piece_ptr) {
@@ -162,15 +162,12 @@ void Board::handle_tile_click(int index, Piece const *piece,
       index != selected_piece_position) { // Si la  case est valide
     // Si je clique sur une pièce jouable
     click_playable_piece(index);
-
   } else if (index == selected_piece_position) {
     // Si je clique sur la même pièce
     deselect_piece();
   } else if (moving && is_a_possible_move && selected_piece_position) {
-
     // Si je clique sur une case ou je peux me déplacer
     click_reachable_tile(index);
-
   } else { // Si la case est erronée
     if ((is_empty(index))) {
       // Si je clique sur une case vide
@@ -204,13 +201,13 @@ void Board::click_playable_piece(int index) {
       std::cout << "cheh" << '\n';
       end_turn();
     }
-  } 
+  }
   // Gestion du Well
   else if (this->chess_board[index]->get_type() == Type::Well) {
     Well *well = dynamic_cast<Well *>(this->chess_board[index].get());
     int jump = next_possible_moves[0];
-    click_reachable_tile(index + (8*jump));
-    if (index + (8*jump) < 8 || index + (8*jump) > 55) {
+    click_reachable_tile(index + (8 * jump));
+    if (index + (8 * jump) < 8 || index + (8 * jump) > 55) {
       well->switch_direction();
     }
   }
@@ -227,19 +224,21 @@ void Board::end_turn() {
   if (!promotion_activated)
     selected_piece_position.reset();
   next_possible_moves.clear();
-  current_player = (current_player == Color::White) ? Color::Black : Color::White;
+  current_player =
+      (current_player == Color::White) ? Color::Black : Color::White;
 
   // Update kamiakazes time before explosion
   if (!active_kamikazes.empty()) {
     for (auto it = active_kamikazes.begin(); it != active_kamikazes.end();) {
-      (*it)->update_time_before_explosion(*this);
-      if ((*it)->get_time_before_explosion() <= 0 && (*it)->get_color() == current_player) {
+      (*it)->update_time_before_explosion();
+      if ((*it)->get_time_before_explosion() <= 0 &&
+          (*it)->get_color() == current_player) {
         (*it)->explode(*this);
         it = active_kamikazes.erase(it);
       } else {
         ++it;
       }
-    }  
+    }
   }
 }
 
@@ -266,11 +265,11 @@ void Board::add_kamikaze(Kamikaze *kamikaze) {
   this->active_kamikazes.push_back(kamikaze);
 }
 
-int Board::get_piece_position(const Piece* piece) const {
+int Board::get_piece_position(const Piece *piece) const {
   for (int i = 0; i < 64; ++i) {
-      if (chess_board[i] && chess_board[i].get() == piece) {
-          return i;
-      }
+    if (chess_board[i] && chess_board[i].get() == piece) {
+      return i;
+    }
   }
   return -1;
 }

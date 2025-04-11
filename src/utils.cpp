@@ -1,20 +1,24 @@
 #include "./utils.hpp"
+
 #include "draw.hpp"
 #include "random/random.hpp"
+
 #define MINIAUDIO_IMPLEMENTATION
 #include "../lib/miniaudio/miniaudio.h"
+#include <array>
 #include <chrono>
 #include <iostream>
 #include <string>
 #include <thread>
+#include <vector>
 
 glm::vec3 get_pos_3D(int index, float tileSize, float spacing) {
   std::pair<int, int> pos2D = get_pos_2D(index);
   float realSpacing =
       spacing + tileSize; // Adjust the spacing to center the tiles
-  float x = pos2D.second * (tileSize + realSpacing);
-  float z = pos2D.first * (tileSize + realSpacing);
-  return glm::vec3(x, 0.0f, z);
+  float x = static_cast<float>(pos2D.second) * (tileSize + realSpacing);
+  float z = static_cast<float>(pos2D.first) * (tileSize + realSpacing);
+  return {x, 0.0f, z};
 }
 
 template <typename T> bool is_in_vec(std::vector<T> &vec, T value) {
@@ -104,11 +108,11 @@ ImVec4 get_tile_color(int i, std::array<float, 32> const &tiles_color_offsets) {
   int x = i % 8;
   int y = i / 8;
   if ((x + y) % 2 == 0)
-    return ImVec4{0.8f, 0.8f, 0.8f, 1.f};
+    return ImVec4{0.85f, 0.85f, 0.8f, 1.f};
   float offset =
       tiles_color_offsets[i / 2]; // Variation de la couleur des cases noires
                                   // selon loi gaussienne
-  return ImVec4{0.45f - offset, 0.23f - offset, 0.f, 1.f};
+  return ImVec4{0.40f - offset, 0.25f - offset, 0.f, 1.f};
 }
 
 glm::vec3
@@ -116,9 +120,9 @@ get_tile_color_vec3(int i, std::array<float, 32> const &tiles_color_offsets) {
   int x = i % 8;
   int y = i / 8;
   if ((x + y) % 2 == 0)
-    return {0.8f, 0.8f, 0.8f};
+    return {0.85f, 0.85f, 0.8f};
   float offset = tiles_color_offsets[i / 2];
-  return {0.45f - offset, 0.23f - offset, 0.f};
+  return {0.40f - offset, 0.25f - offset, 0.f};
 }
 
 void play_sound(std::string file_name) {

@@ -3,7 +3,6 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include "random/random.hpp"
 
 void set_background_color() {
   ImGui::StyleColorsDark();
@@ -94,10 +93,10 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
     ImGui::PushStyleColor(ImGuiCol_Button, buttonColor);
 
     // Buttons to choose the new piece
-    std::unordered_map<char, Type> types = {{'q', Type::Queen},  {'r', Type::Rook},
-                                  {'k', Type::Knight}, {'b', Type::Bishop},
-                                  {'n', Type::Racist}, {'f', Type::Fool},
-                                  {'w', Type::Well}};
+    std::unordered_map<char, Type> types = {
+        {'q', Type::Queen},  {'r', Type::Rook},   {'k', Type::Knight},
+        {'b', Type::Bishop}, {'n', Type::Racist}, {'f', Type::Fool},
+        {'w', Type::Well}};
 
     for (auto &[key, type] : types) {
       std::string spriteChar(1, get_sprite_char(color, type));

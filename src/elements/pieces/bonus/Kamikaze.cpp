@@ -1,13 +1,15 @@
 #include "./Kamikaze.hpp"
-#include "../../Board.hpp"
 #include "../../../random/random.hpp"
-#include "../../move.hpp" 
-#include <algorithm>
+#include "../../Board.hpp"
+#include "../../move.hpp"
 #include <thread>
 
-std::vector<int> Kamikaze::get_possible_moves(const Board &board, int position) {
+
+std::vector<int> Kamikaze::get_possible_moves(const Board &board,
+                                              int position) {
   std::vector<int> possible_moves;
-  get_pawn_moves(possible_moves, board, get_pos_2D(position), this->get_color(), this->get_first_move());
+  get_pawn_moves(possible_moves, board, get_pos_2D(position), this->get_color(),
+                 this->get_first_move());
   return possible_moves;
 }
 
@@ -16,13 +18,11 @@ void Kamikaze::init_time_before_explosion(Board &board) {
   board.add_kamikaze(this);
 }
 
-int Kamikaze::get_time_before_explosion() {
+int Kamikaze::get_time_before_explosion() const {
   return this->time_before_explosion;
 }
 
-void Kamikaze::update_time_before_explosion(Board &board) {
-  this->time_before_explosion--;
-}
+void Kamikaze::update_time_before_explosion() { this->time_before_explosion--; }
 
 void Kamikaze::explode(Board &board) {
   std::thread(play_sound, "kamikaze.mp3").detach();

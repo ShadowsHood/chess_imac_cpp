@@ -1,7 +1,9 @@
 #include "./random.hpp"
+#include <algorithm>
 #include <chrono>
-#include <random>
 #include <corecrt_math_defines.h>
+#include <random>
+
 
 int Random::random_binary() {
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -25,17 +27,19 @@ double Random::random_double(int min, int max) {
 }
 
 int Random::geometric_law() {
-  int value {};
-  int round {0};
-  do {
+  int value = Random::random_int(0, 10);
+  int round = 1;
+  while (value != 10) {
     value = Random::random_int(0, 10);
-    round ++;
-  } while (value != 10);
+    round++;
+  }
   return round;
 }
 
 double Random::cauchy_law(double m, double gamma) {
+
   double u = Random::random_double(0, 1);
+
   return m + gamma * tan(M_PI * (u - 0.5));
 }
 
@@ -43,25 +47,25 @@ float Random::gaussian_law(float mean, float stddev) {
   double u1 = Random::random_double(0, 1);
   double u2 = Random::random_double(0, 1);
 
-  if (u1 < 1e-6) u1 = 1e-6;
+  u1 = std::max(u1, 1e-6);
 
   double z0 = std::sqrt(-2.0 * std::log(u1)) * std::cos(2 * M_PI * u2);
   double value = mean + z0 * stddev;
 
-  if (value < -0.1f) value = -0.1f;
-  if (value > 0.1f) value = 0.1f;
+  value = std::max<double>(value, -0.1f);
+  value = std::min<double>(value, 0.1f);
 
   return static_cast<float>(value);
 }
 
 int Random::exponential_law(double lambda) {
-  double u;
-  do {
-      u = Random::random_double(0, 1);
-  } while (u <= 0.0); 
+  double u = Random::random_double(0, 1);
+  while (u <= 0.0) {
+    u = Random::random_double(0, 1);
+  }
 
   double result = -std::log(u) / lambda;
-  return static_cast<int>(result); 
+  return static_cast<int>(result);
 }
 
 bool Random::bernoulli_law(double p) {
@@ -72,10 +76,10 @@ bool Random::bernoulli_law(double p) {
 double Random::poisson_law(int lambda, int k) {
   double lambda_k = std::pow(lambda, k);
   double exp_neg_lambda = std::exp(-lambda);
-  
+
   double factorial_k = 1.0;
   for (int i = 1; i <= k; ++i) {
-      factorial_k *= i;
+    factorial_k *= i;
   }
   double probability = (lambda_k * exp_neg_lambda) / factorial_k;
   return probability;

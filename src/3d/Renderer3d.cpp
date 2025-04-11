@@ -75,8 +75,8 @@ void Renderer3d ::render_piece(Type type, Color color, int index,
 
   shader.set_uniform_matrix_4fv("model", modelMatrix);
   shader.set_uniform_3fv("objectColor", color == Color::Black
-                                            ? glm::vec3(0.35f, 0.15f, 0.0f)
-                                            : glm::vec3(0.8f, 0.8f, 0.8f));
+                                            ? glm::vec3(0.35f, 0.20f, 0.f)
+                                            : glm::vec3(0.85f, 0.85f, 0.8f));
 
   models[type].render(shader);
 }
@@ -120,7 +120,7 @@ void Renderer3d ::render_base(float tileSize, float tileSpacing) {
 void Renderer3d ::init_3d() {
   shader.load_shader("model.vs.glsl", "model.fs.glsl");
   models.clear();
-  cube_model.load_mesh("tile/tile_2.obj", "tile");
+  cube_model.load_mesh("tile/tile_3.obj", "tile");
   cube_model.setup_buffers();
   models_ready = false;
   load_models_async();

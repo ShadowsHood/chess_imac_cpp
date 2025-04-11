@@ -37,8 +37,9 @@ static Vertex create_vertex(const tinyobj::index_t &index,
   } else {
     vertex.m_tex_coord = glm::vec2(
         0.0f, 0.0f); // Coordonnées de texture par défaut si non définies
-    std::cerr << "Warning: Texture coordinate index is -1 for a vertex in the "
-                 "model.\n";
+    // std::cerr << "Warning: Texture coordinate index is -1 for a vertex in the
+    // "
+    //              "model.\n";
   }
 
   return vertex;
