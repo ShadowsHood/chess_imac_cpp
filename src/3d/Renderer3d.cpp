@@ -4,6 +4,7 @@
 #include "glm/fwd.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include <utility>
 
 void Renderer3d ::chess_3d(Board const &board) {
   glClearColor(0.5f, 0.1f, 0.2f, 1.f);
@@ -31,10 +32,11 @@ void Renderer3d ::chess_3d(Board const &board) {
   }
 
   // LIGHT SETTINGS (2nd)
-  float time = glfwGetTime();
-  float radius = 5.0f; // Rayon de la rotation
-  float lightX = radius * std::cos(time);
-  float lightZ = radius * std::sin(time);
+  auto time = static_cast<float>(glfwGetTime());
+  float radius = 5.0f;
+  float speed = 0.5f;
+  float lightX = radius * std::cos(-time*speed);
+  float lightZ = radius * std::sin(-time*speed);
   shader.set_uniform_3fv("lightPos2", glm::vec3(lightX, 4.0f, lightZ));
   shader.set_uniform_3fv("lightColor2", glm::vec3(0.4f, 0.1f, 1.0f));
 
@@ -65,6 +67,11 @@ void Renderer3d ::chess_3d(Board const &board) {
   skybox_shader.use();
   glm::mat4 view = glm::mat4(glm::mat3(
       camera.get_view_matrix())); // remove translation part of view matrix
+
+  glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), glm::radians(time * 2.0f),
+                                   glm::vec3(0.0f, 1.0f, 0.0f));
+  view = view * rotation;
+
   skybox_shader.set_uniform_matrix_4fv("view", view);
   skybox_shader.set_uniform_matrix_4fv("projection", projection);
   glActiveTexture(GL_TEXTURE0);
@@ -187,16 +194,18 @@ void Renderer3d::load_skybox(std::vector<std::string> faces) {
                          "skybox"); // Charge un cube simple
   skybox_model.setup_buffers();
 
-  skybox_texture = load_cubemap(faces); // Fonction pour charger les textures
+  skybox_texture = load_cubemap(std::move(faces)); // Fonction pour charger les textures
 }
 
 GLuint Renderer3d::load_cubemap(std::vector<std::string> faces) {
-  GLuint textureID;
+  GLuint textureID{};
   glGenTextures(1, &textureID);
   glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
-  int width, height, nrChannels;
-  unsigned char *data;
+  int width = 0;
+  int height = 0;
+  int nrChannels = 0;
+  unsigned char *data = nullptr;
   for (unsigned int i = 0; i < faces.size(); i++) {
     std::string path = "assets/img/" + faces[i];
     data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
@@ -205,8 +214,7 @@ GLuint Renderer3d::load_cubemap(std::vector<std::string> faces) {
                    0, GL_RGB, GL_UNSIGNED_BYTE, data);
       stbi_image_free(data);
     } else {
-      std::cerr << "Cubemap texture failed to load at path: " << faces[i]
-                << std::endl;
+      std::cerr << "Cubemap texture failed to load at path: " << faces[i] << '\n';
       stbi_image_free(data);
     }
   }

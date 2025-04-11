@@ -1,5 +1,6 @@
 #include "./App.hpp"
 #include "./utils.hpp"
+#include "quick_imgui/quick_imgui.hpp"
 #include "random/random.hpp"
 
 #define GLFW_INCLUDE_NONE
@@ -24,16 +25,11 @@ void App::launch() {
                 chess_2d();
                 renderer3d.chess_3d(board);
               },
-          .key_callback =
-              [&](int key, int scancode, int action, int mods) {
-                // std::cout << "Key: " << key << " Scancode: " << scancode
-                //           << " Action: " << action << " Mods: " << mods <<
-                //           '\n';
-              },
+          // .key_callback =
+          //     [&](int key, int scancode, int action, int mods) {
+          //     },
           .mouse_button_callback =
               [&](int button, int action, int mods) {
-                // std::cout << "Button: " << button << " Action: " << action
-                //           << " Mods: " << mods << '\n';
                 if (button == ImGuiMouseButton_Right && action == GLFW_PRESS) {
                   renderer3d.camera.set_first_mouse();
                 }
@@ -41,8 +37,6 @@ void App::launch() {
           .cursor_position_callback =
               [&](double xpos, double ypos) {
                 if (ImGui::IsMouseDown(ImGuiMouseButton_Right)) {
-                  // On ne traite le mouvement que si le bouton est pressé ET
-                  // que la position a été initialisée
                   if (!renderer3d.camera.is_first_mouse()) {
                     renderer3d.camera.track_ball_move_callback(xpos, ypos);
                   } else {
@@ -54,10 +48,9 @@ void App::launch() {
               [&](double xoffset, double yoffset) {
                 renderer3d.camera.process_scroll(yoffset);
               },
-          .window_size_callback =
-              [&](int width, int height) {
-                // std::cout << "Resized: " << width << ' ' << height << '\n';
-              },
+          // .window_size_callback =
+          //     [&](int width, int height) {
+          //     },
       });
   renderer3d.terminate_3d();
 }

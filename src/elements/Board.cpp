@@ -45,7 +45,7 @@ void Board::init_board() {
 
   this->chess_board[get_pos_1D(std::make_pair(1, 0))] =
       std::make_unique<Kamikaze>(Color::Black);
-  this->chess_board[get_pos_1D(std::make_pair(1, 1))] =
+  this->chess_board[get_pos_1D(std::make_pair(4, 1))] =
       std::make_unique<Pawn>(Color::Black);
   this->chess_board[get_pos_1D(std::make_pair(1, 2))] =
       std::make_unique<Pawn>(Color::Black);
@@ -66,9 +66,9 @@ void Board::init_board() {
       std::make_unique<Pawn>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(6, 2))] =
       std::make_unique<Pawn>(Color::White);
-  this->chess_board[get_pos_1D(std::make_pair(6, 3))] =
+  this->chess_board[get_pos_1D(std::make_pair(5, 3))] =
       std::make_unique<Pawn>(Color::White);
-  this->chess_board[get_pos_1D(std::make_pair(6, 4))] =
+  this->chess_board[get_pos_1D(std::make_pair(4, 4))] =
       std::make_unique<Pawn>(Color::White);
   this->chess_board[get_pos_1D(std::make_pair(6, 5))] =
       std::make_unique<Pawn>(Color::White);
