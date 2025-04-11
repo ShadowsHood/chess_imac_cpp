@@ -29,14 +29,13 @@ void draw_board(Board &board, ImFont *main_font) {
 
 void draw_tile(Board &board, int index, Piece const *piece, ImFont *main_font,
                bool &is_a_possible_move) {
-  // Set color of the tile (black or white)
+  // Set color of the tile
   ImVec4 tileColor = get_tile_color(index, board.get_tiles_color_offsets());
   ImGui::PushStyleColor(ImGuiCol_Button, tileColor);
 
   // Set the name of the piece
   std::string name =
       (piece != nullptr) ? std::string(1, piece->get_char()) : "";
-  // std::string buttonLabel = name + "##" + std::to_string(index);
 
   if (piece != nullptr)
     push_font(piece->get_color(), main_font);
@@ -48,16 +47,13 @@ void draw_tile(Board &board, int index, Piece const *piece, ImFont *main_font,
   // Draw tile
   if (ImGui::Button(name.c_str(), ImVec2{60.f, 60.f})) {
     if (board.get_in_game())
-      board.handle_tile_click(index, piece,
-                              is_a_possible_move); // std optional color ?
+      board.handle_tile_click(index, piece, is_a_possible_move);
   }
 
   if (piece != nullptr)
     pop_font();
-  // Pop possible moves highlight
   if (is_a_possible_move)
     pop_possible_move_color();
-  // Pop tile color (black or white)
   ImGui::PopStyleColor();
 }
 
@@ -77,7 +73,6 @@ char draw_promotion_popup(ImFont *main_font, Color color) {
   char new_type{};
   ImVec2 center = ImGui::GetMainViewport()->GetCenter();
   ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-  // ImGui::SetNextWindowSize(ImVec2(450, 180));
 
   if (ImGui::BeginPopupModal("Promotion of your pawn", nullptr,
                              ImGuiWindowFlags_AlwaysAutoResize)) {

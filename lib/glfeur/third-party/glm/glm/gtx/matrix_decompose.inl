@@ -29,9 +29,9 @@ namespace detail
 	// Decomposes the mode matrix to translations,rotation scale components
 
 	template<typename T, qualifier Q>
-	GLM_FUNC_QUALIFIER bool decompose(mat<4, 4, T, Q> const& ModelMatrix, vec<3, T, Q> & Scale, qua<T, Q> & Orientation, vec<3, T, Q> & Translation, vec<3, T, Q> & Skew, vec<4, T, Q> & Perspective)
+	GLM_FUNC_QUALIFIER bool decompose(mat<4, 4, T, Q> const& model_matrix, vec<3, T, Q> & Scale, qua<T, Q> & Orientation, vec<3, T, Q> & Translation, vec<3, T, Q> & Skew, vec<4, T, Q> & Perspective)
 	{
-		mat<4, 4, T, Q> LocalMatrix(ModelMatrix);
+		mat<4, 4, T, Q> LocalMatrix(model_matrix);
 
 		// Normalize the matrix.
 		if(epsilonEqual(LocalMatrix[3][3], static_cast<T>(0), epsilon<T>()))

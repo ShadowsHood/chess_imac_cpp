@@ -3,7 +3,6 @@
 void VBO::init() { glGenBuffers(1, &m_id); }
 
 VBO::~VBO() {
-  // glDeleteBuffers(1, &m_id);
   release();
 }
 

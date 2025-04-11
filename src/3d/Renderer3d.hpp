@@ -24,7 +24,6 @@ public:
   int window_height = 1080;
 
   std::map<Type, Model3D> models;
-  // std::thread loader_thread;
   bool models_ready = false;
   Model3D cube_model;
 
@@ -34,9 +33,9 @@ public:
   void load_models_async();
   void terminate_3d();
   void chess_3d(Board const &board);
-  void render_tile(int index, float tileSize, float tileSpacing,
+  void render_tile(int index, float tile_size, float tile_spacing,
                    std::array<float, 32> const &tiles_color_offsets);
-  void render_base(float tileSize, float tileSpacing);
-  void render_piece(Type type, Color color, int index, float tileSize,
-                    float tileSpacing);
+  void render_base(float tile_size, float tile_spacing);
+  void render_piece(Type type, Color color, int index, float tile_size,
+                    float tile_spacing);
 };
