@@ -22,7 +22,7 @@ void Renderer3d ::chess_3d(Board const &board) {
   shader.set_uniform_matrix_4fv("projection", projection);
 
   // LIGHT SETTINGS
-  if(board.get_current_player() == Color::White) {
+  if (board.get_current_player() == Color::White) {
     shader.set_uniform_3fv("lightPos", glm::vec3(0.0f, 5.0f, 2.0f));
     shader.set_uniform_3fv("lightColor", glm::vec3(0.85f, 0.9f, 0.7f));
   } else {
@@ -50,6 +50,19 @@ void Renderer3d ::chess_3d(Board const &board) {
       }
     }
   }
+
+  // SKYBOX
+  glDepthFunc(GL_LEQUAL); // Change depth function so depth test passes when
+                          // values are equal to depth buffer's content
+  skybox_shader.use();
+  glm::mat4 view = glm::mat4(glm::mat3(
+      camera.get_view_matrix())); // remove translation part of view matrix
+  skybox_shader.set_uniform_matrix_4fv("view", view);
+  skybox_shader.set_uniform_matrix_4fv("projection", projection);
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, skybox_texture);
+  skybox_model.render(skybox_shader);
+  glDepthFunc(GL_LESS); // set depth function back to default
 }
 
 void Renderer3d ::render_piece(Type type, Color color, int index,
@@ -115,6 +128,10 @@ void Renderer3d ::init_3d() {
   cube_model.setup_buffers();
   models_ready = false;
   load_models_async();
+
+  skybox_shader.load_shader("skybox.vs.glsl", "skybox.fs.glsl");
+  load_skybox({"skybox/right.jpg", "skybox/left.jpg", "skybox/top.jpg",
+               "skybox/bottom.jpg", "skybox/front.jpg", "skybox/back.jpg"});
 }
 
 void Renderer3d::load_models_async() {
@@ -150,3 +167,46 @@ void Renderer3d ::terminate_3d() {
   glDeleteVertexArrays(1, &vao);
 }
 
+//
+//
+//
+// SKYBOX
+//
+//
+//
+void Renderer3d::load_skybox(std::vector<std::string> faces) {
+  skybox_model.load_mesh("skybox/skybox.obj",
+                         "skybox"); // Charge un cube simple
+  skybox_model.setup_buffers();
+
+  skybox_texture = load_cubemap(faces); // Fonction pour charger les textures
+}
+
+GLuint Renderer3d::load_cubemap(std::vector<std::string> faces) {
+  GLuint textureID;
+  glGenTextures(1, &textureID);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+  int width, height, nrChannels;
+  unsigned char *data;
+  for (unsigned int i = 0; i < faces.size(); i++) {
+    std::string path = "assets/img/" + faces[i];
+    data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+    if (data) {
+      glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height,
+                   0, GL_RGB, GL_UNSIGNED_BYTE, data);
+      stbi_image_free(data);
+    } else {
+      std::cerr << "Cubemap texture failed to load at path: " << faces[i]
+                << std::endl;
+      stbi_image_free(data);
+    }
+  }
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+  return textureID;
+}

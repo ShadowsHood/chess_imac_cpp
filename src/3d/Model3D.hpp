@@ -9,6 +9,7 @@ class Model3D {
 public:
   Model3D() = default;
 
+  VAO get_vao() const { return m_vao; }
   void load_mesh(const std::string &path, const std::string &name);
   void setup_buffers();
   void render(glfeur::Shader &shader) const;

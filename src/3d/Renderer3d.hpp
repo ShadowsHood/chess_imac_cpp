@@ -27,6 +27,10 @@ public:
   bool models_ready = false;
   Model3D cube_model;
 
+  Model3D skybox_model;
+  GLuint skybox_texture;
+  glfeur::Shader skybox_shader;
+
   Renderer3d() = default;
 
   void init_3d();
@@ -38,4 +42,7 @@ public:
   void render_base(float tile_size, float tile_spacing);
   void render_piece(Type type, Color color, int index, float tile_size,
                     float tile_spacing);
+
+  void load_skybox(std::vector<std::string> faces);
+  GLuint load_cubemap(std::vector<std::string> faces);
 };
