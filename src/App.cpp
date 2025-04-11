@@ -1,5 +1,6 @@
 #include "./App.hpp"
 #include "./utils.hpp"
+#include "random/random.hpp"
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -75,6 +76,10 @@ void App::chess_2d() {
   ImGui::Begin(window_title.c_str());
   ImGui::GetStyle().ItemSpacing = ImVec2(0.0f, 0.0f);
   set_background_color();
+
+  // Display funny message
+  if (Random::bernoulli_law(0.003))
+    funny_message_event(2.0, 5.0);
 
   // Draw the board
   draw_dead_pieces(board, Color::White, main_font);

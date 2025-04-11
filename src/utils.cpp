@@ -177,3 +177,27 @@ void update_chess_game_title(std::string& window_title) {
       window_title = "Chess Game"; 
   }
 }
+
+void funny_message_event(double alpha, double x_m) {
+  double event_value = Random::pareto_law(alpha, x_m);
+  
+  if (event_value >= x_m) {
+      std::vector<std::string> sarcastic_events = {
+          "Wow, that move was truly something.",
+          "Ah, that's an interesting choice, probably strategic.",
+          "Very bold, I wouldn't have dared.",
+          "You had to dare, and you did.",
+          "That was a... memorable move.",
+          "A great stroke of genius, but not sure it will pay off.",
+          "You really thought this move through, huh?",
+          "There, you just made a move.",
+          "A decision full of... surprises.",
+          "A unique approach, that deserves respect."
+      };
+      
+      int event_index = Random::random_int(0, sarcastic_events.size() - 1);
+      std::cout << sarcastic_events[event_index] << std::endl;
+  } else {
+      std::cout << "No special event, keep going." << std::endl;
+  }
+}
