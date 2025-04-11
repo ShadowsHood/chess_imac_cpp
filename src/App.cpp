@@ -72,14 +72,14 @@ void App::init_font() {
 
 void App::chess_2d() {
   static std::string window_title = "Chess Game";
-  update_chess_game_title(window_title);
+  // update_chess_game_title(window_title);
   ImGui::Begin(window_title.c_str());
   ImGui::GetStyle().ItemSpacing = ImVec2(0.0f, 0.0f);
   set_background_color();
 
   // Display funny message
-  if (Random::bernoulli_law(0.003))
-    funny_message_event(2.0, 5.0);
+  // if (Random::bernoulli_law(0.003))
+  //   funny_message_event(2.0, 5.0);
 
   // Draw the board
   draw_dead_pieces(board, Color::White, main_font);
