@@ -8,11 +8,11 @@
 #include "./pieces/bonus/Fool.hpp"
 #include "./pieces/bonus/Kamikaze.hpp"
 #include "./pieces/bonus/Racist.hpp"
-#include "pieces/bonus/Well.hpp"
+#include "./pieces/bonus/Well.hpp"
 
 #include "utils.hpp"
-#include <iostream>
 #include <random/random.hpp>
+#include <iostream>
 #include <thread>
 
 void Piece::move(Board &board, int old_position, int new_position) {

@@ -8,12 +8,12 @@
 #include <thread>
 #include <vector>
 
-glm::vec3 get_pos_3D(int index, float tileSize, float spacing) {
+glm::vec3 get_pos_3D(int index, float tile_size, float spacing) {
   std::pair<int, int> pos2D = get_pos_2D(index);
-  float realSpacing =
-      spacing + tileSize; // Adjust the spacing to center the tiles
-  float x = static_cast<float>(pos2D.second) * (tileSize + realSpacing);
-  float z = static_cast<float>(pos2D.first) * (tileSize + realSpacing);
+  float real_spacing =
+      spacing + tile_size; // Adjust the spacing to center the tiles
+  float x = static_cast<float>(pos2D.second) * (tile_size + real_spacing);
+  float z = static_cast<float>(pos2D.first) * (tile_size + real_spacing);
   return {x, 0.0f, z};
 }
 

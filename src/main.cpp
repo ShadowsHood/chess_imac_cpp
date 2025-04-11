@@ -1,6 +1,3 @@
-// #include <iostream>
-// #include <filesystem>
-
 #include <imgui.h>
 
 #include "./App.hpp"
@@ -10,9 +7,8 @@
 #include <glad/glad.h>
 
 int main() {
-  // std::cout << "Current working directory: " <<
-  // std::filesystem::current_path()
-  //           << "\n";
+
   App app;
   app.launch();
+
 }
