@@ -20,7 +20,7 @@ void Piece::move(Board &board, int old_position, int new_position) {
   std::pair<int, int> old_pos_2D = get_pos_2D(old_position);
   std::pair<int, int> new_pos_2D = get_pos_2D(new_position);
 
-  if (type == Type::Pawn) {
+  if (type == Type::Pawn || type == Type::Kamikaze) {
     handle_en_passant(board, new_pos_2D);
   }
 
@@ -59,13 +59,17 @@ void Piece::handle_en_passant(Board &board,
                               std::pair<int, int> new_pos_2D) const {
   const int invalid = -1;
   int en_passant_available = board.get_en_passant_available();
-  std::pair<int, int> en_passant_available_pos_2D =
-      (en_passant_available != invalid) ? get_pos_2D(en_passant_available)
-                                        : std::make_pair(invalid, invalid);
+  if (en_passant_available == invalid)
+    return;
 
-  if ((new_pos_2D.first - 1 == en_passant_available_pos_2D.first ||
-       new_pos_2D.first + 1 == en_passant_available_pos_2D.first) &&
-      new_pos_2D.second == en_passant_available_pos_2D.second) {
+  std::pair<int, int> en_passant_2D = get_pos_2D(en_passant_available);
+  int direction = (get_color() == Color::White) ? 1 : -1;
+  bool same_x = (en_passant_2D.second == new_pos_2D.second);
+  bool good_offset_y = (en_passant_2D.first == new_pos_2D.first + direction);
+  // std::cout << "En passant : " << en_passant_2D.first << " " << en_passant_2D.second << '\n';
+  // std::cout << "Destination : " << new_pos_2D.first << " " << new_pos_2D.second << '\n';
+
+  if (same_x && good_offset_y) {
     if (board[en_passant_available]->get_color() != this->get_color()) {
       board.kill_piece(en_passant_available);
     }
@@ -75,7 +79,7 @@ void Piece::handle_en_passant(Board &board,
 void Piece::update_en_passant_availability(Board &board,
                                            std::pair<int, int> new_pos_2D,
                                            int new_position) {
-  if (type == Type::Pawn && first_move &&
+  if ((type == Type::Pawn || type == Type::Kamikaze) && first_move &&
       (new_pos_2D.first == 3 || new_pos_2D.first == 4)) {
     board.set_en_passant_available(new_position);
   } else {
