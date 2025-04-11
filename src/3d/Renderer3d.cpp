@@ -22,8 +22,13 @@ void Renderer3d ::chess_3d(Board const &board) {
   shader.set_uniform_matrix_4fv("projection", projection);
 
   // LIGHT SETTINGS
-  shader.set_uniform_3fv("lightPos", glm::vec3(2.0f, 5.0f, 2.0f));
-  shader.set_uniform_3fv("lightColor", glm::vec3(1.0f, 1.0f, 0.9f));
+  if(board.get_current_player() == Color::White) {
+    shader.set_uniform_3fv("lightPos", glm::vec3(0.0f, 5.0f, 2.0f));
+    shader.set_uniform_3fv("lightColor", glm::vec3(0.85f, 0.9f, 0.7f));
+  } else {
+    shader.set_uniform_3fv("lightPos", glm::vec3(0.0f, 5.0f, -2.0f));
+    shader.set_uniform_3fv("lightColor", glm::vec3(1.0f, 0.7f, 0.5f));
+  }
 
   // CAMERA SETTINGS
   shader.set_uniform_3fv("viewPos", camera.get_position());
@@ -144,3 +149,4 @@ void Renderer3d ::terminate_3d() {
   glDeleteBuffers(1, &vbo);
   glDeleteVertexArrays(1, &vao);
 }
+

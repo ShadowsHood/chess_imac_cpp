@@ -52,6 +52,9 @@ public:
   };
 
   // Getters
+
+  Color get_current_player() const { return this->current_player; };
+
   std::vector<int> get_next_possible_moves() const {
     return this->next_possible_moves;
   };
