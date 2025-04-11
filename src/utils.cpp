@@ -1,4 +1,8 @@
 #include "./utils.hpp"
+
+#include "draw.hpp"
+#include "random/random.hpp"
+
 #define MINIAUDIO_IMPLEMENTATION
 #include "../lib/miniaudio/miniaudio.h"
 #include <array>
@@ -151,4 +155,53 @@ void play_sound(std::string file_name) {
 
   ma_sound_uninit(&sound);
   ma_engine_uninit(&engine);
+}
+
+void update_chess_game_title(std::string& window_title) {
+  static int frame_counter = 0;
+  static int threshold = Random::exponential_law(0.005);
+  static bool show_feur = false;
+  static const int glitch_duration = 60;
+
+  // Si le "glitch" doit être activé
+  if (show_feur) {
+      frame_counter++;
+      if (frame_counter >= glitch_duration) {
+          show_feur = false; 
+          frame_counter = 0;
+          threshold = Random::exponential_law(0.005);
+      }
+      window_title = "FEUR";
+  } else {
+      frame_counter++;
+      if (frame_counter >= threshold) {
+          show_feur = true;
+          frame_counter = 0;
+      }
+      window_title = "Chess Game"; 
+  }
+}
+
+void funny_message_event(double alpha, double x_m) {
+  double event_value = Random::pareto_law(alpha, x_m);
+  
+  if (event_value >= x_m) {
+      std::vector<std::string> sarcastic_events = {
+          "Wow, that move was truly something.",
+          "Ah, that's an interesting choice, probably strategic.",
+          "Very bold, I wouldn't have dared.",
+          "You had to dare, and you did.",
+          "That was a... memorable move.",
+          "A great stroke of genius, but not sure it will pay off.",
+          "You really thought this move through, huh?",
+          "There, you just made a move.",
+          "A decision full of... surprises.",
+          "A unique approach, that deserves respect."
+      };
+      
+      int event_index = Random::random_int(0, sarcastic_events.size() - 1);
+      std::cout << sarcastic_events[event_index] << std::endl;
+  } else {
+      std::cout << "No special event, keep going." << std::endl;
+  }
 }

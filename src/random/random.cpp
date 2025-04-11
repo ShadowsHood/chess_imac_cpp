@@ -37,7 +37,9 @@ int Random::geometric_law() {
 }
 
 double Random::cauchy_law(double m, double gamma) {
-  double u = ((double)rand() / RAND_MAX);
+
+  double u = Random::random_double(0, 1);
+
   return m + gamma * tan(M_PI * (u - 0.5));
 }
 
